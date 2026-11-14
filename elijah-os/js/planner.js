@@ -16,7 +16,7 @@
   const BUFFER = { game: [60, 45], training: [45, 30], plans: [15, 15], other: [15, 15] };
   const PHYSICAL_EVENT = { game: 'game day', training: 'extra training today' };
   const isPhysical = c => c.kind === 'gym' || c.kind === 'football' || c.kind === 'recovery';
-  const PRIORITY = { revision: 0, paper: 0, mental: 1, gym: 2, football: 2, recovery: 3 };
+  const PRIORITY = { revision: 0, paper: 0, mental: 1, gym: 2, football: 2, creator: 3, recovery: 4 };
 
   function weekdayOf(date) { return (new Date(date + 'T12:00').getDay() + 6) % 7; }
   function dayName(date) { return new Date(date + 'T12:00').toLocaleDateString('en-GB', { weekday: 'short' }); }
