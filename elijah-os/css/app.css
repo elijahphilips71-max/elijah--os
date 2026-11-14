@@ -431,6 +431,11 @@ button { -webkit-user-select: none; user-select: none; }
 .os-gkey span { display: inline-flex; align-items: center; gap: 6px; }
 .os-gtable { font-size: 13px; }
 
+.os-level { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 8px 10px; border-radius: var(--radius-md); background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+.os-level i { color: var(--color-accent); font-size: 16px; }
+.os-level b { font-weight: 500; color: var(--color-accent-300); }
+.os-level .os-muted { margin-left: auto; font-size: 12px; }
+
 /* Mock exam */
 .os-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .os-steps span { display: flex; align-items: center; justify-content: center; gap: 4px; min-height: 32px; border-radius: 999px; font-size: 12px; color: var(--color-neutral-400); border: 1px solid var(--color-neutral-800); }

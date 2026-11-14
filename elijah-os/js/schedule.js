@@ -233,10 +233,12 @@ window.ELIJAH_DATA = {
     }
   },
 
+  // target: the grade you're aiming for. startLevel: questions start around this grade (±1) and move up
+  // a level when you score 75%+ over your last 8 answers at that level, or down one if you're under 45%.
   // Revision subjects in priority order. goal = default weekly minutes (you can also edit goals in the app).
   // topics = the starting topic list. You can add, remove and rate topics in the app too.
   subjects: [
-    { name: 'Maths', board: 'AQA (Higher)', goal: 75, topics: [
+    { name: 'Maths', board: 'AQA (Higher)', target: 9, startLevel: 6, goal: 75, topics: [
       'Number: fractions, decimals and percentages', 'Number: indices, roots and standard form', 'Number: surds',
       'Number: factors, multiples and primes', 'Number: rounding, estimation and bounds', 'Number: recurring decimals',
       'Algebra: expanding and factorising', 'Algebra: linear equations and inequalities', 'Algebra: quadratics',
@@ -251,7 +253,7 @@ window.ELIJAH_DATA = {
       'Probability: basics and expected outcomes', 'Probability: tree diagrams and conditional probability', 'Probability: Venn diagrams and sets',
       'Statistics: averages and spread', 'Statistics: charts, scatter graphs and correlation',
       'Statistics: cumulative frequency and box plots', 'Statistics: histograms', 'Statistics: sampling'] },
-    { name: 'Physics', board: 'AQA (triple science)', goal: 75, topics: [
+    { name: 'Physics', board: 'AQA (triple science)', target: 9, startLevel: 6, goal: 75, topics: [
       'Energy: stores and transfers', 'Energy: specific heat capacity', 'Energy: power and efficiency', 'Energy: energy resources',
       'Electricity: current, potential difference and resistance', 'Electricity: series and parallel circuits',
       'Electricity: mains electricity and power', 'Electricity: the National Grid', 'Electricity: static electricity',
@@ -271,7 +273,7 @@ window.ELIJAH_DATA = {
       'Literature: Eduqas poetry anthology', 'Literature: unseen poetry',
       'Language: fiction reading', 'Language: non-fiction reading', 'Language: creative writing',
       'Language: viewpoint and transactional writing', 'Language: spelling, punctuation and grammar'] },
-    { name: 'Biology / Chemistry', board: 'AQA (triple science)', goal: 45, topics: [
+    { name: 'Biology / Chemistry', board: 'AQA (triple science)', target: 9, startLevel: 6, goal: 45, topics: [
       'Biology: cell structure and microscopy', 'Biology: cell division and stem cells', 'Biology: transport in cells',
       'Biology: digestion and enzymes', 'Biology: heart, blood and circulation', 'Biology: non-communicable disease',
       'Biology: plant tissues and transport', 'Biology: communicable disease', 'Biology: defence, vaccination and drugs',

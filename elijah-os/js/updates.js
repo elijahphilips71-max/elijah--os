@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-14-grade9', date: '2026-11-14', kind: 'update',
+    title: 'Aiming for 9s',
+    body: 'Maths and science questions now have grades, from 2 up to 9, with lots of new grade 6–9 questions. You start on grade 5–7 questions. Score 75% or more and you move up a level; struggle and it eases off one. Your level shows on each revision card and on the Revision screen.'
+  },
+  {
     id: '2026-11-14-syllabus', date: '2026-11-14', kind: 'update',
     title: 'The whole syllabus',
     body: 'Every subject now lists its full GCSE syllabus as topics, grouped by section: AQA Maths, AQA triple Biology, Chemistry and Physics, AQA PE, Edexcel Spanish, BTEC DIT and your English texts and skills. Your ratings carried over. Rate the new ones red, amber or green so your questions focus on the right ones.'
