@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-14-syllabus', date: '2026-11-14', kind: 'update',
+    title: 'The whole syllabus',
+    body: 'Every subject now lists its full GCSE syllabus as topics, grouped by section: AQA Maths, AQA triple Biology, Chemistry and Physics, AQA PE, Edexcel Spanish, BTEC DIT and your English texts and skills. Your ratings carried over. Rate the new ones red, amber or green so your questions focus on the right ones.'
+  },
+  {
     id: '2026-11-14-english', date: '2026-11-14', kind: 'update',
     title: 'English questions on your set texts',
     body: 'English topics are now Macbeth, Jekyll and Hyde and An Inspector Calls, with new quick-recall, paragraph and essay questions on each (Eduqas). Science is set to AQA triple, with 1h45 papers.'

@@ -66,7 +66,7 @@ window.ELIJAH_DATA = {
   //   remind: minutes before the start to remind you (default 10). Optional cards have no reminder.
   //   ladder: [AO1, AO2, AO3] = how many exam questions of each kind the card gives you, from js/questions.js
   //     (weak topics and questions you got wrong come first). `mixed: true` draws from every subject.
-  //     `only: { subject: [topics] }` limits a subject to some of its topics (e.g. just the Chemistry ones).
+  //     `only: { subject: 'Chemistry:' }` limits a subject to topics starting with that text (or give a list of topic names).
   //   keep: true = never dropped, even on a game day; if something clashes it moves (wall session).
   //   For kind 'revision', `subject` is the subject's position in `subjects` (0 = first),
   //   or `subjects: [a, b]` to alternate between two subjects week by week.
@@ -169,7 +169,7 @@ window.ELIJAH_DATA = {
     },
     'rev-chem-maths': {
       kind: 'revision', subjects: [3, 0], title: 'Chemistry / Maths revision', minutes: 60, ladder: [5, 3, 1],
-      only: { 3: ['Bonding and structure', 'Quantitative chemistry', 'Rates of reaction', 'Organic chemistry'] },
+      only: { 3: 'Chemistry:' },
       focus: 'Chemistry, with Maths questions on alternate weeks. AO1 reps, AO2 main chunk, one AO3.'
     },
     'academy': {
@@ -218,7 +218,7 @@ window.ELIJAH_DATA = {
     },
     'rev-eng-bio': {
       kind: 'revision', subjects: [2, 3], title: 'English / Biology revision', minutes: 45, ladder: [4, 3, 1],
-      only: { 3: ['Cells', 'Infection and response', 'Homeostasis', 'Inheritance and evolution'] },
+      only: { 3: 'Biology:' },
       focus: 'English and Biology swap each week. AO1 reps, AO2 main chunk, one AO3.'
     },
     'past-paper': {
@@ -236,24 +236,92 @@ window.ELIJAH_DATA = {
   // Revision subjects in priority order. goal = default weekly minutes (you can also edit goals in the app).
   // topics = the starting topic list. You can add, remove and rate topics in the app too.
   subjects: [
-    { name: 'Maths', board: 'AQA', goal: 75, topics: [
-      'Algebra: quadratics', 'Simultaneous equations', 'Trigonometry', 'Vectors',
-      'Probability', 'Circle theorems', 'Graphs and gradients', 'Ratio and proportion'] },
+    { name: 'Maths', board: 'AQA (Higher)', goal: 75, topics: [
+      'Number: fractions, decimals and percentages', 'Number: indices, roots and standard form', 'Number: surds',
+      'Number: factors, multiples and primes', 'Number: rounding, estimation and bounds', 'Number: recurring decimals',
+      'Algebra: expanding and factorising', 'Algebra: linear equations and inequalities', 'Algebra: quadratics',
+      'Algebra: simultaneous equations', 'Algebra: sequences', 'Algebra: straight-line graphs and gradients',
+      'Algebra: quadratic, cubic and other graphs', 'Algebra: functions and iteration', 'Algebra: algebraic fractions and proof',
+      'Algebra: transforming graphs', 'Algebra: area under graphs and rates of change', 'Algebra: equation of a circle',
+      'Ratio: ratio and proportion', 'Ratio: percentages, interest, growth and decay', 'Ratio: compound measures',
+      'Geometry: angles and polygons', 'Geometry: area, perimeter and volume', 'Geometry: arcs and sectors',
+      'Geometry: circle theorems', 'Geometry: Pythagoras', 'Geometry: trigonometry', 'Geometry: sine and cosine rules',
+      'Geometry: transformations', 'Geometry: congruence and similarity', 'Geometry: constructions, loci and bearings',
+      'Geometry: vectors',
+      'Probability: basics and expected outcomes', 'Probability: tree diagrams and conditional probability', 'Probability: Venn diagrams and sets',
+      'Statistics: averages and spread', 'Statistics: charts, scatter graphs and correlation',
+      'Statistics: cumulative frequency and box plots', 'Statistics: histograms', 'Statistics: sampling'] },
     { name: 'Physics', board: 'AQA (triple science)', goal: 75, topics: [
-      'Forces and motion', 'Energy', 'Electricity', 'Waves',
-      'Magnetism', 'Atomic structure', 'Particle model', 'Space'] },
-    { name: 'English', board: 'WJEC Eduqas', goal: 45, topics: [
-      'Macbeth', 'Jekyll and Hyde', 'An Inspector Calls', 'Poetry anthology',
-      'Unseen poetry', 'Language Paper 1', 'Language Paper 2'] },
+      'Energy: stores and transfers', 'Energy: specific heat capacity', 'Energy: power and efficiency', 'Energy: energy resources',
+      'Electricity: current, potential difference and resistance', 'Electricity: series and parallel circuits',
+      'Electricity: mains electricity and power', 'Electricity: the National Grid', 'Electricity: static electricity',
+      'Particles: density and changes of state', 'Particles: internal energy and latent heat', 'Particles: gas pressure',
+      'Atomic: atoms, isotopes and models of the atom', 'Atomic: radioactive decay and half-life',
+      'Atomic: uses and hazards of radiation', 'Atomic: fission and fusion',
+      'Forces: scalars, vectors and resultant forces', 'Forces: work done, weight and springs', 'Forces: moments, levers and gears',
+      'Forces: pressure in fluids', 'Forces: motion, graphs and acceleration', 'Forces: Newton’s laws', 'Forces: stopping distances',
+      'Forces: momentum',
+      'Waves: properties of waves', 'Waves: reflection, refraction and sound', 'Waves: electromagnetic spectrum',
+      'Waves: lenses and visible light', 'Waves: black body radiation',
+      'Magnetism: magnets and fields', 'Magnetism: the motor effect', 'Magnetism: generators and transformers',
+      'Space: the solar system and life cycle of stars', 'Space: orbits', 'Space: red-shift and the Big Bang'] },
+    { name: 'English', board: 'WJEC Eduqas or AQA (check with your teacher)', goal: 45, topics: [
+      'Literature: Macbeth', 'Literature: Jekyll and Hyde', 'Literature: An Inspector Calls',
+      'Literature: poetry anthology', 'Literature: unseen poetry',
+      'Language: fiction reading', 'Language: non-fiction reading', 'Language: creative writing',
+      'Language: viewpoint and transactional writing', 'Language: spelling, punctuation and grammar'] },
     { name: 'Biology / Chemistry', board: 'AQA (triple science)', goal: 45, topics: [
-      'Cells', 'Infection and response', 'Homeostasis', 'Inheritance and evolution',
-      'Bonding and structure', 'Quantitative chemistry', 'Rates of reaction', 'Organic chemistry'] },
+      'Biology: cell structure and microscopy', 'Biology: cell division and stem cells', 'Biology: transport in cells',
+      'Biology: digestion and enzymes', 'Biology: heart, blood and circulation', 'Biology: non-communicable disease',
+      'Biology: plant tissues and transport', 'Biology: communicable disease', 'Biology: defence, vaccination and drugs',
+      'Biology: monoclonal antibodies and plant disease', 'Biology: photosynthesis', 'Biology: respiration and metabolism',
+      'Biology: nervous system, brain and eye', 'Biology: hormones and blood glucose', 'Biology: reproductive hormones and contraception',
+      'Biology: kidneys, temperature and water balance', 'Biology: plant hormones', 'Biology: DNA, meiosis and reproduction',
+      'Biology: genetic inheritance', 'Biology: variation and evolution', 'Biology: selective breeding, genetic engineering and cloning',
+      'Biology: classification and fossils', 'Biology: ecosystems and adaptations', 'Biology: cycles and decomposition',
+      'Biology: biodiversity and human impact', 'Biology: food production',
+      'Chemistry: atoms, isotopes and electron structure', 'Chemistry: history of the atom', 'Chemistry: the periodic table and groups',
+      'Chemistry: transition metals', 'Chemistry: ionic, covalent and metallic bonding', 'Chemistry: structure and properties',
+      'Chemistry: carbon structures and nanoparticles', 'Chemistry: relative mass and conservation of mass',
+      'Chemistry: moles and reacting masses', 'Chemistry: yield and atom economy', 'Chemistry: concentration, titrations and gas volumes',
+      'Chemistry: reactivity and extracting metals', 'Chemistry: acids, alkalis and salts', 'Chemistry: electrolysis',
+      'Chemistry: energy changes', 'Chemistry: chemical cells and fuel cells', 'Chemistry: rates of reaction',
+      'Chemistry: reversible reactions and equilibrium', 'Chemistry: crude oil, alkanes and cracking',
+      'Chemistry: alkenes, alcohols and carboxylic acids', 'Chemistry: polymers', 'Chemistry: purity, chromatography and gas tests',
+      'Chemistry: identifying ions and instrumental analysis', 'Chemistry: the atmosphere and climate change', 'Chemistry: pollutants',
+      'Chemistry: water treatment and life cycle assessment', 'Chemistry: materials and corrosion', 'Chemistry: Haber process and fertilisers'] },
     { name: 'Spanish / PE', board: 'Pearson Edexcel (Spanish) · AQA (PE)', goal: 45, topics: [
-      'Spanish: past tenses', 'Spanish: school and future plans', 'Spanish: speaking photo cards',
-      'PE: anatomy and physiology', 'PE: training principles', 'PE: sport psychology'] },
-    { name: 'BTEC DIT', board: 'Pearson BTEC', goal: 30, note: 'Coursework deadlines only, small weekly chunks.', topics: [
-      'Next coursework deadline'] }
+      'Spanish: my personal world', 'Spanish: lifestyle and wellbeing', 'Spanish: my neighbourhood', 'Spanish: media and technology',
+      'Spanish: studying and my future', 'Spanish: travel and tourism',
+      'Spanish: present tense', 'Spanish: past tenses', 'Spanish: future and conditional', 'Spanish: translation',
+      'Spanish: speaking (role play, picture task, conversation)', 'Spanish: listening and dictation',
+      'PE: applied anatomy and physiology', 'PE: movement analysis', 'PE: physical training', 'PE: use of data',
+      'PE: sport psychology', 'PE: socio-cultural influences', 'PE: health, fitness and well-being'] },
+    { name: 'BTEC DIT', board: 'Pearson BTEC Tech Award', goal: 30, note: 'Coursework deadlines only, small weekly chunks.', topics: [
+      'Component 1: user interface design and project planning', 'Component 2: collecting, presenting and interpreting data',
+      'Component 3: effective digital working practices (exam)', 'Next coursework deadline'] }
   ],
+
+  // Old topic names → new ones, so your ratings, marks and past-paper notes carry over.
+  topicRenames: {
+    0: { 'Simultaneous equations': 'Algebra: simultaneous equations', 'Trigonometry': 'Geometry: trigonometry', 'Vectors': 'Geometry: vectors',
+      'Probability': 'Probability: basics and expected outcomes', 'Circle theorems': 'Geometry: circle theorems',
+      'Graphs and gradients': 'Algebra: straight-line graphs and gradients', 'Ratio and proportion': 'Ratio: ratio and proportion' },
+    1: { 'Forces and motion': 'Forces: motion, graphs and acceleration', 'Energy': 'Energy: stores and transfers',
+      'Electricity': 'Electricity: current, potential difference and resistance', 'Waves': 'Waves: properties of waves',
+      'Magnetism': 'Magnetism: magnets and fields', 'Atomic structure': 'Atomic: atoms, isotopes and models of the atom',
+      'Particle model': 'Particles: density and changes of state', 'Space': 'Space: the solar system and life cycle of stars' },
+    2: { 'Shakespeare play': 'Literature: Macbeth', 'Macbeth': 'Literature: Macbeth', '19th-century novel': 'Literature: Jekyll and Hyde',
+      'Jekyll and Hyde': 'Literature: Jekyll and Hyde', 'Modern text': 'Literature: An Inspector Calls', 'An Inspector Calls': 'Literature: An Inspector Calls',
+      'Poetry anthology': 'Literature: poetry anthology', 'Unseen poetry': 'Literature: unseen poetry',
+      'Language Paper 1': 'Language: fiction reading', 'Language Paper 2': 'Language: non-fiction reading' },
+    3: { 'Cells': 'Biology: cell structure and microscopy', 'Infection and response': 'Biology: communicable disease',
+      'Homeostasis': 'Biology: hormones and blood glucose', 'Inheritance and evolution': 'Biology: variation and evolution',
+      'Bonding and structure': 'Chemistry: ionic, covalent and metallic bonding', 'Quantitative chemistry': 'Chemistry: moles and reacting masses',
+      'Rates of reaction': 'Chemistry: rates of reaction', 'Organic chemistry': 'Chemistry: crude oil, alkanes and cracking' },
+    4: { 'Spanish: school and future plans': 'Spanish: studying and my future', 'Spanish: speaking photo cards': 'Spanish: speaking (role play, picture task, conversation)',
+      'PE: anatomy and physiology': 'PE: applied anatomy and physiology', 'PE: training principles': 'PE: physical training' }
+  },
 
   // Starting rows for the Benchmarks table. Retest every `retestWeeks` weeks.
   retestWeeks: 4,
