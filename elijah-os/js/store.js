@@ -19,9 +19,26 @@
       bench: DATA.benchmarks.map(b => ({ name: b.name, base: b.base || '', latest: '', target: '' })),
       skill: { name: '', steps: ['', '', '', '', ''], cur: 0 },
       reviews: {},
-      workouts: JSON.parse(JSON.stringify(DATA.defaultWorkouts)),
+      workouts: JSON.parse(JSON.stringify(DATA.defaultWorkouts || {})),
+      // Session-card progress: sess[date][sessionId] = { c: { rowKey: setsTicked }, done, added }
+      sess: {},
+      // ids of updates/notices already dismissed
+      seen: [],
+      // Revision topics per subject. conf: 0 not rated, 1 red, 2 amber, 3 green
+      topics: DATA.subjects.map(seedTopics),
       updatedAt: 0
     };
+  }
+
+  function seedTopics(sub) { return (sub.topics || []).map(name => ({ name, conf: 0 })); }
+
+  // The first version seeded Monday with an empty Pull-ups/Dips/Hollow/Handstand table.
+  // Those now live in the Upper-body session card, so drop that table if it was never filled in.
+  const OLD_MONDAY = ['Pull-ups', 'Dips', 'Hollow hold', 'Handstand hold'];
+  function dropOldMonday(w) {
+    const m = w && w[0];
+    if (Array.isArray(m) && m.length === OLD_MONDAY.length &&
+        m.every((x, i) => x && x.name === OLD_MONDAY[i] && !x.sets && !x.reps)) delete w[0];
   }
 
   function normalise(o) {
@@ -33,6 +50,9 @@
     }
     while (s.mins.length < DATA.subjects.length) s.mins.push(0);
     while (s.goals.length < DATA.subjects.length) s.goals.push(DATA.subjects[s.goals.length].goal);
+    if (!Array.isArray(s.topics)) s.topics = [];
+    while (s.topics.length < DATA.subjects.length) s.topics.push(seedTopics(DATA.subjects[s.topics.length]));
+    dropOldMonday(s.workouts);
     return s;
   }
 

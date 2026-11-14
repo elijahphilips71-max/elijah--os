@@ -20,7 +20,8 @@ Then open http://localhost:8000 in your browser. You can also double-click `inde
 
 | File | What it holds |
 |---|---|
-| `js/schedule.js` | The weekly schedule, missions, exam date, subjects and starting benchmarks. Edit this to change your week. |
+| `js/schedule.js` | The weekly schedule, session cards (workouts, pitch sessions, revision blocks), exam date, subjects, revision topics and starting benchmarks. Edit this to change your week. |
+| `js/updates.js` | Updates and notices shown on Today ("New for you") and on Log ("What's new"). |
 | `js/config.js` | Supabase keys for sync. Leave them empty to keep data on one device. |
 | `css/app.css` | The app's layout and look. |
 | `js/app.js` | The screens and what each button does. |
@@ -44,14 +45,14 @@ With sync turned on, the app also keeps a copy on each device, so it still opens
 
 The anon key is safe to put in a public website. The row-level security rules in `supabase.sql` stop anyone else from reading your data.
 
-## Put it online for free (GitHub Pages)
+## Put it online (GitHub Pages, updates itself)
 
-1. Create a new repository on GitHub, for example `elijah-os`.
-2. Upload every file in this folder to it. The `design-reference` folder is optional.
-3. In the repository, go to **Settings → Pages**. Under "Build and deployment", choose **Deploy from a branch**, pick `main` and `/ (root)`, then press **Save**.
-4. After a minute your app is at `https://YOUR-NAME.github.io/elijah-os/`.
+The repository has a workflow (`.github/workflows/deploy.yml`) that publishes this folder every time `main` changes.
 
-When you change files later, change `VERSION` at the top of `sw.js` (for example `elijah-os-v2`) so phones load the new version.
+1. One time only: in the repository, go to **Settings → Pages**, and under "Build and deployment" set **Source** to **GitHub Actions**.
+2. The app is at `https://elijahphilips71-max.github.io/elijah--os/`. That link never changes, so the home-screen app and bookmarks keep working.
+
+To ship an update: change the files, change `VERSION` at the top of `sw.js` (for example `elijah-os-v5`), add a line to `js/updates.js` saying what changed, and merge into `main`. About a minute later the site is live. An open app shows **"A new version of Elijah OS is ready · Reload"**, and the update appears under **New for you** on Today. Your data is not touched: it lives in the browser and in Supabase, not in the files.
 
 ## Install it as an app
 
@@ -67,7 +68,11 @@ When you change files later, change `VERSION` at the top of `sw.js` (for example
 - **Log check-in** ticks "Morning check-in" and folds the readiness card into a chip. Tap **Edit** to open it again.
 - If Sleep, Energy or Leg freshness is set to 2 or lower, an amber "Adjust today" banner appears.
 - **Save entry** ticks "2-line log". On the Log screen, if "Session done" is ticked, it also ticks "Football / physical session".
-- Workouts are saved per weekday, so Monday's workout is the same every Monday.
+- Each day lists its **session cards** (set in `schedule.js`). Tap a card to open it, tap a row to tick a set. When every row is ticked, or you press **Finish session**, the card is done: workout and pitch cards tick "Football / physical session", revision and past-paper cards tick "Revision block".
+- Revision cards pick the weakest topics of their subject (red first, then not rated, then amber). Finishing one adds its minutes to that subject. **Undo finish** takes them off again.
+- On Revision, tap **Topics** under a subject to rate topics red, amber or green, add new ones, or remove them.
+- The three-line button (top left on phone) opens the menu: screens, today's session cards, What's new and Revision topics. On desktop the same menu is the left sidebar.
+- **Extras** on Today holds any exercises not on a card. They are saved per weekday.
 - Revision minutes start again from 0 each Monday. Weekly goals can be edited: tap the number.
 - The Sunday review is saved separately for each week.
 
