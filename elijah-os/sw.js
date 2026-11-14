@@ -1,6 +1,6 @@
 // Elijah OS service worker: lets the app open offline.
 // Bump VERSION whenever you change files, so phones pick up the new version.
-const VERSION = 'elijah-os-v7';
+const VERSION = 'elijah-os-v8';
 const SHELL = [
   './',
   './index.html',
@@ -10,6 +10,7 @@ const SHELL = [
   './js/schedule.js',
   './js/updates.js',
   './js/cal.js',
+  './js/planner.js',
   './js/config.js',
   './js/store.js',
   './js/app.js',

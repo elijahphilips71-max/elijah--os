@@ -365,6 +365,19 @@ button { -webkit-user-select: none; user-select: none; }
 .os-evdot { position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--os-amber); box-shadow: 0 0 6px var(--os-amber); }
 .os-drow-ev { display: block; font-size: 12px; color: var(--os-amber); }
 
+/* Planner changes */
+.os-plan {
+  display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-radius: var(--radius-lg);
+  border: 1px dashed color-mix(in srgb, var(--os-amber) 60%, transparent); background: color-mix(in srgb, var(--os-amber) 6%, transparent);
+}
+.os-plan .os-k i { vertical-align: -2px; }
+.os-plan-line { font-size: 14px; line-height: 1.45; color: var(--color-neutral-200); padding-left: 12px; position: relative; }
+.os-plan-line::before { content: ''; position: absolute; left: 0; top: .6em; width: 5px; height: 5px; border-radius: 50%; background: var(--os-amber); }
+.os-plan-warn { display: flex; gap: 8px; font-size: 14px; line-height: 1.45; color: var(--os-amber); }
+.os-plan-warn i { font-size: 18px; flex: none; }
+.os-scard-note { font-size: 12px; color: var(--os-amber); }
+.os-scard.skipped { opacity: .55; }
+
 /* Temporary events */
 .os-ev { border-color: color-mix(in srgb, var(--os-amber) 55%, transparent); }
 .os-ev .os-scard-ic { color: var(--os-amber); background: color-mix(in srgb, var(--os-amber) 14%, transparent); }

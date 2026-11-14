@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-14-planner', date: '2026-11-14', kind: 'update',
+    title: 'The plan now reorganises itself',
+    body: 'Add an event and clashing sessions move to a free slot. On a game day, extra training is dropped. Revision is shortened or moved to tomorrow if there is no room. Clashes with academy or a match are flagged. Delete the event and the plan goes back to normal.'
+  },
+  {
     id: '2026-11-14-reminders', date: '2026-11-14', kind: 'update',
     title: 'Reminders',
     body: 'Turn on reminders from the menu (Reminders). The calendar feed now alerts you before every session too, even when the app is closed.'
