@@ -16,7 +16,7 @@
   const BUFFER = { game: [60, 45], training: [45, 30], plans: [15, 15], other: [15, 15] };
   const PHYSICAL_EVENT = { game: 'game day', training: 'extra training today' };
   const isPhysical = c => c.kind === 'gym' || c.kind === 'football' || c.kind === 'recovery';
-  const PRIORITY = { revision: 0, paper: 0, mental: 1, gym: 2, football: 2, creator: 3, recovery: 4 };
+  const PRIORITY = { revision: 0, paper: 0, mental: 1, gym: 2, football: 2, hustle: 3, recovery: 4 };
 
   function weekdayOf(date) { return (new Date(date + 'T12:00').getDay() + 6) % 7; }
   function dayName(date) { return new Date(date + 'T12:00').toLocaleDateString('en-GB', { weekday: 'short' }); }
@@ -25,10 +25,12 @@
   // Returns { items, changes, warnings, carryOut }
   //   item: { key, id, at, min, orig, status: 'ok'|'moved'|'shortened'|'in'|'skipped'|'out', note }
   //   Cards to show are the ones with status ok / moved / shortened / in.
-  function planDay(DATA, date, eventsOn, noCarryIn) {
+  // opts.hide(id): sessions to leave out entirely (e.g. side-hustle slots with no active project).
+  function planDay(DATA, date, eventsOn, noCarryIn, opts) {
+    opts = opts || {};
     const wd = weekdayOf(date), events = eventsOn(date);
     const win = (wd < 5 ? WINDOW.weekday : WINDOW.weekend).map(toMin);
-    const items = Cal.refs(DATA.schedule[wd], DATA.daily).filter(r => DATA.sessions[r.id]).map(r => {
+    const items = Cal.refs(DATA.schedule[wd], DATA.daily).filter(r => DATA.sessions[r.id] && !(opts.hide && opts.hide(r.id))).map(r => {
       const c = DATA.sessions[r.id];
       return { key: r.id, id: r.id, at: r.at, orig: r.at, min: c.minutes || 30, status: 'ok', note: '' };
     });
@@ -76,7 +78,11 @@
         else if (c.fixed) warnings.push(c.title + ' is close to ' + hit.title + '. Tight on time, and a heavy day for your legs.');
         return;
       }
-      if (c.onClash === 'skip') { it.status = 'skipped'; it.note = c.clashNote || 'Clashes with ' + hit.title; return; }
+      if (c.onClash === 'skip') {
+        it.status = 'skipped'; it.note = c.clashNote || 'Clashes with ' + hit.title;
+        if (c.kind !== 'mental') changes.push(c.title + ' dropped for today (clashes with ' + hit.title + ').');
+        return;
+      }
       movers.push(it);
     });
     if (phys) {
@@ -136,7 +142,7 @@
     // 4. Revision carried over from yesterday.
     if (!noCarryIn) {
       const prev = Cal.addDays(date, -1);
-      const before = planDay(DATA, prev, eventsOn, true);
+      const before = planDay(DATA, prev, eventsOn, true, opts);
       before.carryOut.forEach(id => {
         const c = DATA.sessions[id];
         const it = { key: id + '@carry', id, at: '', orig: '', min: c.minutes || 30, status: 'in', note: 'From ' + dayName(prev) };
