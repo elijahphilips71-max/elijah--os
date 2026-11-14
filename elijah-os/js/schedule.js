@@ -15,6 +15,11 @@ window.ELIJAH_DATA = {
       steps: ['Pick a story', 'Trim the script, write the hook', 'AI voiceover', 'Background gameplay + captions', 'Title, hashtags, upload'] }
   ],
 
+  // Saturday past papers rotate through these subjects, one per week (positions in `subjects`).
+  // You can always switch subject on the card. paperMins = default time allowed.
+  paperRotation: [0, 1, 3, 2, 4],
+  paperMins: { 0: 90, 1: 105, 2: 105, 3: 105, 4: 75 },
+
   // Every day: these session cards are added to each day (same format as `sessions` in a day row).
   daily: [['ao1-reps', '07:45'], ['evening', '21:15']],
 
@@ -224,29 +229,29 @@ window.ELIJAH_DATA = {
         { name: 'Sit the paper' },
         { name: 'Mark it against the mark scheme' }
       ],
-      logPaper: true   // the card ends with a form to log the score and the topics that lost marks
+      logPaper: true   // the card runs the paper as a mock exam: set up (link, timer), sit it, then log the marks
     }
   },
 
   // Revision subjects in priority order. goal = default weekly minutes (you can also edit goals in the app).
   // topics = the starting topic list. You can add, remove and rate topics in the app too.
   subjects: [
-    { name: 'Maths', goal: 75, topics: [
+    { name: 'Maths', board: 'AQA', goal: 75, topics: [
       'Algebra: quadratics', 'Simultaneous equations', 'Trigonometry', 'Vectors',
       'Probability', 'Circle theorems', 'Graphs and gradients', 'Ratio and proportion'] },
-    { name: 'Physics', goal: 75, topics: [
+    { name: 'Physics', board: 'AQA', goal: 75, topics: [
       'Forces and motion', 'Energy', 'Electricity', 'Waves',
       'Magnetism', 'Atomic structure', 'Particle model', 'Space'] },
-    { name: 'English', goal: 45, topics: [
+    { name: 'English', board: 'WJEC Eduqas', goal: 45, topics: [
       'Shakespeare play', '19th-century novel', 'Modern text', 'Poetry anthology',
       'Unseen poetry', 'Language Paper 1', 'Language Paper 2'] },
-    { name: 'Biology / Chemistry', goal: 45, topics: [
+    { name: 'Biology / Chemistry', board: 'AQA', goal: 45, topics: [
       'Cells', 'Infection and response', 'Homeostasis', 'Inheritance and evolution',
       'Bonding and structure', 'Quantitative chemistry', 'Rates of reaction', 'Organic chemistry'] },
-    { name: 'Spanish / PE', goal: 45, topics: [
+    { name: 'Spanish / PE', board: 'Pearson Edexcel (Spanish) · AQA (PE)', goal: 45, topics: [
       'Spanish: past tenses', 'Spanish: school and future plans', 'Spanish: speaking photo cards',
       'PE: anatomy and physiology', 'PE: training principles', 'PE: sport psychology'] },
-    { name: 'BTEC DIT', goal: 30, note: 'Coursework deadlines only, small weekly chunks.', topics: [
+    { name: 'BTEC DIT', board: 'Pearson BTEC', goal: 30, note: 'Coursework deadlines only, small weekly chunks.', topics: [
       'Next coursework deadline'] }
   ],
 
