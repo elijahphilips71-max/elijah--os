@@ -49,6 +49,8 @@ window.ELIJAH_DATA = {
   // Session cards. Each one shows on Today and Week for the days that list it.
   //   kind: 'gym' | 'football' | 'recovery' | 'revision' | 'paper' | 'mental' | 'routine'
   //   items: one row each. sets = how many ticks the row has (leave it out for a single tick).
+  //   fixed: true = the planner never moves or drops it (academy, match).
+  //   onClash: 'skip' = if an event clashes, skip it instead of moving it (clashNote says why).
   //   remind: minutes before the start to remind you (default 10). Optional cards have no reminder.
   //   For kind 'revision', `subject` is the subject's position in `subjects` (0 = first),
   //   or `subjects: [a, b]` to alternate between two subjects week by week.
@@ -112,7 +114,7 @@ window.ELIJAH_DATA = {
       ]
     },
     'cue': {
-      kind: 'mental', title: 'Pick one cue', minutes: 2,
+      kind: 'mental', title: 'Pick one cue', minutes: 2, onClash: 'skip', clashNote: 'Pick your cue before the event instead',
       focus: 'One thing to focus on tonight, e.g. "scan before receiving".',
       items: [{ name: 'Choose today’s cue before you leave' }, { name: 'After training: did you do it?' }]
     },
@@ -150,7 +152,7 @@ window.ELIJAH_DATA = {
       items: [{ name: 'Exam questions on today’s topics' }]
     },
     'academy': {
-      kind: 'football', title: 'Academy training', minutes: 90, remind: 30,
+      kind: 'football', fixed: true, title: 'Academy training', minutes: 90, remind: 30,
       focus: 'Full focus. Win your first action.',
       items: [
         { name: 'Eat a snack and drink water by 16:30' },
@@ -160,7 +162,7 @@ window.ELIJAH_DATA = {
       ]
     },
     'match': {
-      kind: 'football', title: 'Match day', minutes: 90,
+      kind: 'football', fixed: true, title: 'Match day', minutes: 90,
       focus: 'Play simple, play fast.',
       items: [
         { name: 'Breakfast 3 hours before kick-off' },

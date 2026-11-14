@@ -5,6 +5,7 @@
   const DATA = window.ELIJAH_DATA;
   const UPDATES = window.ELIJAH_UPDATES || [];
   const Cal = window.ElijahCal;
+  const Planner = window.ElijahPlanner;
   const Store = window.ElijahStore;
   const root = document.getElementById('app');
 
@@ -79,13 +80,18 @@
   // Temporary events on a date, earliest first; and the one that replaces the plan, if any.
   const eventsOn = k => (st().events || []).filter(e => e.date === k).sort((a, b) => (a.start || '').localeCompare(b.start || ''));
   const replacingEvent = k => eventsOn(k).find(e => e.replace);
-  // What a day effectively looks like once a replacing event is applied.
+  // The day's real plan after events (see planner.js), and the cards to show.
+  const planFor = d => Planner.planDay(DATA, iso(dt(d)), eventsOn);
+  const shownItems = d => planFor(d).items.filter(Planner.shown);
+  const sid = key => key.split('@')[0];
+  // What a day effectively looks like once events are applied.
   function dayView(i) {
-    const c = DATA.schedule[i], ev = replacingEvent(iso(dt(i)));
+    const evs = eventsOn(iso(dt(i)));
+    const c = DATA.schedule[i], ev = evs.find(e => e.replace) || evs.find(e => e.kind === 'game' || e.kind === 'training');
     if (!ev) return { title: c.title, load: c.load, time: c.time, sub: c.sub, mission: c.mission, ev: null };
     const k = EVK[ev.kind] || EVK.other;
     return { title: ev.title, load: k[2] === 'High' || c.load === 'High' ? 'High' : k[2], ev,
-      time: ev.start ? ev.start + (ev.end ? '–' + ev.end : '') : 'All day', sub: 'Planned: ' + c.title,
+      time: ev.start ? ev.start + (ev.end ? '–' + ev.end : '') : 'All day', sub: (ev.replace ? 'Planned: ' : 'Plan reorganised · was: ') + c.title,
       mission: ev.kind === 'game' ? 'Game day. Eat 3 hours before, warm up properly, play simple and fast.' : (ev.note || c.mission) };
   }
   const icon = n => `<i class="ph ph-${n}" aria-hidden="true"></i>`;
@@ -111,7 +117,7 @@
     return `<span class="os-k acc" style="padding:0 14px 10px">Elijah OS</span>
       ${nav()}
       ${ids.length ? `<span class="os-k os-menu-k">${isToday() ? 'Today' : FULL[ui.day]}</span>
-        ${ids.map(id => { const c = DATA.sessions[id], done = getSess(id).done;
+        ${ids.map(id => { const c = DATA.sessions[sid(id)], done = getSess(id).done;
           return `<button class="os-nav os-menu-sess ${done ? 'done' : ''}" data-act="goCard" data-v="${esc(id)}">${icon(done ? 'check-circle' : (KIND[c.kind] || KIND.gym)[1])}<span>${esc(c.title)}</span></button>`; }).join('')}` : ''}
       <span class="os-k os-menu-k">More</span>
       <button class="os-nav" data-act="goNews">${icon('megaphone')}<span>What's new</span>${unread ? `<span class="os-badge os-num">${unread}</span>` : ''}</button>
@@ -186,7 +192,7 @@
         <span class="os-scard-t"><span class="os-k">${esc(k[0])} · <span class="os-num">${esc(evTimes(e))}</span></span>
           <span class="os-scard-title">${esc(e.title)}</span>
           ${e.note ? `<span class="os-muted" style="font-size:13px;line-height:1.4">${esc(e.note)}</span>` : ''}
-          ${e.replace ? '<span class="os-muted" style="font-size:12px">Replaces the planned sessions</span>' : ''}</span>
+          <span class="os-muted" style="font-size:12px">${e.replace ? 'Clears the day’s plan' : 'Plan reorganised around it'}</span></span>
       </div>
       <div class="os-ev-acts">
         <button class="btn btn-secondary" data-act="evIcs" data-v="${esc(e.id)}">${icon('calendar-plus')}Add to calendar</button>
@@ -206,7 +212,7 @@
         <div class="field"><label for="ev-end">End</label><input class="input os-in" type="time" id="ev-end" value="${esc(e.end)}" data-in="ev" data-f="end"></div>
       </div>
       <div class="field"><label for="ev-note">Note (optional)</label><input class="input os-in" id="ev-note" placeholder="Kick-off 16:00, meet 15:40" value="${esc(e.note)}" data-in="ev" data-f="note"></div>
-      <button type="button" class="os-row ${e.replace ? 'on' : ''}" data-act="evReplace" aria-pressed="${!!e.replace}"><span class="os-box">${icon('check')}</span><span style="font-size:14px">Replaces that day's planned sessions</span></button>
+      <button type="button" class="os-row ${e.replace ? 'on' : ''}" data-act="evReplace" aria-pressed="${!!e.replace}"><span class="os-box">${icon('check')}</span><span style="font-size:14px">Clear the whole day's plan instead<br><span class="os-muted" style="font-size:12px">Otherwise the planner moves things around it</span></span></button>
       ${ui.evErr ? `<span class="os-err">${esc(ui.evErr)}</span>` : ''}
       <button class="btn btn-primary os-btn" type="submit">Save event</button></form>`;
   }
@@ -233,7 +239,8 @@
     const evs = [];
     for (let i = 0; i < 7; i++) {
       const k = iso(dt(i));
-      if (!replacingEvent(k)) dayRefs(i).forEach(r => { evs.push(Object.assign(Cal.planEvent(DATA, i, r, k), { uid: 'plan-' + k + '-' + r.id + '@elijah-os' })); });
+      shownItems(i).forEach(it => { const ev = Cal.planEvent(DATA, i, { id: it.id, at: it.at }, k);
+        evs.push(Object.assign(ev, { uid: 'plan-' + k + '-' + it.key + '@elijah-os', end: it.at ? Cal.addMin(it.at, it.min) : '' })); });
       eventsOn(k).forEach(e => evs.push(evCalData(e)));
     }
     return Cal.calendar(evs, 'Elijah OS · week of ' + fmt(dt(0), { day: 'numeric', month: 'short' }));
@@ -252,16 +259,16 @@
 
   // Today's reminders, whatever day the app is showing: [{ key, at: 'HH:MM', remindAt: 'HH:MM', title, body }]
   function todaysReminders() {
-    const i = todayIdx(), k = iso(new Date()), cfg = remindCfg(), out = [];
+    const k = iso(new Date()), cfg = remindCfg(), out = [];
     const daily = st().daily[k] || { chk: [false, false, false, false] };
     const sess = st().sess[k] || {};
     const add = (key, at, lead, title, body) => out.push({ key, at, remindAt: Cal.addMin(at, -lead + 24 * 60), title, body });
     if (!daily.chk[0]) add('checkin', '07:30', 0, 'Morning check-in', 'Sleep, energy, legs: 1 to 5.');
-    if (!replacingEvent(k)) Cal.refs(DATA.schedule[i], DATA.daily).forEach(r => {
+    Planner.planDay(DATA, k, eventsOn).items.filter(Planner.shown).forEach(r => {
       const c = DATA.sessions[r.id];
-      if (!c || !r.at || c.optional || (sess[r.id] && sess[r.id].done)) return;
+      if (!c || !r.at || c.optional || (sess[r.key] && sess[r.key].done)) return;
       const lead = c.remind != null ? c.remind : cfg.lead;
-      add('s-' + r.id, r.at, lead, c.title, (lead ? 'Starts at ' + r.at + '. ' : '') + (c.focus || ''));
+      add('s-' + r.key + '-' + r.at, r.at, lead, c.title, (lead ? 'Starts at ' + r.at + '. ' : '') + (r.status !== 'ok' && r.note ? r.note + '. ' : '') + (c.focus || ''));
     });
     eventsOn(k).forEach(e => { if (e.start) add('e-' + e.id, e.start, Math.max(30, cfg.lead), e.title, 'Starts at ' + e.start + (e.note ? '. ' + e.note : '')); });
     if (!daily.chk[3]) add('log', '21:00', 0, '2-line log', 'One win, one fix.');
@@ -302,9 +309,8 @@
   }
 
   // ---------- session cards ----------
-  const dayRefs = d => Cal.refs(DATA.schedule[d], DATA.daily).filter(r => DATA.sessions[r.id]);
-  const cardIds = d => dayRefs(d).map(r => r.id);
-  const startAt = (d, id) => { const r = dayRefs(d).find(x => x.id === id); return r ? r.at : ''; };
+  const cardIds = d => shownItems(d).map(it => it.key);
+  const itemOf = key => planFor(ui.day).items.find(it => it.key === key) || { key, id: sid(key), at: '', min: (DATA.sessions[sid(key)] || {}).minutes || 0, status: 'ok' };
   function getSess(id) { const e = (st().sess[dayKey()] || {})[id]; return Object.assign({ c: {}, done: false, added: 0 }, e); }
   // Which daily checklist item a finished card ticks: 1 = Revision block, 2 = Football / physical session.
   const checkFor = c => c.kind === 'revision' || c.kind === 'paper' ? 1 : (c.kind === 'gym' || c.kind === 'football' || c.kind === 'recovery') ? 2 : -1;
@@ -312,7 +318,7 @@
   // Rows for one card. Revision cards put the weakest topics of their subject first
   // (red, then not rated, then amber), keeping any topic already ticked today.
   function cardRows(id) {
-    const c = DATA.sessions[id], e = getSess(id), rows = [];
+    const c = DATA.sessions[sid(id)], e = getSess(id), rows = [];
     const sj = subjOf(c);
     if (c.kind === 'revision' && sj != null) {
       const ts = st().topics[sj] || [];
@@ -337,38 +343,46 @@
   }
 
   function sessionCards(d, title) {
-    const ids = cardIds(d), k = iso(dt(d)), evs = eventsOn(k), rep = replacingEvent(k);
+    const ids = cardIds(d), k = iso(dt(d)), evs = eventsOn(k), plan = planFor(d);
     const open = ui.openCard != null ? ui.openCard : (ids.find(id => !getSess(id).done) || '');
-    const core = ids.filter(id => !DATA.sessions[id].optional);
+    const core = ids.filter(id => !DATA.sessions[sid(id)].optional);
     const doneN = core.filter(id => getSess(id).done).length;
-    const planned = rep && !ui.showPlanned
-      ? (ids.length ? `<button class="os-chip" data-act="showPlanned">${icon('eye-slash')}<span>Planned sessions skipped for ${esc(rep.title)}</span><span style="margin-left:auto;color:var(--color-accent-300);font-size:13px">Show</span></button>` : '')
-      : ids.map(id => sessCard(id, id === open)).join('');
+    const hidden = plan.items.filter(it => !Planner.shown(it));
+    const changes = plan.changes.length || plan.warnings.length ? `<section class="os-plan" role="status">
+        <div class="os-between"><span class="os-k camber">${icon('arrows-clockwise')} Plan reorganised</span></div>
+        ${plan.warnings.map(w => `<div class="os-plan-warn">${icon('warning')}<span>${esc(w)}</span></div>`).join('')}
+        ${plan.changes.map(t => `<div class="os-plan-line">${esc(t)}</div>`).join('')}
+        ${hidden.length ? `<button class="btn btn-ghost" style="align-self:flex-start;padding-left:0" data-act="showPlanned">${ui.showPlanned ? 'Hide' : 'Show'} skipped sessions (${hidden.length})</button>` : ''}
+      </section>` : '';
+    const planned = ids.map(id => sessCard(id, id === open)).join('') +
+      (ui.showPlanned ? hidden.map(it => sessCard(it.key, false, true)).join('') : '');
     return `<section class="os-cards" aria-label="${esc(title)}">
       <div class="os-between" style="padding:0 2px"><span class="os-k">${esc(title)}</span>${core.length ? `<span class="os-num os-muted" style="font-size:12px">${doneN} of ${core.length} done</span>` : ''}</div>
       ${evs.map(eventCard).join('')}
+      ${changes}
       ${planned}
       ${ui.evForm ? eventForm() : `<button class="btn btn-secondary os-btn" data-act="evNew">${icon('plus')}Add event for ${fmt(dt(d), { weekday: 'long' })}</button>`}</section>`;
   }
 
-  function sessCard(id, open) {
-    const c = DATA.sessions[id], e = getSess(id), k = KIND[c.kind] || KIND.gym;
+  function sessCard(id, open, skipped) {
+    const c = DATA.sessions[sid(id)], e = getSess(id), k = KIND[c.kind] || KIND.gym, it = itemOf(id);
     const p = cardProgress(id);
     const pct = p.total ? Math.round(p.got / p.total * 100) : 0;
     const sj = subjOf(c), sub = c.kind === 'revision' && sj != null ? DATA.subjects[sj] : null;
-    return `<article class="os-scard ${e.done ? 'done' : ''} ${open ? 'open' : ''}" data-kind="${esc(c.kind)}">
+    return `<article class="os-scard ${e.done ? 'done' : ''} ${open ? 'open' : ''} ${skipped ? 'skipped' : ''}" data-kind="${esc(c.kind)}">
       <button class="os-scard-head" data-act="card" data-v="${esc(id)}" aria-expanded="${open}">
         <span class="os-scard-ic">${icon(e.done ? 'check' : k[1])}</span>
-        <span class="os-scard-t"><span class="os-k">${c.optional ? 'Optional · ' : ''}${esc(k[0])}${sub ? ' · ' + esc(sub.name) : ''} · <span class="os-num">${c.minutes} min</span></span>
-          <span class="os-scard-title">${esc(c.title)}</span></span>
-        <span class="os-num os-scard-pct">${startAt(ui.day, id) ? `<span class="os-muted">${esc(startAt(ui.day, id))}</span><br>` : ''}${e.done ? 'Done' : p.got + '/' + p.total}</span>
+        <span class="os-scard-t"><span class="os-k">${c.optional ? 'Optional · ' : ''}${esc(k[0])}${sub ? ' · ' + esc(sub.name) : ''} · <span class="os-num">${it.min} min</span></span>
+          <span class="os-scard-title">${esc(c.title)}</span>
+          ${it.status !== 'ok' && it.note ? `<span class="os-scard-note">${icon(skipped ? 'prohibit' : 'arrows-clockwise')} ${esc(it.note)}</span>` : ''}</span>
+        <span class="os-num os-scard-pct">${it.at ? `<span class="${it.status === 'ok' ? 'os-muted' : 'camber'}">${esc(it.at)}</span><br>` : ''}${e.done ? 'Done' : p.got + '/' + p.total}</span>
         ${icon(open ? 'caret-up' : 'caret-down')}
       </button>
       <div class="os-bar os-scard-bar"><div style="width:${e.done ? 100 : pct}%"></div></div>
       ${open ? `<div class="os-scard-body">
         ${c.focus ? `<div class="os-scard-focus">${esc(c.focus)}</div>` : ''}
         <div class="os-scard-rows">${cardRows(id).map(r => sessRow(id, r, e)).join('')}</div>
-        <button class="btn ${e.done ? 'btn-secondary' : 'btn-primary'} os-btn" data-act="sessDone" data-v="${esc(id)}">${e.done ? 'Undo finish' : 'Finish session'}${!e.done && sub ? ` · +${c.minutes} min ${esc(sub.name)}` : ''}</button>
+        <button class="btn ${e.done ? 'btn-secondary' : 'btn-primary'} os-btn" data-act="sessDone" data-v="${esc(id)}">${e.done ? 'Undo finish' : 'Finish session'}${!e.done && sub ? ` · +${it.min} min ${esc(sub.name)}` : ''}</button>
       </div>` : ''}
     </article>`;
   }
@@ -388,7 +402,7 @@
 
   // Finishing a card ticks the matching daily checklist item, and revision cards add their minutes.
   function finish(id, on) {
-    const c = DATA.sessions[id], k = dayKey(), wk = curWeekKey(), day = getDay();
+    const c = DATA.sessions[sid(id)], mins = itemOf(id).min || c.minutes, k = dayKey(), wk = curWeekKey(), day = getDay();
     Store.update(s => {
       const all = s.sess[k] = s.sess[k] || {};
       const e = Object.assign({ c: {}, done: false, added: 0 }, all[id]);
@@ -397,7 +411,7 @@
       const sj = subjOf(c);
       if (c.kind === 'revision' && sj != null && ui.week === 0) {
         if (s.minsWeek !== wk) { s.mins = s.mins.map(() => 0); s.minsWeek = wk; }
-        if (on) { s.mins[sj] += c.minutes; e.added = c.minutes; e.subj = sj; }
+        if (on) { s.mins[sj] += mins; e.added = mins; e.subj = sj; }
         else { const was = e.subj != null ? e.subj : sj; s.mins[was] = Math.max(0, s.mins[was] - (e.added || 0)); e.added = 0; }
       }
       all[id] = e;
@@ -699,12 +713,12 @@
     },
     shiftWeek(v) { ui.week += +v; ui.openCard = null; ui.showPlanned = false; },
     goToday() { ui.week = 0; ui.day = todayIdx(); ui.openCard = null; ui.showPlanned = false; },
-    showPlanned() { ui.showPlanned = true; },
-    evNew() { ui.evForm = true; ui.evErr = ''; ui.ev = { title: '', kind: 'game', date: dayKey(), start: '16:00', end: '17:30', note: '', replace: true };
+    showPlanned() { ui.showPlanned = !ui.showPlanned; },
+    evNew() { ui.evForm = true; ui.evErr = ''; ui.ev = { title: '', kind: 'game', date: dayKey(), start: '16:00', end: '17:30', note: '', replace: false };
       setTimeout(() => { const el = root.querySelector('#ev-title'); if (el) { el.focus(); el.scrollIntoView({ block: 'center' }); } }); },
     evNewMenu() { ui.menu = false; if (ui.tab !== 'week') ui.tab = 'today'; actions.evNew(); },
     evCancel() { ui.evForm = false; ui.ev = null; },
-    evKind(v) { ui.ev.kind = v; ui.ev.replace = v === 'game' || v === 'training'; },
+    evKind(v) { ui.ev.kind = v; },
     evReplace() { ui.ev.replace = !ui.ev.replace; },
     evRm(v) {
       const e = (st().events || []).find(x => x.id === v);
