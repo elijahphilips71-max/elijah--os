@@ -24,6 +24,8 @@
       sess: {},
       // ids of updates/notices already dismissed
       seen: [],
+      // Temporary events: { id, date, title, kind, start, end, note, replace }
+      events: [],
       // Revision topics per subject. conf: 0 not rated, 1 red, 2 amber, 3 green
       topics: DATA.subjects.map(seedTopics),
       updatedAt: 0

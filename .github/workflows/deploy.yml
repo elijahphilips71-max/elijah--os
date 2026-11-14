@@ -6,7 +6,7 @@ name: Deploy Elijah OS
 on:
   push:
     branches: [main]
-    paths: ['elijah-os/**', '.github/workflows/deploy.yml']
+    paths: ['elijah-os/**', 'tools/**', '.github/workflows/deploy.yml']
   workflow_dispatch:
 
 permissions:
@@ -26,6 +26,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: Build calendar feed from the schedule
+        run: node tools/make-calendar.js
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

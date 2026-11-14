@@ -21,6 +21,8 @@ Then open http://localhost:8000 in your browser. You can also double-click `inde
 | File | What it holds |
 |---|---|
 | `js/schedule.js` | The weekly schedule, session cards (workouts, pitch sessions, revision blocks), exam date, subjects, revision topics and starting benchmarks. Edit this to change your week. |
+| `js/cal.js` | Calendar helpers: Add to calendar, Download week, and the subscribable feed. |
+| `calendar.ics` | The weekly plan as a calendar feed. Made from `schedule.js` by `node tools/make-calendar.js` (the deploy does this too). |
 | `js/updates.js` | Updates and notices shown on Today ("New for you") and on Log ("What's new"). |
 | `js/config.js` | Supabase keys for sync. Leave them empty to keep data on one device. |
 | `css/app.css` | The app's layout and look. |
@@ -72,6 +74,10 @@ To ship an update: change the files, change `VERSION` at the top of `sw.js` (for
 - Revision cards pick the weakest topics of their subject (red first, then not rated, then amber). Finishing one adds its minutes to that subject. **Undo finish** takes them off again.
 - On Revision, tap **Topics** under a subject to rate topics red, amber or green, add new ones, or remove them.
 - The three-line button (top left on phone) opens the menu: screens, today's session cards, What's new and Revision topics. On desktop the same menu is the left sidebar.
+- The arrows on Today step one day at a time, into next or last week too. The double arrows on Week step a whole week. **Back to today** jumps home.
+- **Add event** (under the session cards, or in the menu) adds a one-off: a game, extra training, plans. Tick **Replaces that day's planned sessions** and that day's cards are tucked away (tap **Show** to see them), the day's load and mission change, and the day gets an amber dot in the day strip. Each event has **Add to calendar** (.ics) and **Google** buttons.
+- **Calendar** (on Week, or in the menu): **Subscribe** adds the weekly plan to Apple Calendar and it updates itself when the schedule changes. For Google Calendar, copy the link and add it under Other calendars → From URL. **Download** saves the week shown, including your events, as one .ics file.
+- Revision minutes only count for the current week. Finishing a card in another week does not add minutes.
 - **Extras** on Today holds any exercises not on a card. They are saved per weekday.
 - Revision minutes start again from 0 each Monday. Weekly goals can be edited: tap the number.
 - The Sunday review is saved separately for each week.

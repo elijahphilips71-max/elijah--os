@@ -1,0 +1,163 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Elijah OS//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Elijah OS
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:plan-0-recovery@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261109T160000
+DTEND:20261109T162000
+RRULE:FREQ=WEEKLY
+SUMMARY:Recovery and mobility
+DESCRIPTION:Easy. Leave feeling fresher than you started.\n• Foam roll: ca
+ lves\, quads\, glutes — 6 min\n• Hip flexor stretch — 2 × 45s each side\n
+ • Hamstring stretch — 2 × 45s each side\n• Ankle mobility — 2 × 10 each s
+ ide
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-0-upper-cali@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261109T163000
+DTEND:20261109T171000
+RRULE:FREQ=WEEKLY
+SUMMARY:Upper-body calisthenics
+DESCRIPTION:Strict reps\, full range. Stop 1–2 reps before failure.\n• Pul
+ l-ups — 4 × 6–8\n• Dips — 4 × 8–10\n• Pike push-ups — 3 × 8\n• Hollow hol
+ d — 3 × 30s\n• Handstand hold (wall) — 5 × 20–30s
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-0-rev-maths@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261109T173000
+DTEND:20261109T183000
+RRULE:FREQ=WEEKLY
+SUMMARY:Maths revision
+DESCRIPTION:Two weak topics\, then exam questions on them.\n• 10 exam ques
+ tions on today’s topics
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-1-astro-skill@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261110T154500
+DTEND:20261110T164500
+RRULE:FREQ=WEEKLY
+SUMMARY:Astro: skill sequences
+DESCRIPTION:Clean touches at speed. Repeat each sequence until it is autom
+ atic.\n• Warm-up and mobility — 10 min\n• Ball mastery sequence — 4 × 60s
+ \n• Wall passes\, left then right — 3 × 60s each\n• Receive\, turn\, acce
+ lerate — 6 × 3 each side\n• Weak-foot finishes — 2 × 10
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-1-rev-physics@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261110T173000
+DTEND:20261110T181500
+RRULE:FREQ=WEEKLY
+SUMMARY:Physics revision
+DESCRIPTION:Learn it\, then test yourself without notes.\n• Blurt everythi
+ ng from memory\, then check
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-2-rev-science@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261111T163000
+DTEND:20261111T170000
+RRULE:FREQ=WEEKLY
+SUMMARY:Biology / Chemistry revision
+DESCRIPTION:One topic\, done properly\, before academy.\n• Flashcards for 
+ the topic
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-2-academy@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261111T181500
+DTEND:20261111T194500
+RRULE:FREQ=WEEKLY
+SUMMARY:Academy training
+DESCRIPTION:Full focus. Win your first action.\n• Eat a snack and drink wa
+ ter by 16:30\n• Pack boots\, shin pads\, bottle\n• Activation before the 
+ session — 10 min\n• Training\n• Stretch and refuel after
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-3-rev-english@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261112T163000
+DTEND:20261112T170000
+RRULE:FREQ=WEEKLY
+SUMMARY:English revision
+DESCRIPTION:Quotes and one timed paragraph.\n• Write one paragraph in 12 m
+ inutes
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-3-academy@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261112T181500
+DTEND:20261112T194500
+RRULE:FREQ=WEEKLY
+SUMMARY:Academy training
+DESCRIPTION:Full focus. Win your first action.\n• Eat a snack and drink wa
+ ter by 16:30\n• Pack boots\, shin pads\, bottle\n• Activation before the 
+ session — 10 min\n• Training\n• Stretch and refuel after
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-4-astro-speed@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261113T154500
+DTEND:20261113T164500
+RRULE:FREQ=WEEKLY
+SUMMARY:Astro: speed and match-speed reps
+DESCRIPTION:Short\, sharp reps with full rest. Stop while you are still fa
+ st.\n• Warm-up and sprint drills — 12 min\n• 10m sprints — 6 × 1\n• 20m f
+ lying sprints — 4 × 1\n• Dribble at match speed\, cut\, finish — 6 × 1\n•
+  Cool-down — 5 min
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-4-rev-lang@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261113T173000
+DTEND:20261113T180000
+RRULE:FREQ=WEEKLY
+SUMMARY:Spanish / PE revision
+DESCRIPTION:Short and active: say it out loud or write it.\n• Self-test on
+  the topic
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-5-past-paper@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261114T093000
+DTEND:20261114T110000
+RRULE:FREQ=WEEKLY
+SUMMARY:Timed past paper
+DESCRIPTION:Exam conditions: timer on\, phone away\, no notes.\n• Pick the
+  paper and set the timer\n• Sit the paper\n• Mark it with the mark scheme
+ \n• Add the score on the Revision screen\n• Rate the topics you dropped m
+ arks on
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-5-recovery@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261114T150000
+DTEND:20261114T152000
+RRULE:FREQ=WEEKLY
+SUMMARY:Recovery and mobility
+DESCRIPTION:Easy. Leave feeling fresher than you started.\n• Foam roll: ca
+ lves\, quads\, glutes — 6 min\n• Hip flexor stretch — 2 × 45s each side\n
+ • Hamstring stretch — 2 × 45s each side\n• Ankle mobility — 2 × 10 each s
+ ide
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-6-match@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART;VALUE=DATE:20261115
+DTEND;VALUE=DATE:20261116
+RRULE:FREQ=WEEKLY
+SUMMARY:Match day
+DESCRIPTION:Play simple\, play fast.\n• Breakfast 3 hours before kick-off\
+ n• Bag packed the night before\n• Warm-up\n• Match\n• Refuel and stretch 
+ within an hour
+END:VEVENT
+END:VCALENDAR

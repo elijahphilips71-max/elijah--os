@@ -10,32 +10,33 @@ window.ELIJAH_DATA = {
 
   // One row per day, Monday first.
   // load is 'High', 'Medium' or 'Low'.
-  // sessions lists the session cards for that day, in order (ids from `sessions` below).
+  // sessions lists the session cards for that day, in order: [id, start time] (ids from `sessions` below).
+  // Leave the time out (just the id) for an all-day item. Times feed the calendar (calendar.ics).
   schedule: [
     { day: 'Mon', title: 'Recovery, upper-body calisthenics, Maths revision', load: 'Low',
       time: 'After school · Maths 60 min', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Recover well. Upper body, then one hour of Maths.',
-      sessions: ['recovery', 'upper-cali', 'rev-maths'] },
+      sessions: [['recovery', '16:00'], ['upper-cali', '16:30'], ['rev-maths', '17:30']] },
     { day: 'Tue', title: 'Astro: skill sequences', load: 'Medium',
       time: '15:45–16:45', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Clean touches at speed. Repeat each sequence until it is automatic.',
-      sessions: ['astro-skill', 'rev-physics'] },
+      sessions: [['astro-skill', '15:45'], ['rev-physics', '17:30']] },
     { day: 'Wed', title: 'Academy training', load: 'High',
       time: '18:15 · leave 18:00', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Bring full focus to academy. Win your first action.',
-      sessions: ['rev-science', 'academy'] },
+      sessions: [['rev-science', '16:30'], ['academy', '18:15']] },
     { day: 'Thu', title: 'Academy training', load: 'High',
       time: '18:15 · leave 18:00', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Second academy night. Quality over volume.',
-      sessions: ['rev-english', 'academy'] },
+      sessions: [['rev-english', '16:30'], ['academy', '18:15']] },
     { day: 'Fri', title: 'Astro: speed and match-speed reps', load: 'Medium',
       time: '15:45–16:45', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Short, sharp speed reps. Stop while you are still fast.',
-      sessions: ['astro-speed', 'rev-lang'] },
+      sessions: [['astro-speed', '15:45'], ['rev-lang', '17:30']] },
     { day: 'Sat', title: 'Past paper, then rest', load: 'Low',
       time: 'Morning', sub: 'Rest in the afternoon',
       mission: 'Past paper under timed conditions, then switch off.',
-      sessions: ['past-paper', 'recovery'] },
+      sessions: [['past-paper', '09:30'], ['recovery', '15:00']] },
     { day: 'Sun', title: 'Match', load: 'High',
       time: 'Match day', sub: '',
       mission: 'Match day. Play simple, play fast.',
