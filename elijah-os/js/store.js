@@ -16,8 +16,8 @@
       minsWeek: '',
       goals: DATA.subjects.map(s => s.goal),
       scores: [],
-      bench: DATA.benchmarks.map(b => ({ name: b.name, base: b.base || '', latest: '', target: '' })),
-      skill: { name: '', steps: ['', '', '', '', ''], cur: 0 },
+      bench: benchDefaults(),
+      skills: skillDefaults(),
       reviews: {},
       workouts: JSON.parse(JSON.stringify(DATA.defaultWorkouts || {})),
       // Session-card progress: sess[date][sessionId] = { c: { rowKey: setsTicked }, done, added }
@@ -31,6 +31,10 @@
       updatedAt: 0
     };
   }
+
+  function benchDefaults() { return DATA.benchmarks.map(b => ({ name: b.name, base: b.base || '', latest: '', target: b.target || '' })); }
+  function skillDefaults() { return (DATA.skills || []).map(k => ({ name: k.name, steps: k.steps.slice(), cur: 0 })); }
+  const OLD_BENCH = ['10m sprint', '20m sprint', 'Wall passes / 60s (L)', 'Wall passes / 60s (R)', 'Weak-foot finishes / 10', 'Pull-ups', 'Dips', 'Hollow hold', 'Handstand hold'];
 
   function seedTopics(sub) { return (sub.topics || []).map(name => ({ name, conf: 0 })); }
 
@@ -52,9 +56,20 @@
     }
     while (s.mins.length < DATA.subjects.length) s.mins.push(0);
     while (s.goals.length < DATA.subjects.length) s.goals.push(DATA.subjects[s.goals.length].goal);
+    // Goals never edited from the first version's defaults follow the new plan's defaults.
+    if ([150, 120, 90, 90, 60].every((g, i) => s.goals[i] === g)) s.goals = DATA.subjects.map(x => x.goal);
     if (!Array.isArray(s.topics)) s.topics = [];
     while (s.topics.length < DATA.subjects.length) s.topics.push(seedTopics(DATA.subjects[s.topics.length]));
     dropOldMonday(s.workouts);
+    // Untouched benchmark table from the first version: switch to the new list.
+    if (s.bench.length === OLD_BENCH.length && s.bench.every((b, i) => b.name === OLD_BENCH[i] && !b.latest && !b.target && (!b.base || b.base === '12'))) s.bench = benchDefaults();
+    // The first version had one empty skill ladder; keep it only if it was filled in.
+    if (o && o.skill && !o.skills) {
+      const old = o.skill, used = old.name || (old.steps || []).some(Boolean);
+      s.skills = used ? [{ name: old.name, steps: (old.steps || []).filter(Boolean).length ? old.steps.filter(Boolean) : ['', '', ''], cur: old.cur || 0 }].concat(skillDefaults().slice(1)) : skillDefaults();
+    }
+    delete s.skill;
+    if (!Array.isArray(s.skills) || !s.skills.length) s.skills = skillDefaults();
     return s;
   }
 

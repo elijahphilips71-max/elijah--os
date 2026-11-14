@@ -7,69 +7,154 @@ X-WR-CALNAME:Elijah OS
 REFRESH-INTERVAL;VALUE=DURATION:PT6H
 X-PUBLISHED-TTL:PT6H
 BEGIN:VEVENT
-UID:plan-0-recovery@elijah-os
-DTSTAMP:20261109T000000Z
-DTSTART:20261109T160000
-DTEND:20261109T162000
-RRULE:FREQ=WEEKLY
-SUMMARY:Recovery and mobility
-DESCRIPTION:Easy. Leave feeling fresher than you started.\n• Foam roll: ca
- lves\, quads\, glutes — 6 min\n• Hip flexor stretch — 2 × 45s each side\n
- • Hamstring stretch — 2 × 45s each side\n• Ankle mobility — 2 × 10 each s
- ide
-END:VEVENT
-BEGIN:VEVENT
 UID:plan-0-upper-cali@elijah-os
 DTSTAMP:20261109T000000Z
-DTSTART:20261109T163000
-DTEND:20261109T171000
+DTSTART:20261109T161500
+DTEND:20261109T165500
 RRULE:FREQ=WEEKLY
 SUMMARY:Upper-body calisthenics
-DESCRIPTION:Strict reps\, full range. Stop 1–2 reps before failure.\n• Pul
- l-ups — 4 × 6–8\n• Dips — 4 × 8–10\n• Pike push-ups — 3 × 8\n• Hollow hol
- d — 3 × 30s\n• Handstand hold (wall) — 5 × 20–30s
+DESCRIPTION:Stop 2 reps short on every set. Quality over fatigue.\n• Warm-
+ up: wrist circles\, shoulder dislocates\, scap pull-ups — 5 min\n• Chest-
+ to-wall handstand — 5 × 15–20s\n• Pull-ups — 3 × ~8–10\, stop 2 short\n• 
+ Dips\, elbows to ~90° — 3 × stop 2 short\n• Inverted rows — 3 × 10–12\n• 
+ Hollow hold — 4 × 10–15s\n• Tuck L-sit on dip bars — 3 × 10s\n• Mobility:
+  hips\, hamstrings\, groin — 10 min
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Upper-body calisthenics
+TRIGGER:-PT10M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:plan-0-rev-maths@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261109T173000
-DTEND:20261109T183000
+DTEND:20261109T184500
 RRULE:FREQ=WEEKLY
 SUMMARY:Maths revision
 DESCRIPTION:Two weak topics\, then exam questions on them.\n• 10 exam ques
  tions on today’s topics
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Maths revision
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-0-match-review@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261109T190000
+DTEND:20261109T190500
+RRULE:FREQ=WEEKLY
+SUMMARY:Match review
+DESCRIPTION:Five minutes on the last match.\n• 3 good actions\n• 1 repeate
+ d problem
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Match review
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-0-wall@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261109T191000
+DTEND:20261109T193000
+RRULE:FREQ=WEEKLY
+SUMMARY:Home wall session
+DESCRIPTION:Optional\, after revision. Weak foot only for the second half.
+ \n• Two-touch passing\, both feet\, then one-touch\n• Receiving across bo
+ dy and turning\n• Second half: weak foot only
 END:VEVENT
 BEGIN:VEVENT
 UID:plan-1-astro-skill@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261110T154500
-DTEND:20261110T164500
+DTEND:20261110T162000
 RRULE:FREQ=WEEKLY
 SUMMARY:Astro: skill sequences
-DESCRIPTION:Clean touches at speed. Repeat each sequence until it is autom
- atic.\n• Warm-up and mobility — 10 min\n• Ball mastery sequence — 4 × 60s
- \n• Wall passes\, left then right — 3 × 60s each\n• Receive\, turn\, acce
- lerate — 6 × 3 each side\n• Weak-foot finishes — 2 × 10
+DESCRIPTION:About 75% pace. Half speed first\, then full speed.\n• Warm-up
+ : jog\, dynamic stretches\, 3 build-ups — 8 min\n• Check away\, receive o
+ n half-turn\, drive\, shoot — 4 × 5 reps\n• Weak foot: first touch and fi
+ nishing — 10 min
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Astro: skill sequences
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-1-lower-body@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261110T170000
+DTEND:20261110T173000
+RRULE:FREQ=WEEKLY
+SUMMARY:Lower body at home (light)
+DESCRIPTION:Light. Stop 2–3 reps short on every set.\n• Split squats — 2 ×
+  8 each leg\n• Single-leg RDL — 2 × 8 each leg\n• Single-leg glute bridge
+  — 2 × 12\n• Nordic curl negatives — 2 × 3–5\n• Skill snack: tuck L-sit h
+ olds — 10 min
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Lower body at home (light)
+TRIGGER:-PT10M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:plan-1-rev-physics@elijah-os
 DTSTAMP:20261109T000000Z
-DTSTART:20261110T173000
-DTEND:20261110T181500
+DTSTART:20261110T180000
+DTEND:20261110T191500
 RRULE:FREQ=WEEKLY
 SUMMARY:Physics revision
 DESCRIPTION:Learn it\, then test yourself without notes.\n• Blurt everythi
  ng from memory\, then check
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Physics revision
+TRIGGER:-PT10M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:plan-2-rev-science@elijah-os
+UID:plan-1-wall@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261110T192000
+DTEND:20261110T194000
+RRULE:FREQ=WEEKLY
+SUMMARY:Home wall session
+DESCRIPTION:Optional\, after revision. Weak foot only for the second half.
+ \n• Two-touch passing\, both feet\, then one-touch\n• Receiving across bo
+ dy and turning\n• Second half: weak foot only
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-2-rev-lang@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261111T163000
-DTEND:20261111T170000
+DTEND:20261111T171500
 RRULE:FREQ=WEEKLY
-SUMMARY:Biology / Chemistry revision
-DESCRIPTION:One topic\, done properly\, before academy.\n• Flashcards for 
- the topic
+SUMMARY:Spanish + PE revision
+DESCRIPTION:30–45 minutes. Short and active: say it out loud or write it.\
+ n• Self-test on the topics
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Spanish + PE revision
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-2-cue@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261111T175000
+DTEND:20261111T175200
+RRULE:FREQ=WEEKLY
+SUMMARY:Pick one cue
+DESCRIPTION:One thing to focus on tonight\, e.g. "scan before receiving".\
+ n• Choose today’s cue before you leave\n• After training: did you do it?
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Pick one cue
+TRIGGER:-PT10M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:plan-2-academy@elijah-os
@@ -79,18 +164,43 @@ DTEND:20261111T194500
 RRULE:FREQ=WEEKLY
 SUMMARY:Academy training
 DESCRIPTION:Full focus. Win your first action.\n• Eat a snack and drink wa
- ter by 16:30\n• Pack boots\, shin pads\, bottle\n• Activation before the 
- session — 10 min\n• Training\n• Stretch and refuel after
+ ter by 16:30\n• Pack boots\, shin pads\, bottle\n• Training\n• Stretch an
+ d refuel after
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Academy training
+TRIGGER:-PT30M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:plan-3-rev-english@elijah-os
+UID:plan-3-rev-eng-bio@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261112T163000
-DTEND:20261112T170000
+DTEND:20261112T171500
 RRULE:FREQ=WEEKLY
-SUMMARY:English revision
-DESCRIPTION:Quotes and one timed paragraph.\n• Write one paragraph in 12 m
- inutes
+SUMMARY:English / Biology revision
+DESCRIPTION:English and Biology swap each week.\n• One timed answer or par
+ agraph
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:English / Biology revision
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-3-cue@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261112T175000
+DTEND:20261112T175200
+RRULE:FREQ=WEEKLY
+SUMMARY:Pick one cue
+DESCRIPTION:One thing to focus on tonight\, e.g. "scan before receiving".\
+ n• Choose today’s cue before you leave\n• After training: did you do it?
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Pick one cue
+TRIGGER:-PT10M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:plan-3-academy@elijah-os
@@ -100,42 +210,74 @@ DTEND:20261112T194500
 RRULE:FREQ=WEEKLY
 SUMMARY:Academy training
 DESCRIPTION:Full focus. Win your first action.\n• Eat a snack and drink wa
- ter by 16:30\n• Pack boots\, shin pads\, bottle\n• Activation before the 
- session — 10 min\n• Training\n• Stretch and refuel after
+ ter by 16:30\n• Pack boots\, shin pads\, bottle\n• Training\n• Stretch an
+ d refuel after
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Academy training
+TRIGGER:-PT30M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:plan-4-astro-speed@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261113T154500
-DTEND:20261113T164500
+DTEND:20261113T163000
 RRULE:FREQ=WEEKLY
-SUMMARY:Astro: speed and match-speed reps
-DESCRIPTION:Short\, sharp reps with full rest. Stop while you are still fa
- st.\n• Warm-up and sprint drills — 12 min\n• 10m sprints — 6 × 1\n• 20m f
- lying sprints — 4 × 1\n• Dribble at match speed\, cut\, finish — 6 × 1\n•
-  Cool-down — 5 min
+SUMMARY:Astro: speed + match reps
+DESCRIPTION:Full recovery between sprints. Stop after 2 slow reps.\n• Warm
+ -up: A-skips\, strides — 10 min\n• 10m sprints — 3 × 1\n• 20m sprints — 2
+  × 1\n• Runs in behind — 6–8 reps\n• Near-post darts — 6–8 reps\n• 1v1 in
+ to shot — 6–8 reps\n• Finishing\, at least half weak foot — 10 min\n• Ski
+ ll snack: handstand kick-ups — 10 min
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Astro: speed + match reps
+TRIGGER:-PT10M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:plan-4-rev-lang@elijah-os
+UID:plan-4-rev-chem-maths@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261113T173000
-DTEND:20261113T180000
+DTEND:20261113T183000
 RRULE:FREQ=WEEKLY
-SUMMARY:Spanish / PE revision
-DESCRIPTION:Short and active: say it out loud or write it.\n• Self-test on
-  the topic
+SUMMARY:Chemistry / Maths revision
+DESCRIPTION:Chemistry\, with Maths questions on alternate weeks.\n• Exam q
+ uestions on today’s topics
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Chemistry / Maths revision
+TRIGGER:-PT10M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:plan-5-past-paper@elijah-os
 DTSTAMP:20261109T000000Z
-DTSTART:20261114T093000
-DTEND:20261114T110000
+DTSTART:20261114T090000
+DTEND:20261114T113000
 RRULE:FREQ=WEEKLY
 SUMMARY:Timed past paper
-DESCRIPTION:Exam conditions: timer on\, phone away\, no notes.\n• Pick the
-  paper and set the timer\n• Sit the paper\n• Mark it with the mark scheme
- \n• Add the score on the Revision screen\n• Rate the topics you dropped m
- arks on
+DESCRIPTION:2–3 hours\, exam conditions: timer on\, phone away\, no notes.
+ \n• Pick the paper and set the timer\n• Sit the paper\n• Mark it against 
+ the mark scheme\n• Add the score on the Revision screen\n• Rate the topic
+ s you dropped marks on
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Timed past paper
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-5-wall@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261114T130000
+DTEND:20261114T132000
+RRULE:FREQ=WEEKLY
+SUMMARY:Home wall session
+DESCRIPTION:Optional\, after revision. Weak foot only for the second half.
+ \n• Two-touch passing\, both feet\, then one-touch\n• Receiving across bo
+ dy and turning\n• Second half: weak foot only
 END:VEVENT
 BEGIN:VEVENT
 UID:plan-5-recovery@elijah-os
@@ -143,11 +285,25 @@ DTSTAMP:20261109T000000Z
 DTSTART:20261114T150000
 DTEND:20261114T152000
 RRULE:FREQ=WEEKLY
-SUMMARY:Recovery and mobility
-DESCRIPTION:Easy. Leave feeling fresher than you started.\n• Foam roll: ca
- lves\, quads\, glutes — 6 min\n• Hip flexor stretch — 2 × 45s each side\n
- • Hamstring stretch — 2 × 45s each side\n• Ankle mobility — 2 × 10 each s
- ide
+SUMMARY:Rest\, or 20 min mobility
+DESCRIPTION:Rest is fine. If you move\, keep it easy.\n• Foam roll: calves
+ \, quads\, glutes — 6 min\n• Hip flexor stretch — 2 × 45s each side\n• Ha
+ mstring stretch — 2 × 45s each side\n• Ankle mobility — 2 × 10 each side
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-5-visualise@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261114T200000
+DTEND:20261114T200500
+RRULE:FREQ=WEEKLY
+SUMMARY:Visualisation
+DESCRIPTION:Five minutes in the evening. See it clearly\, at match speed.\
+ n• Picture your first touch\n• Picture the finish
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Visualisation
+TRIGGER:-PT10M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:plan-6-match@elijah-os
@@ -159,5 +315,36 @@ SUMMARY:Match day
 DESCRIPTION:Play simple\, play fast.\n• Breakfast 3 hours before kick-off\
  n• Bag packed the night before\n• Warm-up\n• Match\n• Refuel and stretch 
  within an hour
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-daily-flashcards@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261109T074500
+DTEND:20261109T080000
+RRULE:FREQ=DAILY
+SUMMARY:Flashcards
+DESCRIPTION:Fifteen minutes\, every day. Say the answer before you flip.\n
+ • Spanish vocab\n• Biology definitions\n• Chemistry equations
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Flashcards
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-daily-evening@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261109T211500
+DTEND:20261109T230000
+RRULE:FREQ=DAILY
+SUMMARY:Evening wind-down
+DESCRIPTION:All work finished by 21:15. In bed before 23:00.\n• All work f
+ inished — 21:15\n• Wind-down — 21:30\n• Shower\n• Journal\n• Reading\n• B
+ ed before 23:00
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Evening wind-down
+TRIGGER:-PT0M
+END:VALARM
 END:VEVENT
 END:VCALENDAR

@@ -8,88 +8,153 @@ window.ELIJAH_DATA = {
   // First exam: year, month (1-12), day
   firstExam: { year: 2027, month: 5, day: 10, label: '10 May 2027' },
 
+  // Every day: these session cards are added to each day (same format as `sessions` in a day row).
+  daily: [['flashcards', '07:45'], ['evening', '21:15']],
+
   // One row per day, Monday first.
-  // load is 'High', 'Medium' or 'Low'.
-  // sessions lists the session cards for that day, in order: [id, start time] (ids from `sessions` below).
+  // load is 'High', 'Medium-High', 'Medium' or 'Low'.
+  // sessions lists the session cards for that day: [id, start time] (ids from `sessions` below).
   // Leave the time out (just the id) for an all-day item. Times feed the calendar (calendar.ics).
   schedule: [
-    { day: 'Mon', title: 'Recovery, upper-body calisthenics, Maths revision', load: 'Low',
-      time: 'After school · Maths 60 min', sub: 'Leave 08:20 · school 08:50–15:25',
-      mission: 'Recover well. Upper body, then one hour of Maths.',
-      sessions: [['recovery', '16:00'], ['upper-cali', '16:30'], ['rev-maths', '17:30']] },
-    { day: 'Tue', title: 'Astro: skill sequences', load: 'Medium',
-      time: '15:45–16:45', sub: 'Leave 08:20 · school 08:50–15:25',
-      mission: 'Clean touches at speed. Repeat each sequence until it is automatic.',
-      sessions: [['astro-skill', '15:45'], ['rev-physics', '17:30']] },
+    { day: 'Mon', title: 'Recovery + upper body', load: 'Medium',
+      time: 'After school · Maths 75 min', sub: 'Leave 08:20 · school 08:50–15:25',
+      mission: 'Upper body with 2 reps in reserve, then 75 minutes of Maths. Review Sunday’s match.',
+      sessions: [['upper-cali', '16:15'], ['rev-maths', '17:30'], ['match-review', '19:00'], ['wall', '19:10']] },
+    { day: 'Tue', title: 'Astro skills + lower body', load: 'Medium',
+      time: '15:45 · Physics 75 min', sub: 'Leave 08:20 · school 08:50–15:25',
+      mission: 'Skill sequences at 75% pace, light legs, then 75 minutes of Physics.',
+      sessions: [['astro-skill', '15:45'], ['lower-body', '17:00'], ['rev-physics', '18:00'], ['wall', '19:20']] },
     { day: 'Wed', title: 'Academy training', load: 'High',
       time: '18:15 · leave 18:00', sub: 'Leave 08:20 · school 08:50–15:25',
-      mission: 'Bring full focus to academy. Win your first action.',
-      sessions: [['rev-science', '16:30'], ['academy', '18:15']] },
+      mission: 'Pick one cue and bring it to academy.',
+      sessions: [['rev-lang', '16:30'], ['cue', '17:50'], ['academy', '18:15']] },
     { day: 'Thu', title: 'Academy training', load: 'High',
       time: '18:15 · leave 18:00', sub: 'Leave 08:20 · school 08:50–15:25',
-      mission: 'Second academy night. Quality over volume.',
-      sessions: [['rev-english', '16:30'], ['academy', '18:15']] },
-    { day: 'Fri', title: 'Astro: speed and match-speed reps', load: 'Medium',
-      time: '15:45–16:45', sub: 'Leave 08:20 · school 08:50–15:25',
-      mission: 'Short, sharp speed reps. Stop while you are still fast.',
-      sessions: [['astro-speed', '15:45'], ['rev-lang', '17:30']] },
-    { day: 'Sat', title: 'Past paper, then rest', load: 'Low',
-      time: 'Morning', sub: 'Rest in the afternoon',
-      mission: 'Past paper under timed conditions, then switch off.',
-      sessions: [['past-paper', '09:30'], ['recovery', '15:00']] },
-    { day: 'Sun', title: 'Match', load: 'High',
-      time: 'Match day', sub: '',
+      mission: 'Second academy night. One cue, quality over volume.',
+      sessions: [['rev-eng-bio', '16:30'], ['cue', '17:50'], ['academy', '18:15']] },
+    { day: 'Fri', title: 'Astro speed + match reps', load: 'Medium-High',
+      time: '15:45–16:30 · revision 60 min', sub: 'Leave 08:20 · school 08:50–15:25',
+      mission: 'Short, sharp speed reps. Stop after 2 slow reps.',
+      sessions: [['astro-speed', '15:45'], ['rev-chem-maths', '17:30']] },
+    { day: 'Sat', title: 'Past paper + rest', load: 'Low',
+      time: 'Morning · 2–3 hr paper', sub: 'Rest in the afternoon',
+      mission: 'Timed past paper, mark it properly, then rest.',
+      sessions: [['past-paper', '09:00'], ['wall', '13:00'], ['recovery', '15:00'], ['visualise', '20:00']] },
+    { day: 'Sun', title: 'Match day', load: 'High',
+      time: 'Match day · no revision', sub: '',
       mission: 'Match day. Play simple, play fast.',
       sessions: ['match'] }
   ],
 
   // Session cards. Each one shows on Today and Week for the days that list it.
-  //   kind: 'gym' | 'football' | 'recovery' | 'revision' | 'paper'
+  //   kind: 'gym' | 'football' | 'recovery' | 'revision' | 'paper' | 'mental' | 'routine'
   //   items: one row each. sets = how many ticks the row has (leave it out for a single tick).
+  //   remind: minutes before the start to remind you (default 10). Optional cards have no reminder.
   //   For kind 'revision', `subject` is the subject's position in `subjects` (0 = first),
-  //   and the card adds your `topics` weakest topics from that subject automatically.
-  //   Finishing a revision card adds its minutes to that subject on the Revision screen.
+  //   or `subjects: [a, b]` to alternate between two subjects week by week.
+  //   The card adds your `topics` weakest topics from that subject automatically,
+  //   and finishing it adds its minutes to that subject on the Revision screen.
   sessions: {
+    'flashcards': {
+      kind: 'revision', title: 'Flashcards', minutes: 15, remind: 0,
+      focus: 'Fifteen minutes, every day. Say the answer before you flip.',
+      items: [{ name: 'Spanish vocab' }, { name: 'Biology definitions' }, { name: 'Chemistry equations' }]
+    },
+    'evening': {
+      kind: 'routine', title: 'Evening wind-down', minutes: 105, remind: 0,
+      focus: 'All work finished by 21:15. In bed before 23:00.',
+      items: [
+        { name: 'All work finished', reps: '21:15' },
+        { name: 'Wind-down', reps: '21:30' },
+        { name: 'Shower' },
+        { name: 'Journal' },
+        { name: 'Reading' },
+        { name: 'Bed before 23:00' }
+      ]
+    },
     'upper-cali': {
       kind: 'gym', title: 'Upper-body calisthenics', minutes: 40,
-      focus: 'Strict reps, full range. Stop 1–2 reps before failure.',
+      focus: 'Stop 2 reps short on every set. Quality over fatigue.',
       items: [
-        { name: 'Pull-ups', sets: 4, reps: '6–8', rest: '90s' },
-        { name: 'Dips', sets: 4, reps: '8–10', rest: '90s' },
-        { name: 'Pike push-ups', sets: 3, reps: '8', rest: '60s' },
-        { name: 'Hollow hold', sets: 3, reps: '30s', rest: '45s' },
-        { name: 'Handstand hold (wall)', sets: 5, reps: '20–30s', rest: '45s' }
+        { name: 'Warm-up: wrist circles, shoulder dislocates, scap pull-ups', reps: '5 min' },
+        { name: 'Chest-to-wall handstand', sets: 5, reps: '15–20s' },
+        { name: 'Pull-ups', sets: 3, reps: '~8–10, stop 2 short' },
+        { name: 'Dips, elbows to ~90°', sets: 3, reps: 'stop 2 short' },
+        { name: 'Inverted rows', sets: 3, reps: '10–12' },
+        { name: 'Hollow hold', sets: 4, reps: '10–15s' },
+        { name: 'Tuck L-sit on dip bars', sets: 3, reps: '10s' },
+        { name: 'Mobility: hips, hamstrings, groin', reps: '10 min' }
       ]
+    },
+    'match-review': {
+      kind: 'mental', title: 'Match review', minutes: 5,
+      focus: 'Five minutes on the last match.',
+      items: [{ name: '3 good actions' }, { name: '1 repeated problem' }]
     },
     'astro-skill': {
-      kind: 'football', title: 'Astro: skill sequences', minutes: 60,
-      focus: 'Clean touches at speed. Repeat each sequence until it is automatic.',
+      kind: 'football', title: 'Astro: skill sequences', minutes: 35,
+      focus: 'About 75% pace. Half speed first, then full speed.',
       items: [
-        { name: 'Warm-up and mobility', reps: '10 min' },
-        { name: 'Ball mastery sequence', sets: 4, reps: '60s', rest: '30s' },
-        { name: 'Wall passes, left then right', sets: 3, reps: '60s each' },
-        { name: 'Receive, turn, accelerate', sets: 6, reps: '3 each side' },
-        { name: 'Weak-foot finishes', sets: 2, reps: '10' }
+        { name: 'Warm-up: jog, dynamic stretches, 3 build-ups', reps: '8 min' },
+        { name: 'Check away, receive on half-turn, drive, shoot', sets: 4, reps: '5 reps', rest: 'half then full speed' },
+        { name: 'Weak foot: first touch and finishing', reps: '10 min' }
       ]
+    },
+    'lower-body': {
+      kind: 'gym', title: 'Lower body at home (light)', minutes: 30,
+      focus: 'Light. Stop 2–3 reps short on every set.',
+      items: [
+        { name: 'Split squats', sets: 2, reps: '8 each leg' },
+        { name: 'Single-leg RDL', sets: 2, reps: '8 each leg' },
+        { name: 'Single-leg glute bridge', sets: 2, reps: '12' },
+        { name: 'Nordic curl negatives', sets: 2, reps: '3–5' },
+        { name: 'Skill snack: tuck L-sit holds', reps: '10 min' }
+      ]
+    },
+    'cue': {
+      kind: 'mental', title: 'Pick one cue', minutes: 2,
+      focus: 'One thing to focus on tonight, e.g. "scan before receiving".',
+      items: [{ name: 'Choose today’s cue before you leave' }, { name: 'After training: did you do it?' }]
     },
     'astro-speed': {
-      kind: 'football', title: 'Astro: speed and match-speed reps', minutes: 60,
-      focus: 'Short, sharp reps with full rest. Stop while you are still fast.',
+      kind: 'football', title: 'Astro: speed + match reps', minutes: 45,
+      focus: 'Full recovery between sprints. Stop after 2 slow reps.',
       items: [
-        { name: 'Warm-up and sprint drills', reps: '12 min' },
-        { name: '10m sprints', sets: 6, reps: '1', rest: '60s' },
-        { name: '20m flying sprints', sets: 4, reps: '1', rest: '90s' },
-        { name: 'Dribble at match speed, cut, finish', sets: 6, reps: '1', rest: '60s' },
-        { name: 'Cool-down', reps: '5 min' }
+        { name: 'Warm-up: A-skips, strides', reps: '10 min' },
+        { name: '10m sprints', sets: 3, reps: '1', rest: 'full recovery' },
+        { name: '20m sprints', sets: 2, reps: '1', rest: 'full recovery' },
+        { name: 'Runs in behind', reps: '6–8 reps' },
+        { name: 'Near-post darts', reps: '6–8 reps' },
+        { name: '1v1 into shot', reps: '6–8 reps' },
+        { name: 'Finishing, at least half weak foot', reps: '10 min' },
+        { name: 'Skill snack: handstand kick-ups', reps: '10 min' }
       ]
     },
+    'wall': {
+      kind: 'football', optional: true, title: 'Home wall session', minutes: 20,
+      focus: 'Optional, after revision. Weak foot only for the second half.',
+      items: [
+        { name: 'Two-touch passing, both feet, then one-touch' },
+        { name: 'Receiving across body and turning' },
+        { name: 'Second half: weak foot only' }
+      ]
+    },
+    'visualise': {
+      kind: 'mental', title: 'Visualisation', minutes: 5,
+      focus: 'Five minutes in the evening. See it clearly, at match speed.',
+      items: [{ name: 'Picture your first touch' }, { name: 'Picture the finish' }]
+    },
+    'rev-chem-maths': {
+      kind: 'revision', subjects: [3, 0], title: 'Chemistry / Maths revision', minutes: 60, topics: 2,
+      focus: 'Chemistry, with Maths questions on alternate weeks.',
+      items: [{ name: 'Exam questions on today’s topics' }]
+    },
     'academy': {
-      kind: 'football', title: 'Academy training', minutes: 90,
+      kind: 'football', title: 'Academy training', minutes: 90, remind: 30,
       focus: 'Full focus. Win your first action.',
       items: [
         { name: 'Eat a snack and drink water by 16:30' },
         { name: 'Pack boots, shin pads, bottle' },
-        { name: 'Activation before the session', reps: '10 min' },
         { name: 'Training' },
         { name: 'Stretch and refuel after' }
       ]
@@ -106,8 +171,8 @@ window.ELIJAH_DATA = {
       ]
     },
     'recovery': {
-      kind: 'recovery', title: 'Recovery and mobility', minutes: 20,
-      focus: 'Easy. Leave feeling fresher than you started.',
+      kind: 'recovery', optional: true, title: 'Rest, or 20 min mobility', minutes: 20,
+      focus: 'Rest is fine. If you move, keep it easy.',
       items: [
         { name: 'Foam roll: calves, quads, glutes', reps: '6 min' },
         { name: 'Hip flexor stretch', sets: 2, reps: '45s each side' },
@@ -116,37 +181,32 @@ window.ELIJAH_DATA = {
       ]
     },
     'rev-maths': {
-      kind: 'revision', subject: 0, title: 'Maths revision', minutes: 60, topics: 2,
+      kind: 'revision', subject: 0, title: 'Maths revision', minutes: 75, topics: 2,
       focus: 'Two weak topics, then exam questions on them.',
       items: [{ name: '10 exam questions on today’s topics' }]
     },
     'rev-physics': {
-      kind: 'revision', subject: 1, title: 'Physics revision', minutes: 45, topics: 2,
+      kind: 'revision', subject: 1, title: 'Physics revision', minutes: 75, topics: 2,
       focus: 'Learn it, then test yourself without notes.',
       items: [{ name: 'Blurt everything from memory, then check' }]
     },
-    'rev-science': {
-      kind: 'revision', subject: 3, title: 'Biology / Chemistry revision', minutes: 30, topics: 1,
-      focus: 'One topic, done properly, before academy.',
-      items: [{ name: 'Flashcards for the topic' }]
-    },
-    'rev-english': {
-      kind: 'revision', subject: 2, title: 'English revision', minutes: 30, topics: 1,
-      focus: 'Quotes and one timed paragraph.',
-      items: [{ name: 'Write one paragraph in 12 minutes' }]
-    },
     'rev-lang': {
-      kind: 'revision', subject: 4, title: 'Spanish / PE revision', minutes: 30, topics: 1,
-      focus: 'Short and active: say it out loud or write it.',
-      items: [{ name: 'Self-test on the topic' }]
+      kind: 'revision', subject: 4, title: 'Spanish + PE revision', minutes: 45, topics: 2,
+      focus: '30–45 minutes. Short and active: say it out loud or write it.',
+      items: [{ name: 'Self-test on the topics' }]
+    },
+    'rev-eng-bio': {
+      kind: 'revision', subjects: [2, 3], title: 'English / Biology revision', minutes: 45, topics: 1,
+      focus: 'English and Biology swap each week.',
+      items: [{ name: 'One timed answer or paragraph' }]
     },
     'past-paper': {
-      kind: 'paper', title: 'Timed past paper', minutes: 90,
-      focus: 'Exam conditions: timer on, phone away, no notes.',
+      kind: 'paper', title: 'Timed past paper', minutes: 150,
+      focus: '2–3 hours, exam conditions: timer on, phone away, no notes.',
       items: [
         { name: 'Pick the paper and set the timer' },
         { name: 'Sit the paper' },
-        { name: 'Mark it with the mark scheme' },
+        { name: 'Mark it against the mark scheme' },
         { name: 'Add the score on the Revision screen' },
         { name: 'Rate the topics you dropped marks on' }
       ]
@@ -156,35 +216,46 @@ window.ELIJAH_DATA = {
   // Revision subjects in priority order. goal = default weekly minutes (you can also edit goals in the app).
   // topics = the starting topic list. You can add, remove and rate topics in the app too.
   subjects: [
-    { name: 'Maths', goal: 150, topics: [
+    { name: 'Maths', goal: 75, topics: [
       'Algebra: quadratics', 'Simultaneous equations', 'Trigonometry', 'Vectors',
       'Probability', 'Circle theorems', 'Graphs and gradients', 'Ratio and proportion'] },
-    { name: 'Physics', goal: 120, topics: [
+    { name: 'Physics', goal: 75, topics: [
       'Forces and motion', 'Energy', 'Electricity', 'Waves',
       'Magnetism', 'Atomic structure', 'Particle model', 'Space'] },
-    { name: 'English', goal: 90, topics: [
+    { name: 'English', goal: 45, topics: [
       'Shakespeare play', '19th-century novel', 'Modern text', 'Poetry anthology',
       'Unseen poetry', 'Language Paper 1', 'Language Paper 2'] },
-    { name: 'Biology / Chemistry', goal: 90, topics: [
+    { name: 'Biology / Chemistry', goal: 45, topics: [
       'Cells', 'Infection and response', 'Homeostasis', 'Inheritance and evolution',
       'Bonding and structure', 'Quantitative chemistry', 'Rates of reaction', 'Organic chemistry'] },
-    { name: 'Spanish / PE', goal: 60, topics: [
+    { name: 'Spanish / PE', goal: 45, topics: [
       'Spanish: past tenses', 'Spanish: school and future plans', 'Spanish: speaking photo cards',
-      'PE: anatomy and physiology', 'PE: training principles', 'PE: sport psychology'] }
+      'PE: anatomy and physiology', 'PE: training principles', 'PE: sport psychology'] },
+    { name: 'BTEC DIT', goal: 30, note: 'Coursework deadlines only, small weekly chunks.', topics: [
+      'Next coursework deadline'] }
   ],
 
-  // Starting rows for the Benchmarks table.
+  // Starting rows for the Benchmarks table. Retest every `retestWeeks` weeks.
+  retestWeeks: 4,
   benchmarks: [
+    { name: 'Pull-ups', base: '12' },
+    { name: 'Hollow hold', base: 'not yet', target: '20s' },
+    { name: 'Handstand hold', base: '10–20s' },
+    { name: 'Max dips' },
     { name: '10m sprint' },
     { name: '20m sprint' },
     { name: 'Wall passes / 60s (L)' },
     { name: 'Wall passes / 60s (R)' },
     { name: 'Weak-foot finishes / 10' },
-    { name: 'Pull-ups', base: '12' },
-    { name: 'Dips' },
-    { name: 'Hollow hold' },
-    { name: 'Handstand hold' }
+    { name: 'Maths past-paper score' }
   ],
+
+  // Skill of the month: progressions, easiest first. Tap a step in the app to mark where you are.
+  skills: [
+    { name: 'Wall handstand', steps: ['Wall plank', 'Chest-to-wall', 'Kick-up', 'Free hold'] },
+    { name: 'Core', steps: ['Hollow hold', 'Tuck L-sit', 'L-sit'] }
+  ],
+  skillNext: 'Next: muscle-up path (months 2–3)',
 
   // Extra exercises per weekday (0 = Monday ... 6 = Sunday), editable in the app under "Extras".
   defaultWorkouts: {}

@@ -106,6 +106,7 @@ button { -webkit-user-select: none; user-select: none; }
   box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 .os-pill.Medium { color: var(--color-neutral-200); border-color: var(--color-neutral-600); }
+.os-pill.Medium-High { color: var(--color-accent-300); border-color: color-mix(in srgb, var(--color-accent) 60%, transparent); }
 
 .os-sess-title { font-size: 21px; font-weight: 500; line-height: 1.2; letter-spacing: -0.01em; text-wrap: pretty; }
 .os-time { display: flex; align-items: center; gap: 8px; }
@@ -237,6 +238,8 @@ button { -webkit-user-select: none; user-select: none; }
   box-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 .os-ladder { display: flex; align-items: center; gap: 10px; }
+.os-skill { display: flex; flex-direction: column; gap: 8px; }
+.os-skill + .os-skill { border-top: 1px solid var(--color-divider); padding-top: 12px; }
 /* the step input sits beside a 36px button, so its 44px tap height comes from the row */
 
 /* Log */
@@ -282,6 +285,7 @@ button { -webkit-user-select: none; user-select: none; }
   color: var(--color-accent-300); background: color-mix(in srgb, var(--color-accent) 16%, transparent);
 }
 .os-scard[data-kind="revision"] .os-scard-ic, .os-scard[data-kind="paper"] .os-scard-ic { color: var(--os-amber); background: color-mix(in srgb, var(--os-amber) 14%, transparent); }
+.os-scard[data-kind="mental"] .os-scard-ic, .os-scard[data-kind="routine"] .os-scard-ic { color: var(--color-neutral-200); background: color-mix(in srgb, var(--color-text) 9%, transparent); }
 .os-scard[data-kind="recovery"] .os-scard-ic { color: var(--os-green); background: color-mix(in srgb, var(--os-green) 14%, transparent); }
 .os-scard.done .os-scard-ic { color: var(--color-bg); background: var(--color-accent); }
 .os-scard.done .os-scard-title { color: var(--color-neutral-400); }
@@ -377,6 +381,11 @@ button { -webkit-user-select: none; user-select: none; }
 .os-evgrid .input { width: 100%; min-width: 0; box-sizing: border-box; }
 .os-evform .field { margin: 0; }
 a.btn.os-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+
+/* Reminders */
+.os-remind-tip { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.5; color: var(--color-neutral-400); border-top: 1px solid var(--color-divider); padding-top: 10px; }
+.os-remind-tip > i { font-size: 18px; color: var(--color-accent); flex: none; }
+.os-remind-tip .btn-ghost { font-size: 13px; vertical-align: baseline; }
 
 /* Updates and notices */
 .os-note { gap: 8px; }

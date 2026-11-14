@@ -26,7 +26,7 @@
   }
   function stampNow() { return new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, ''); }
 
-  // e: { uid, title, date: 'YYYY-MM-DD', start?: 'HH:MM', end?: 'HH:MM', desc?, rrule? }
+  // e: { uid, title, date: 'YYYY-MM-DD', start?: 'HH:MM', end?: 'HH:MM', desc?, rrule?, alarm?: minutes before }
   function vevent(e, stamp) {
     const L = ['BEGIN:VEVENT', 'UID:' + e.uid, 'DTSTAMP:' + (stamp || stampNow())];
     if (e.start) {
@@ -38,6 +38,7 @@
     if (e.rrule) L.push('RRULE:' + e.rrule);
     L.push('SUMMARY:' + text(e.title));
     if (e.desc) L.push('DESCRIPTION:' + text(e.desc));
+    if (e.start && e.alarm != null) L.push('BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:' + text(e.title), 'TRIGGER:-PT' + (+e.alarm) + 'M', 'END:VALARM');
     L.push('END:VEVENT');
     return L.map(fold).join('\r\n');
   }
@@ -47,9 +48,11 @@
       .concat(events.map(e => vevent(e, stamp)), ['END:VCALENDAR']).join('\r\n') + '\r\n';
   }
 
-  // A schedule day's sessions as [{ id, at }], whether written as 'id' or ['id', 'HH:MM'].
-  function refs(day) {
-    return (day.sessions || []).map(r => Array.isArray(r) ? { id: r[0], at: r[1] || '' } : { id: r, at: '' });
+  // A list of sessions as [{ id, at }], whether written as 'id' or ['id', 'HH:MM'].
+  const norm = list => (list || []).map(r => Array.isArray(r) ? { id: r[0], at: r[1] || '' } : { id: r, at: '' });
+  // One day's sessions plus the every-day ones, in time order (untimed last).
+  function refs(day, daily) {
+    return norm(day.sessions).concat(norm(daily)).sort((a, b) => (a.at || '00').localeCompare(b.at || '00'));
   }
   function describe(c) {
     return [c.focus].concat((c.items || []).map(x => '• ' + x.name +
@@ -59,15 +62,20 @@
   function planEvent(DATA, dayIdx, ref, date) {
     const c = DATA.sessions[ref.id];
     return { uid: 'plan-' + dayIdx + '-' + ref.id + '@elijah-os', title: c.title, date,
-      start: ref.at, end: ref.at ? addMin(ref.at, c.minutes || 60) : '', desc: describe(c) };
+      start: ref.at, end: ref.at ? addMin(ref.at, c.minutes || 60) : '', desc: describe(c),
+      alarm: c.optional ? null : (c.remind != null ? c.remind : 10) };
   }
   // The whole weekly plan, repeating every week from the Monday `anchor`.
   function weeklyFeed(DATA, anchor, stamp) {
     const evs = [];
-    DATA.schedule.forEach((day, i) => refs(day).forEach(r => {
+    DATA.schedule.forEach((day, i) => norm(day.sessions).forEach(r => {
       if (!DATA.sessions[r.id]) return;
       evs.push(Object.assign(planEvent(DATA, i, r, addDays(anchor, i)), { rrule: 'FREQ=WEEKLY' }));
     }));
+    norm(DATA.daily).forEach(r => {
+      if (!DATA.sessions[r.id]) return;
+      evs.push(Object.assign(planEvent(DATA, 'daily', r, anchor), { rrule: 'FREQ=DAILY' }));
+    });
     return calendar(evs, 'Elijah OS', stamp);
   }
   // Google Calendar "add event" link for one event.

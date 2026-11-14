@@ -9,6 +9,16 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-14-reminders', date: '2026-11-14', kind: 'update',
+    title: 'Reminders',
+    body: 'Turn on reminders from the menu (Reminders). The calendar feed now alerts you before every session too, even when the app is closed.'
+  },
+  {
+    id: '2026-11-14-plan', date: '2026-11-14', kind: 'notice',
+    title: 'Your real weekly plan is in',
+    body: 'Every day follows your plan now, with flashcards and the evening wind-down (work done 21:15, bed before 23:00). English/Biology swap on Thursdays, Chemistry/Maths on Fridays. Optional wall sessions on Mon, Tue and Sat. Benchmarks and skill ladders (wall handstand, core) are on Progress; retest every 4 weeks.'
+  },
+  {
     id: '2026-11-14-calendar', date: '2026-11-14', kind: 'update',
     title: 'Events, day buttons and calendar',
     body: 'Use the arrows to move between days and weeks. Tap "Add event" for anything unplanned, like an after-school game; it can replace that day’s sessions. On Week, subscribe to your plan in your phone’s calendar.'
