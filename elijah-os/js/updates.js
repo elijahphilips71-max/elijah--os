@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-14-calendar', date: '2026-11-14', kind: 'update',
+    title: 'Events, day buttons and calendar',
+    body: 'Use the arrows to move between days and weeks. Tap "Add event" for anything unplanned, like an after-school game; it can replace that day’s sessions. On Week, subscribe to your plan in your phone’s calendar.'
+  },
+  {
     id: '2026-11-14-menu', date: '2026-11-14', kind: 'update',
     title: 'Menu',
     body: 'Tap the three lines at the top left to jump to any screen, today’s session cards, What’s new or your revision topics.'

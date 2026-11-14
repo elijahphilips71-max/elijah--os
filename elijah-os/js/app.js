@@ -4,6 +4,7 @@
 (function () {
   const DATA = window.ELIJAH_DATA;
   const UPDATES = window.ELIJAH_UPDATES || [];
+  const Cal = window.ElijahCal;
   const Store = window.ElijahStore;
   const root = document.getElementById('app');
 
@@ -33,7 +34,17 @@
     subj: -1,         // subject whose topic list is open on Revision
     topicDraft: '',
     newVersion: false,
-    menu: false
+    menu: false,
+    week: 0,          // 0 = this week, -1 = last week, 1 = next week ...
+    showPlanned: false,
+    evForm: false,
+    ev: null,         // event draft while the form is open
+    copied: false
+  };
+  // Temporary event types: label, icon, load it puts on the day
+  const EVK = {
+    game: ['Game', 'soccer-ball', 'High'], training: ['Training', 'whistle', 'Medium'],
+    plans: ['Plans', 'calendar-star', 'Low'], other: ['Other', 'calendar-plus', 'Low']
   };
   const KIND = {
     gym: ['Workout', 'barbell'], football: ['Pitch', 'soccer-ball'], recovery: ['Recovery', 'heartbeat'],
@@ -46,7 +57,11 @@
   const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const iso = x => x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0');
   const fmt = (x, o) => x.toLocaleDateString('en-GB', o);
-  function monday() { const now = new Date(); const m = new Date(now); m.setHours(12, 0, 0, 0); m.setDate(now.getDate() - ((now.getDay() + 6) % 7)); return m; }
+  function realMonday() { const now = new Date(); const m = new Date(now); m.setHours(12, 0, 0, 0); m.setDate(now.getDate() - ((now.getDay() + 6) % 7)); return m; }
+  function monday() { const m = realMonday(); m.setDate(m.getDate() + ui.week * 7); return m; }
+  const todayIdx = () => (new Date().getDay() + 6) % 7;
+  const isToday = () => ui.week === 0 && ui.day === todayIdx();
+  const curWeekKey = () => iso(realMonday());
   function dt(i) { const m = monday(); m.setDate(m.getDate() + i); return m; }
   const dayKey = () => iso(dt(ui.day));
   const weekKey = () => iso(monday());
@@ -59,7 +74,19 @@
   function getLog() { return st().logs[dayKey()] || { done: false, rpe: 0, win: '', fix: '' }; }
   function setDay(patch) { const k = dayKey(); const d = getDay(); Store.update(s => { s.daily[k] = Object.assign({}, d, patch); }); }
   function setLog(patch) { const k = dayKey(); const l = getLog(); Store.update(s => { s.logs[k] = Object.assign({}, l, patch); }); }
-  function weekMins() { return st().minsWeek === weekKey() ? st().mins : st().mins.map(() => 0); }
+  function weekMins() { return st().minsWeek === curWeekKey() ? st().mins : st().mins.map(() => 0); }
+  // Temporary events on a date, earliest first; and the one that replaces the plan, if any.
+  const eventsOn = k => (st().events || []).filter(e => e.date === k).sort((a, b) => (a.start || '').localeCompare(b.start || ''));
+  const replacingEvent = k => eventsOn(k).find(e => e.replace);
+  // What a day effectively looks like once a replacing event is applied.
+  function dayView(i) {
+    const c = DATA.schedule[i], ev = replacingEvent(iso(dt(i)));
+    if (!ev) return { title: c.title, load: c.load, time: c.time, sub: c.sub, mission: c.mission, ev: null };
+    const k = EVK[ev.kind] || EVK.other;
+    return { title: ev.title, load: k[2] === 'High' || c.load === 'High' ? 'High' : k[2], ev,
+      time: ev.start ? ev.start + (ev.end ? '–' + ev.end : '') : 'All day', sub: 'Planned: ' + c.title,
+      mission: ev.kind === 'game' ? 'Game day. Eat 3 hours before, warm up properly, play simple and fast.' : (ev.note || c.mission) };
+  }
   const icon = n => `<i class="ph ph-${n}" aria-hidden="true"></i>`;
   const pill = (load, text, sm) => `<span class="os-pill ${esc(load)}${sm ? ' sm' : ''}">${esc(text)}</span>`;
 
@@ -73,12 +100,14 @@
     const ids = cardIds(ui.day), unread = unreadUpdates().length;
     return `<span class="os-k acc" style="padding:0 14px 10px">Elijah OS</span>
       ${nav()}
-      ${ids.length ? `<span class="os-k os-menu-k">${ui.day === (new Date().getDay() + 6) % 7 ? 'Today' : FULL[ui.day]}</span>
+      ${ids.length ? `<span class="os-k os-menu-k">${isToday() ? 'Today' : FULL[ui.day]}</span>
         ${ids.map(id => { const c = DATA.sessions[id], done = getSess(id).done;
           return `<button class="os-nav os-menu-sess ${done ? 'done' : ''}" data-act="goCard" data-v="${esc(id)}">${icon(done ? 'check-circle' : (KIND[c.kind] || KIND.gym)[1])}<span>${esc(c.title)}</span></button>`; }).join('')}` : ''}
       <span class="os-k os-menu-k">More</span>
       <button class="os-nav" data-act="goNews">${icon('megaphone')}<span>What's new</span>${unread ? `<span class="os-badge os-num">${unread}</span>` : ''}</button>
       <button class="os-nav" data-act="goTopics">${icon('list-checks')}<span>Revision topics</span></button>
+      <button class="os-nav" data-act="evNewMenu">${icon('calendar-plus')}<span>Add event</span></button>
+      <button class="os-nav" data-act="goCal">${icon('calendar-check')}<span>Calendar</span></button>
       <div style="margin-top:auto;padding:16px 14px 0;display:flex;flex-direction:column;gap:2px"><span class="os-k">First exam</span>
         <span class="os-num" style="font-size:22px">${daysLeft()}<span class="os-muted" style="font-size:12px"> days</span></span></div>`;
   }
@@ -95,19 +124,21 @@
   }
 
   function strip(tall) {
-    return `<div class="os-strip">${DATA.schedule.map((d, i) => `<button class="os-day ${tall ? 'tall' : ''} ${i === ui.day ? 'on' : ''}" data-act="day" data-v="${i}" aria-label="${FULL[i]}">
-      <span>${esc(d.day)}</span>${tall ? `<span class="os-num" style="font-size:16px;color:var(--color-text)">${dt(i).getDate()}</span>` : ''}${pill(d.load, d.load[0], true)}</button>`).join('')}</div>`;
+    return `<div class="os-strip">${DATA.schedule.map((d, i) => { const v = dayView(i), n = eventsOn(iso(dt(i))).length;
+      return `<button class="os-day ${tall ? 'tall' : ''} ${i === ui.day ? 'on' : ''} ${ui.week === 0 && i === todayIdx() ? 'now' : ''}" data-act="day" data-v="${i}" aria-label="${FULL[i]}${n ? ', ' + n + ' event' + (n > 1 ? 's' : '') : ''}">
+      <span>${esc(d.day)}</span>${tall ? `<span class="os-num" style="font-size:16px;color:var(--color-text)">${dt(i).getDate()}</span>` : ''}${pill(v.load, v.load[0], true)}${n ? '<span class="os-evdot"></span>' : ''}</button>`; }).join('')}</div>`;
   }
 
   function dayList(fullLoad, withKicker) {
-    return `<section class="os-card os-list">${withKicker ? '<span class="os-k" style="padding:8px 10px">This week</span>' : ''}${DATA.schedule.map((d, i) => `<button class="os-drow ${i === ui.day ? 'on' : ''}" data-act="day" data-v="${i}">
-      <span class="os-num os-muted">${esc(d.day)}</span><span style="line-height:1.3">${esc(d.title)}</span>${pill(d.load, fullLoad ? d.load : d.load[0])}</button>`).join('')}</section>`;
+    return `<section class="os-card os-list">${withKicker ? '<span class="os-k" style="padding:8px 10px">This week</span>' : ''}${DATA.schedule.map((d, i) => { const v = dayView(i), extra = eventsOn(iso(dt(i))).filter(e => !e.replace);
+      return `<button class="os-drow ${i === ui.day ? 'on' : ''}" data-act="day" data-v="${i}">
+      <span class="os-num os-muted">${esc(d.day)}</span><span style="line-height:1.3">${v.ev ? icon((EVK[v.ev.kind] || EVK.other)[1]) + ' ' : ''}${esc(v.title)}${extra.map(e => `<span class="os-drow-ev">+ ${esc(e.title)}${e.start ? ' · ' + esc(e.start) : ''}</span>`).join('')}</span>${pill(v.load, fullLoad ? v.load : v.load[0])}</button>`; }).join('')}</section>`;
   }
 
   function sessionCard(kicker, withStrip) {
-    const c = DATA.schedule[ui.day];
+    const c = dayView(ui.day);
     return `<section class="os-card os-hero">
-      <div class="os-between"><span class="os-k">${esc(kicker)}</span>${pill(c.load, c.load + ' load')}</div>
+      <div class="os-between"><span class="os-k">${esc(c.ev ? 'Changed · ' + FULL[ui.day] : kicker)}</span>${pill(c.load, c.load + ' load')}</div>
       <div class="os-sess-title">${esc(c.title)}</div>
       <div class="os-time">${icon('clock')}<span class="os-num">${esc(c.time)}</span></div>
       ${c.sub ? `<div class="os-num os-sub">${esc(c.sub)}</div>` : ''}
@@ -115,8 +146,92 @@
     </section>`;
   }
 
+  // ---------- day and week navigation ----------
+  function dayNav() {
+    return `<div class="os-daynav">
+      <button class="btn btn-secondary btn-icon os-navbtn" data-act="shiftDay" data-v="-1" aria-label="Previous day">${icon('caret-left')}</button>
+      <div class="os-daynav-t"><span class="os-num">${fmt(dt(ui.day), { weekday: 'short', day: 'numeric', month: 'short' })}</span>
+        ${isToday() ? '<span class="os-k acc">Today</span>' : '<button class="btn btn-ghost os-today" data-act="goToday">Back to today</button>'}</div>
+      <button class="btn btn-secondary btn-icon os-navbtn" data-act="shiftDay" data-v="1" aria-label="Next day">${icon('caret-right')}</button></div>`;
+  }
+  function weekNav() {
+    const label = ui.week === 0 ? 'This week' : ui.week === 1 ? 'Next week' : ui.week === -1 ? 'Last week' : (ui.week > 0 ? 'In ' + ui.week + ' weeks' : -ui.week + ' weeks ago');
+    return `<div class="os-daynav">
+      <button class="btn btn-secondary btn-icon os-navbtn" data-act="shiftWeek" data-v="-1" aria-label="Previous week">${icon('caret-double-left')}</button>
+      <div class="os-daynav-t"><span class="os-num">${label}</span>${ui.week ? '<button class="btn btn-ghost os-today" data-act="goToday">Back to today</button>' : ''}</div>
+      <button class="btn btn-secondary btn-icon os-navbtn" data-act="shiftWeek" data-v="1" aria-label="Next week">${icon('caret-double-right')}</button></div>`;
+  }
+
+  // ---------- temporary events ----------
+  function evTimes(e) { return e.start ? e.start + (e.end ? '–' + e.end : '') : 'All day'; }
+  function evCalData(e) {
+    return { uid: 'event-' + e.id + '@elijah-os', title: e.title, date: e.date, start: e.start, end: e.end, desc: e.note || '' };
+  }
+  function eventCard(e) {
+    const k = EVK[e.kind] || EVK.other;
+    return `<article class="os-scard os-ev" data-kind="${esc(e.kind)}">
+      <div class="os-scard-head" style="cursor:default">
+        <span class="os-scard-ic">${icon(k[1])}</span>
+        <span class="os-scard-t"><span class="os-k">${esc(k[0])} · <span class="os-num">${esc(evTimes(e))}</span></span>
+          <span class="os-scard-title">${esc(e.title)}</span>
+          ${e.note ? `<span class="os-muted" style="font-size:13px;line-height:1.4">${esc(e.note)}</span>` : ''}
+          ${e.replace ? '<span class="os-muted" style="font-size:12px">Replaces the planned sessions</span>' : ''}</span>
+      </div>
+      <div class="os-ev-acts">
+        <button class="btn btn-secondary" data-act="evIcs" data-v="${esc(e.id)}">${icon('calendar-plus')}Add to calendar</button>
+        <a class="btn btn-secondary" href="${esc(Cal.googleLink(evCalData(e)))}" target="_blank" rel="noopener">${icon('google-logo')}Google</a>
+        <button class="btn btn-ghost btn-icon os-x" data-act="evRm" data-v="${esc(e.id)}" aria-label="Remove ${esc(e.title)}">${icon('trash')}</button>
+      </div></article>`;
+  }
+  function eventForm() {
+    const e = ui.ev;
+    return `<form class="os-card os-hero os-evform" data-form="event" novalidate>
+      <div class="os-between"><span class="os-k acc">New event</span><button type="button" class="btn btn-ghost btn-icon os-x" data-act="evCancel" aria-label="Cancel">${icon('x')}</button></div>
+      <div class="os-chips" role="group" aria-label="Type">${Object.keys(EVK).map(k => `<button type="button" class="os-chipsel ${e.kind === k ? 'on' : ''}" data-act="evKind" data-v="${k}" aria-pressed="${e.kind === k}">${icon(EVK[k][1])}${EVK[k][0]}</button>`).join('')}</div>
+      <div class="field"><label for="ev-title">What</label><input class="input os-in" id="ev-title" placeholder="After-school game" value="${esc(e.title)}" data-in="ev" data-f="title"></div>
+      <div class="os-evgrid">
+        <div class="field"><label for="ev-date">Date</label><input class="input os-in" type="date" id="ev-date" value="${esc(e.date)}" data-in="ev" data-f="date"></div>
+        <div class="field"><label for="ev-start">Start</label><input class="input os-in" type="time" id="ev-start" value="${esc(e.start)}" data-in="ev" data-f="start"></div>
+        <div class="field"><label for="ev-end">End</label><input class="input os-in" type="time" id="ev-end" value="${esc(e.end)}" data-in="ev" data-f="end"></div>
+      </div>
+      <div class="field"><label for="ev-note">Note (optional)</label><input class="input os-in" id="ev-note" placeholder="Kick-off 16:00, meet 15:40" value="${esc(e.note)}" data-in="ev" data-f="note"></div>
+      <button type="button" class="os-row ${e.replace ? 'on' : ''}" data-act="evReplace" aria-pressed="${!!e.replace}"><span class="os-box">${icon('check')}</span><span style="font-size:14px">Replaces that day's planned sessions</span></button>
+      ${ui.evErr ? `<span class="os-err">${esc(ui.evErr)}</span>` : ''}
+      <button class="btn btn-primary os-btn" type="submit">Save event</button></form>`;
+  }
+
+  // ---------- calendar ----------
+  function feedUrl() { return new URL('calendar.ics', location.href).href; }
+  function calendarCard() {
+    const https = feedUrl(), webcal = https.replace(/^https?:/, 'webcal:');
+    return `<section class="os-card" id="calendar"><span class="os-k">Calendar</span>
+      <div style="font-size:14px;line-height:1.5;color:var(--color-neutral-200)">Subscribe once and your weekly plan shows in your phone's calendar. It updates by itself when the plan changes.</div>
+      <a class="btn btn-primary os-btn" href="${esc(webcal)}">${icon('calendar-check')}Subscribe (iPhone, iPad, Mac)</a>
+      <button class="btn btn-secondary os-btn" data-act="copyFeed">${icon(ui.copied ? 'check' : 'copy')}${ui.copied ? 'Link copied' : 'Copy link for Google Calendar'}</button>
+      <span class="os-muted" style="font-size:12px;line-height:1.5">Google: on a computer open calendar.google.com, then Other calendars → + → From URL, and paste the link.</span>
+      <button class="btn btn-secondary os-btn" data-act="weekIcs">${icon('download-simple')}Download ${ui.week === 0 ? 'this week' : 'the week shown'} with events (.ics)</button>
+    </section>`;
+  }
+  function downloadIcs(name, ics) {
+    const a = document.createElement('a');
+    a.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+    a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+  function weekIcs() {
+    const evs = [];
+    for (let i = 0; i < 7; i++) {
+      const k = iso(dt(i));
+      if (!replacingEvent(k)) Cal.refs(DATA.schedule[i]).forEach(r => { if (DATA.sessions[r.id]) evs.push(Object.assign(Cal.planEvent(DATA, i, r, k), { uid: 'plan-' + k + '-' + r.id + '@elijah-os' })); });
+      eventsOn(k).forEach(e => evs.push(evCalData(e)));
+    }
+    return Cal.calendar(evs, 'Elijah OS · week of ' + fmt(dt(0), { day: 'numeric', month: 'short' }));
+  }
+
   // ---------- session cards ----------
-  const cardIds = d => (DATA.schedule[d].sessions || []).filter(id => DATA.sessions[id]);
+  const dayRefs = d => Cal.refs(DATA.schedule[d]).filter(r => DATA.sessions[r.id]);
+  const cardIds = d => dayRefs(d).map(r => r.id);
+  const startAt = (d, id) => { const r = dayRefs(d).find(x => x.id === id); return r ? r.at : ''; };
   function getSess(id) { const e = (st().sess[dayKey()] || {})[id]; return Object.assign({ c: {}, done: false, added: 0 }, e); }
   const isRevKind = c => c.kind === 'revision' || c.kind === 'paper';
 
@@ -147,13 +262,17 @@
   }
 
   function sessionCards(d, title) {
-    const ids = cardIds(d);
-    if (!ids.length) return '';
+    const ids = cardIds(d), k = iso(dt(d)), evs = eventsOn(k), rep = replacingEvent(k);
     const open = ui.openCard != null ? ui.openCard : (ids.find(id => !getSess(id).done) || '');
     const doneN = ids.filter(id => getSess(id).done).length;
+    const planned = rep && !ui.showPlanned
+      ? (ids.length ? `<button class="os-chip" data-act="showPlanned">${icon('eye-slash')}<span>Planned sessions skipped for ${esc(rep.title)}</span><span style="margin-left:auto;color:var(--color-accent-300);font-size:13px">Show</span></button>` : '')
+      : ids.map(id => sessCard(id, id === open)).join('');
     return `<section class="os-cards" aria-label="${esc(title)}">
-      <div class="os-between" style="padding:0 2px"><span class="os-k">${esc(title)}</span><span class="os-num os-muted" style="font-size:12px">${doneN} of ${ids.length} done</span></div>
-      ${ids.map(id => sessCard(id, id === open)).join('')}</section>`;
+      <div class="os-between" style="padding:0 2px"><span class="os-k">${esc(title)}</span>${ids.length ? `<span class="os-num os-muted" style="font-size:12px">${doneN} of ${ids.length} done</span>` : ''}</div>
+      ${evs.map(eventCard).join('')}
+      ${planned}
+      ${ui.evForm ? eventForm() : `<button class="btn btn-secondary os-btn" data-act="evNew">${icon('plus')}Add event for ${fmt(dt(d), { weekday: 'long' })}</button>`}</section>`;
   }
 
   function sessCard(id, open) {
@@ -166,7 +285,7 @@
         <span class="os-scard-ic">${icon(e.done ? 'check' : k[1])}</span>
         <span class="os-scard-t"><span class="os-k">${esc(k[0])}${sub ? ' · ' + esc(sub.name) : ''} · <span class="os-num">${c.minutes} min</span></span>
           <span class="os-scard-title">${esc(c.title)}</span></span>
-        <span class="os-num os-scard-pct">${e.done ? 'Done' : p.got + '/' + p.total}</span>
+        <span class="os-num os-scard-pct">${startAt(ui.day, id) ? `<span class="os-muted">${esc(startAt(ui.day, id))}</span><br>` : ''}${e.done ? 'Done' : p.got + '/' + p.total}</span>
         ${icon(open ? 'caret-up' : 'caret-down')}
       </button>
       <div class="os-bar os-scard-bar"><div style="width:${e.done ? 100 : pct}%"></div></div>
@@ -193,13 +312,13 @@
 
   // Finishing a card ticks the matching daily checklist item, and revision cards add their minutes.
   function finish(id, on) {
-    const c = DATA.sessions[id], k = dayKey(), wk = weekKey(), day = getDay();
+    const c = DATA.sessions[id], k = dayKey(), wk = curWeekKey(), day = getDay();
     Store.update(s => {
       const all = s.sess[k] = s.sess[k] || {};
       const e = Object.assign({ c: {}, done: false, added: 0 }, all[id]);
       if (!!e.done === on) return;
       e.done = on;
-      if (c.kind === 'revision' && c.subject != null) {
+      if (c.kind === 'revision' && c.subject != null && ui.week === 0) {
         if (s.minsWeek !== wk) { s.mins = s.mins.map(() => 0); s.minsWeek = wk; }
         if (on) { s.mins[c.subject] += c.minutes; e.added = c.minutes; }
         else { s.mins[c.subject] = Math.max(0, s.mins[c.subject] - (e.added || 0)); e.added = 0; }
@@ -235,7 +354,7 @@
 
   // ---------- screens ----------
   function today() {
-    const day = getDay(), log = getLog(), c = DATA.schedule[ui.day];
+    const day = getDay(), log = getLog(), c = dayView(ui.day);
     const h = new Date().getHours();
     const greeting = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
     const lows = LABELS.filter((_, i) => day.r[i] <= 2);
@@ -250,6 +369,7 @@
         <span class="os-num" style="font-size:20px">${daysLeft()}<span class="os-muted" style="font-size:12px">d</span></span></div>
     </header>
     ${updatesCard()}
+    ${dayNav()}
     ${lows.length ? `<div class="os-amber" role="status">${icon('warning')}<div><strong style="font-weight:500">Adjust today</strong><br>${lows.join(' and ')}${lows.length > 1 ? ' are' : ' is'} low. Drop the session one load level or shorten it.</div></div>` : ''}
     <div class="os-grid g3">
       <div class="os-col">
@@ -289,9 +409,10 @@
   function week() {
     return `
     <header class="os-head"><span class="os-k acc">Week</span><h3>${fmt(dt(0), { day: 'numeric', month: 'short' })} – ${fmt(dt(6), { day: 'numeric', month: 'short' })}</h3></header>
+    ${weekNav()}
     <div class="os-grid g2">
       <div class="os-col">${strip(true)}${sessionCard(FULL[ui.day], false)}${sessionCards(ui.day, 'Session cards')}</div>
-      ${dayList(true, false)}
+      <div class="os-col">${dayList(true, false)}${calendarCard()}</div>
     </div>`;
   }
 
@@ -480,7 +601,33 @@
     goCard(v) { ui.tab = 'today'; ui.openCard = v; ui.menu = false; setTimeout(() => { const el = root.querySelector(`[data-act="card"][data-v="${v}"]`); if (el) el.scrollIntoView({ block: 'center' }); }); },
     goNews() { ui.tab = 'log'; ui.menu = false; setTimeout(() => { const el = root.querySelector('[data-news]'); if (el) el.scrollIntoView({ block: 'start' }); }); },
     goTopics() { ui.tab = 'rev'; ui.menu = false; if (ui.subj < 0) ui.subj = 0; setTimeout(() => { const el = root.querySelector('.os-topics'); if (el) el.scrollIntoView({ block: 'center' }); }); },
-    day(v) { ui.day = +v; ui.openCard = null; },
+    day(v) { ui.day = +v; ui.openCard = null; ui.showPlanned = false; },
+    shiftDay(v) {
+      let d = ui.day + +v;
+      if (d < 0) { d = 6; ui.week--; } else if (d > 6) { d = 0; ui.week++; }
+      ui.day = d; ui.openCard = null; ui.showPlanned = false;
+    },
+    shiftWeek(v) { ui.week += +v; ui.openCard = null; ui.showPlanned = false; },
+    goToday() { ui.week = 0; ui.day = todayIdx(); ui.openCard = null; ui.showPlanned = false; },
+    showPlanned() { ui.showPlanned = true; },
+    evNew() { ui.evForm = true; ui.evErr = ''; ui.ev = { title: '', kind: 'game', date: dayKey(), start: '16:00', end: '17:30', note: '', replace: true };
+      setTimeout(() => { const el = root.querySelector('#ev-title'); if (el) { el.focus(); el.scrollIntoView({ block: 'center' }); } }); },
+    evNewMenu() { ui.menu = false; if (ui.tab !== 'week') ui.tab = 'today'; actions.evNew(); },
+    evCancel() { ui.evForm = false; ui.ev = null; },
+    evKind(v) { ui.ev.kind = v; ui.ev.replace = v === 'game' || v === 'training'; },
+    evReplace() { ui.ev.replace = !ui.ev.replace; },
+    evRm(v) {
+      const e = (st().events || []).find(x => x.id === v);
+      if (e && !confirm('Remove "' + e.title + '"?')) return;
+      Store.update(s => { s.events = (s.events || []).filter(x => x.id !== v); });
+    },
+    evIcs(v) { const e = (st().events || []).find(x => x.id === v); if (e) downloadIcs(e.title.replace(/[^\w-]+/g, '-').toLowerCase() + '.ics', Cal.calendar([evCalData(e)], e.title)); },
+    weekIcs() { downloadIcs('elijah-os-week-' + iso(dt(0)) + '.ics', weekIcs()); },
+    async copyFeed() {
+      try { await navigator.clipboard.writeText(feedUrl()); } catch (e) { prompt('Copy this link:', feedUrl()); }
+      ui.copied = true; setTimeout(() => { ui.copied = false; render(); }, 2500);
+    },
+    goCal() { ui.tab = 'week'; ui.menu = false; setTimeout(() => { const el = root.querySelector('#calendar'); if (el) el.scrollIntoView({ block: 'start' }); }); },
     card(v) {
       const ids = cardIds(ui.day);
       const open = ui.openCard != null ? ui.openCard : (ids.find(id => !getSess(id).done) || '');
@@ -535,7 +682,7 @@
     rpe(v) { setLog({ rpe: +v }); ui.savedFor = ''; },
     undoScore() { Store.update(s => { s.scores = s.scores.slice(0, -1); }); },
     addMin(v) {
-      const wk = weekKey();
+      const wk = curWeekKey();
       Store.update(s => {
         if (s.minsWeek !== wk) { s.mins = s.mins.map(() => 0); s.minsWeek = wk; }
         s.mins[+v] += 15;
@@ -576,6 +723,18 @@
       ui.scoreDraft = '';
       render();
       const inp = root.querySelector('#scoreDraft'); if (inp) inp.focus();
+    } else if (f === 'event') {
+      const e = ui.ev, title = (e.title || '').trim();
+      if (!title) { ui.evErr = 'Give the event a name.'; render(); return; }
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date || '')) { ui.evErr = 'Pick a date.'; render(); return; }
+      if (e.start && e.end && e.end <= e.start) { ui.evErr = 'The end time must be after the start.'; render(); return; }
+      const ev = { id: Date.now().toString(36), title, kind: e.kind, date: e.date, start: e.start || '', end: e.end || '', note: (e.note || '').trim(), replace: !!e.replace };
+      Store.update(s => { s.events = (s.events || []).concat(ev); });
+      // Jump to the event's day so it is visible.
+      const d = new Date(ev.date + 'T12:00'), diff = Math.round((d - realMonday()) / 864e5);
+      ui.week = Math.floor(diff / 7); ui.day = ((diff % 7) + 7) % 7;
+      ui.evForm = false; ui.ev = null; ui.evErr = ''; ui.showPlanned = false;
+      render();
     } else if (f === 'topic') {
       const i = +e.target.dataset.i, name = ui.topicDraft.trim();
       if (!name) return;
@@ -620,6 +779,7 @@
       case 'review': { const wk = weekKey(); Store.update(s => { const r = (s.reviews[wk] || ['', '', '']).slice(); r[i] = v; s.reviews[wk] = r; }); break; }
       case 'scoreDraft': ui.scoreDraft = v; break;
       case 'topicDraft': ui.topicDraft = v; break;
+      case 'ev': if (ui.ev) ui.ev[f] = v; break;
       case 'goal': { const n = parseInt(v, 10); if (n > 0) Store.update(s => { s.goals[i] = n; }); break; }
     }
   });
@@ -638,7 +798,7 @@
   let lastDate = iso(new Date());
   setInterval(() => {
     const d = iso(new Date());
-    if (d !== lastDate && !root.contains(document.activeElement)) { lastDate = d; ui.day = (new Date().getDay() + 6) % 7; render(); }
+    if (d !== lastDate && !root.contains(document.activeElement)) { lastDate = d; ui.week = 0; ui.day = todayIdx(); render(); }
   }, 60000);
 
   render();
