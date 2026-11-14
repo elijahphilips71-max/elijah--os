@@ -334,10 +334,19 @@
     async signOut() { await Store.signOut(); ui.authStep = 'signin'; window.scrollTo(0, 0); },
     async resend() {
       try { await Store.sendLink(ui.email); ui.resent = true; ui.emailErr = ''; }
-      catch (e) { ui.emailErr = 'Could not send the link. Check your connection and try again.'; }
+      catch (e) { ui.emailErr = linkErr(e); }
     },
     otherEmail() { ui.authStep = 'signin'; ui.emailErr = ''; ui.resent = false; }
   };
+
+  function linkErr(e) {
+    console.warn('Sign-in link failed', e);
+    const msg = (e && e.message) || '';
+    if ((e && e.status === 429) || /rate limit|security purposes|only request/i.test(msg))
+      return 'Too many sign-in emails. Wait a few minutes (up to an hour), then try again. ' + msg;
+    if (!navigator.onLine) return 'You are offline. Check your connection and try again.';
+    return 'Could not send the link: ' + (msg || 'unknown error');
+  }
 
   root.addEventListener('click', async e => {
     const b = e.target.closest('[data-act]');
@@ -363,7 +372,7 @@
       ui.email = ui.email.trim();
       ui.sending = true; render();
       try { await Store.sendLink(ui.email); ui.authStep = 'sent'; ui.emailErr = ''; ui.resent = false; }
-      catch (err) { ui.emailErr = 'Could not send the link. Check your connection and try again.'; }
+      catch (err) { ui.emailErr = linkErr(err); }
       ui.sending = false; render();
     }
   });
