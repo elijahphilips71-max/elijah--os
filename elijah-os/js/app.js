@@ -36,7 +36,14 @@
     subj: -1,         // subject whose topic list is open on Revision
     topicDraft: '',
     newVersion: false,
-    qShown: {},       // mark schemes revealed (not saved)
+    qShown: {},
+    pd: { s: 0, topics: [] },  // past-paper form draft
+    pdOpen: '', pdErr: '',
+    progTab: 'grades', gradeSubj: null, gradeTable: false,
+    qPos: {},         // which question each ladder card is showing
+    showAllNews: false,
+    qAdd: -1,         // subject whose "add a question" form is open
+    report: false,       // mark schemes revealed (not saved)
     qd: {},           // draft of a new question, per subject
     ideaDraft: {},    // per project
     hOpen: null,      // open project on Side hustles (null = the first)
@@ -327,12 +334,47 @@
   const QBANK = (window.ELIJAH_QUESTIONS || []).map(r => ({ s: r[0], t: r[1], ao: r[2], m: r[3], q: r[4], a: r[5], id: 'b' + qhash(r[4]) }));
   const allQuestions = () => QBANK.concat((st().myq || []).map(x => Object.assign({ own: true }, x)));
   const qById = id => allQuestions().find(q => q.id === id);
-  // Lower comes first: questions you got wrong last time, then new ones, then ones you got right; red topics before green.
+  // ----- spaced repetition -----
+  // After an attempt, a question comes back: missed (under half marks) next day, part marks in 3 days,
+  // full marks in 7 days, then 14, 28 and 56 days for each full-marks answer in a row.
+  const FULL_STEPS = [7, 14, 28, 56];
+  const daysBetween = (a, b) => Math.round((new Date(b + 'T12:00') - new Date(a + 'T12:00')) / 864e5);
+  function qState(q, date) {
+    const h = ((st().qlog || {})[q.id] || []).filter(x => x.d < date);
+    if (!h.length) return { kind: 'new', due: 0, tries: 0 };
+    const last = h[h.length - 1], r = last.of ? last.got / last.of : 0;
+    let streak = 0; for (let i = h.length - 1; i >= 0 && h[i].got >= h[i].of; i--) streak++;
+    const gap = r < 0.5 ? 1 : r < 1 ? 3 : FULL_STEPS[Math.min(streak, FULL_STEPS.length) - 1];
+    return { kind: r < 0.5 ? 'missed' : r < 1 ? 'part' : 'solid', due: daysBetween(date, Cal.addDays(last.d, gap)), gap, tries: h.length, last };
+  }
+  function nextGap(got, of, q, date) {
+    const r = of ? got / of : 0;
+    if (r < 0.5) return 1; if (r < 1) return 3;
+    const h = ((st().qlog || {})[q.id] || []).filter(x => x.d < date);
+    let streak = 1; for (let i = h.length - 1; i >= 0 && h[i].got >= h[i].of; i--) streak++;
+    return FULL_STEPS[Math.min(streak, FULL_STEPS.length) - 1];
+  }
+  // How well a topic is going, from your marks in the last 6 weeks (null = no answers yet).
+  function topicAcc(s, t, date) {
+    const from = Cal.addDays(date || iso(new Date()), -42), log = st().qlog || {}; let got = 0, of = 0;
+    allQuestions().forEach(q => { if (q.s === s && q.t === t) (log[q.id] || []).forEach(x => { if (x.d >= from && (!date || x.d < date)) { got += x.got; of += x.of; } }); });
+    return of ? got / of : null;
+  }
+  // 0 = weakest. Your red/amber/green rating counts, and so do your actual marks.
+  // Topics you said lost marks in a past paper in the last 6 weeks.
+  const paperFlagged = (s, t, date) => (st().papers || []).some(p => p.s === s && p.date && p.date >= Cal.addDays(date || iso(new Date()), -42) && (p.topics || []).includes(t));
+  function topicWeak(s, t, date) {
+    const conf = ((st().topics[s] || []).find(x => x.name === t) || {}).conf || 0, acc = topicAcc(s, t, date);
+    const fromConf = [1.5, 0, 2, 3][conf], fromAcc = paperFlagged(s, t, date) ? 0 : acc == null ? 1.5 : acc < 0.5 ? 0 : acc < 0.75 ? 1.5 : 3;
+    return (fromConf + fromAcc) / 2;
+  }
+  // Lower comes first: due or overdue questions (missed ones first), then new questions, then not-yet-due ones
+  // (only if there aren't enough). Weak topics come before strong ones in each group.
   function qScore(q, date) {
-    const conf = ((st().topics[q.s] || []).find(t => t.name === q.t) || {}).conf || 0;
-    const h = ((st().qlog || {})[q.id] || []).filter(x => x.d < date), last = h[h.length - 1];
-    const histW = !last ? 1 : last.got < last.of ? 0 : 2 + Math.min(h.length, 3);
-    return histW * 4 + [1, 0, 2, 3][conf];
+    const s = qState(q, date), weak = topicWeak(q.s, q.t, date);
+    if (s.kind === 'new') return 100 + weak * 10;
+    if (s.due <= 0) return (s.kind === 'missed' ? 0 : s.kind === 'part' ? 20 : 40) + weak * 5 + Math.max(-10, s.due);
+    return 300 + s.due * 5 + weak;
   }
   // The questions a ladder card gives today. Ranked on history before today, so the list stays put while you answer.
   function ladderRows(key, c) {
@@ -362,16 +404,41 @@
     });
     return rows;
   }
+  // Ladder cards show one question at a time, with dots to jump between them.
+  function qDone(r, e) { return r.q ? (e.q || {})[r.q.id] != null : !!(e.c[r.key]); }
+  function questionStepper(id, e) {
+    const rows = cardRows(id);
+    if (!rows.length) return '<span class="os-muted" style="font-size:14px">No questions for this subject yet. Add some on the Revision screen.</span>';
+    let pos = ui.qPos[id];
+    if (pos == null || pos >= rows.length) { pos = rows.findIndex(r => !qDone(r, e)); if (pos < 0) pos = 0; }
+    const r = rows[pos], aoOf = x => x.q ? x.q.ao : +x.key.slice(2);
+    const head = ['AO1 · quick marks', 'AO2 · main chunk', 'AO3 · heavy questions'][aoOf(r) - 1];
+    return `<div class="os-qdots" role="group" aria-label="Questions">${rows.map((x, i) => {
+        const got = x.q ? (e.q || {})[x.q.id] : null, cls = x.q && got != null ? (got >= x.q.m ? 'full' : got ? 'part' : 'miss') : (!x.q && e.c[x.key] ? 'full' : '');
+        const gapBefore = i && aoOf(rows[i - 1]) !== aoOf(x);
+        return `${gapBefore ? '<span class="os-qdots-gap"></span>' : ''}<button class="os-qdot ${cls} ${i === pos ? 'on' : ''}" data-act="qgo" data-v="${esc(id)}|${i}" aria-label="Question ${i + 1}${cls ? ', answered' : ''}"></button>`; }).join('')}</div>
+      <div class="os-between"><span class="os-k acc">${head}</span><span class="os-num os-muted" style="font-size:12px">${pos + 1} of ${rows.length}</span></div>
+      ${sessRow(id, Object.assign({}, r, { head: '' }), e)}
+      <div class="os-qnav">
+        <button class="btn btn-secondary os-btn" data-act="qgo" data-v="${esc(id)}|${pos - 1}"${pos ? '' : ' disabled'}>${icon('caret-left')}Back</button>
+        <button class="btn btn-secondary os-btn" data-act="qgo" data-v="${esc(id)}|${pos + 1}"${pos < rows.length - 1 ? '' : ' disabled'}>${qDone(r, e) ? 'Next' : 'Skip'}${icon('caret-right')}</button>
+      </div>`;
+  }
+  const Q_TAG = { new: 'New', missed: 'Missed last time', part: 'Part marks last time', solid: 'Review' };
   function qRow(key, r, e) {
     const q = r.q, got = (e.q || {})[q.id], answered = got != null, shown = answered || ui.qShown[key + '|' + q.id];
-    const v = esc(key + '|' + q.id);
+    const v = esc(key + '|' + q.id), date = dayKey(), state = qState(q, date), ans = (e.ans || {})[q.id] || '';
+    const gap = answered ? nextGap(got, q.m, q, date) : 0;
+    const when = gap === 1 ? 'tomorrow' : gap < 7 ? 'in ' + gap + ' days' : 'in ' + gap / 7 + ' week' + (gap > 7 ? 's' : '');
     return `<div class="os-q ${answered ? (got >= q.m ? 'full' : got ? 'part' : 'miss') : ''}">
       <div class="os-between"><span class="os-k">AO${q.ao} · ${q.m} mark${q.m > 1 ? 's' : ''} · ${esc(DATA.sessions[sid(key)].mixed ? DATA.subjects[q.s].name : q.t)}</span>
-        ${answered ? `<span class="os-num os-q-score">${got}/${q.m}</span>` : ''}</div>
+        ${answered ? `<span class="os-num os-q-score">${got}/${q.m}</span>` : `<span class="os-q-tag ${state.kind}">${Q_TAG[state.kind]}</span>`}</div>
       <div class="os-q-text">${esc(q.q)}</div>
+      <textarea class="input os-in os-q-input" rows="${q.m > 3 ? 4 : 2}" placeholder="Your answer" aria-label="Your answer" data-in="qans" data-f="${v}" id="qa-${esc(key)}-${q.id}"${answered ? ' readonly' : ''}>${esc(ans)}</textarea>
       ${shown ? `<div class="os-q-ans"><span class="os-k">Mark scheme</span><span>${esc(q.a)}</span></div>
+        <span class="os-muted" style="font-size:12px">${answered ? 'Comes back ' + when + '. Tap another number to change your mark.' : 'Compare your answer with the mark scheme. How many marks did you get?'}</span>
         <div class="os-q-marks" role="group" aria-label="Your marks">${Array.from({ length: q.m + 1 }, (_, n) => `<button class="os-rpe ${got === n ? 'on' : ''}" data-act="qmark" data-v="${v}|${n}" aria-pressed="${got === n}">${n}</button>`).join('')}</div>`
-      : `<button class="btn btn-secondary os-btn" data-act="qshow" data-v="${v}">Check the mark scheme</button>`}
+      : `<button class="btn btn-primary os-btn" data-act="qshow" data-v="${v}">Check my answer</button>`}
     </div>`;
   }
   // Marks per AO for a subject over the last 4 weeks: [{ got, of }, ...] for AO1..AO3
@@ -453,7 +520,10 @@
         ${c.focus ? `<div class="os-scard-focus">${esc(c.focus)}</div>` : ''}
         ${c.ladder ? (() => { const qs = cardRows(id).filter(r => r.q && (e.q || {})[r.q.id] != null); const g = qs.reduce((a, r) => a + e.q[r.q.id], 0), o = qs.reduce((a, r) => a + r.q.m, 0);
           return qs.length ? `<div class="os-between os-q-total"><span>${qs.length} answered</span><span class="os-num">${g} / ${o} marks${o ? ' · ' + Math.round(g / o * 100) + '%' : ''}</span></div>` : ''; })() : ''}
-        <div class="os-scard-rows">${cardRows(id).map(r => sessRow(id, r, e)).join('')}</div>
+        ${c.ladder ? questionStepper(id, e) : `<div class="os-scard-rows">${cardRows(id).map(r => sessRow(id, r, e)).join('')}</div>`}
+        ${c.logPaper ? (() => { const done = (st().papers || []).filter(p => p.date === dayKey());
+          return done.length ? `<div class="os-q-total" style="display:flex;flex-direction:column;gap:2px"><span class="os-k">Logged</span>${paperList(99).split('</div>').filter(x => x.trim()).slice(0, done.length).map(x => x + '</div>').join('')}</div>`
+            : `<span class="os-k acc" style="padding-top:6px">Log your result</span>${paperForm('card')}`; })() : ''}
         <button class="btn ${e.done ? 'btn-secondary' : 'btn-primary'} os-btn" data-act="sessDone" data-v="${esc(id)}">${e.done ? 'Undo finish' : 'Finish session'}${!e.done && sub ? ` · +${it.min} min ${esc(sub.name)}` : ''}</button>
       </div>` : ''}
     </article>`;
@@ -524,7 +594,8 @@
     const list = unreadUpdates();
     if (!list.length) return '';
     return `<section class="os-card os-note"><div class="os-between"><span class="os-k acc">${icon('megaphone')} New for you</span>
-      <button class="btn btn-ghost" data-act="seenAll">Got it</button></div>${list.map(noteItem).join('')}</section>`;
+      <button class="btn btn-ghost" data-act="seenAll">Got it</button></div>${(ui.showAllNews ? list : list.slice(0, 1)).map(noteItem).join('')}
+      ${list.length > 1 && !ui.showAllNews ? `<button class="btn btn-ghost" style="align-self:flex-start;padding-left:0" data-act="allNews">${list.length - 1} more</button>` : ''}</section>`;
   }
   function updateBar() {
     return ui.newVersion ? `<div class="os-updbar" role="status">${icon('arrow-clockwise')}<span>A new version of Elijah OS is ready.</span>
@@ -620,6 +691,104 @@
     </div>`;
   }
 
+  // ---------- grades and past papers ----------
+  // Rough GCSE grade from a percentage, using typical boundaries. Real boundaries change by subject, board and year.
+  const BOUNDS = [[9, 80], [8, 72], [7, 64], [6, 55], [5, 47], [4, 38], [3, 28], [2, 18], [1, 9]];
+  const gradeOf = pct => { for (const [g, b] of BOUNDS) if (pct >= b) return g; return 'U'; };
+  // Marks for one subject between two dates (inclusive start, exclusive end): practice questions plus past papers.
+  function marksBetween(sj, a, b) {
+    const log = st().qlog || {}; let qg = 0, qo = 0, pg = 0, po = 0, papers = 0;
+    allQuestions().forEach(q => { if (q.s === sj) (log[q.id] || []).forEach(x => { if (x.d >= a && x.d < b) { qg += x.got; qo += x.of; } }); });
+    (st().papers || []).forEach(p => { if (p.s === sj && p.date && p.date >= a && p.date < b) { pg += p.got; po += p.of; papers++; } });
+    // Past papers count double: they're the closest thing to the real exam.
+    const got = qg + 2 * pg, of = qo + 2 * po;
+    return { pct: of ? got / of * 100 : null, papers, n: qo + po };
+  }
+  function weeklySeries(sj, weeks) {
+    const out = [], mon = realMonday();
+    for (let w = weeks - 1; w >= 0; w--) {
+      const a = iso(new Date(mon.getTime() - w * 7 * 864e5)), b = Cal.addDays(a, 7);
+      out.push(Object.assign({ week: a }, marksBetween(sj, a, b)));
+    }
+    return out;
+  }
+  function subjectGrade(sj) {
+    const today = Cal.addDays(iso(new Date()), 1), now = marksBetween(sj, Cal.addDays(today, -28), today), before = marksBetween(sj, Cal.addDays(today, -56), Cal.addDays(today, -28));
+    // Needs at least 10 marks' worth of answers before it guesses a grade.
+    const enough = m => m.pct != null && m.n >= 10;
+    return { now, before, grade: enough(now) ? gradeOf(now.pct) : null, prev: enough(before) ? gradeOf(before.pct) : null };
+  }
+
+  function gradesView() {
+    const subs = DATA.subjects.map((sub, i) => ({ sub, i, g: subjectGrade(i) })).filter(x => x.i !== 5 || x.g.now.n);
+    const pick = ui.gradeSubj != null ? ui.gradeSubj : (subs.find(x => x.g.now.n) || subs[0]).i;
+    const series = weeklySeries(pick, 10);
+    return `
+    <section class="os-card"><div class="os-between"><span class="os-k">Estimated grades · last 4 weeks</span></div>
+      <div class="os-grades">${subs.map(({ sub, i, g }) => {
+        const up = g.grade != null && g.prev != null && g.grade !== 'U' && g.prev !== 'U' ? g.grade - g.prev : 0;
+        return `<button class="os-grade ${pick === i ? 'on' : ''}" data-act="gradeSubj" data-v="${i}" aria-pressed="${pick === i}">
+          <span class="os-grade-n os-num">${g.grade == null ? '–' : g.grade}</span>
+          <span class="os-grade-s">${esc(sub.name)}</span>
+          <span class="os-num os-muted" style="font-size:11px">${g.now.pct == null ? 'no data yet' : g.grade == null ? g.now.n + ' marks so far' : Math.round(g.now.pct) + '%'}${up ? ` <span class="${up > 0 ? 'cgreen' : 'cred'}">${up > 0 ? '▲' : '▼'}${Math.abs(up)}</span>` : ''}</span></button>`; }).join('')}</div>
+      <span class="os-muted" style="font-size:12px;line-height:1.5">A rough guide from typical grade boundaries. Past papers count double. Tap a subject to see its graph.</span>
+    </section>
+    <section class="os-card"><div class="os-between"><span class="os-k">${esc(DATA.subjects[pick].name)} · weekly score</span>
+        <button class="btn btn-ghost" data-act="gradeTable">${ui.gradeTable ? 'Graph' : 'Table'}</button></div>
+      ${ui.gradeTable ? gradeTable(series) : gradeChart(series)}
+    </section>`;
+  }
+  function gradeChart(series) {
+    const W = 320, H = 170, L = 26, R = 8, T = 8, B = 22, iw = W - L - R, ih = H - T - B;
+    const x = i => L + (series.length === 1 ? iw / 2 : i * iw / (series.length - 1)), y = p => T + ih - p / 100 * ih;
+    const pts = series.map((d, i) => d.pct == null ? null : { i, d, x: x(i), y: y(d.pct) });
+    const have = pts.filter(Boolean);
+    if (!have.length) return '<div class="os-muted" style="padding:24px 0;font-size:14px">Answer some questions or log a past paper to start the graph.</div>';
+    const segs = []; let cur = [];
+    pts.forEach(p => { if (p) cur.push(p.x.toFixed(1) + ',' + p.y.toFixed(1)); else if (cur.length) { segs.push(cur); cur = []; } }); if (cur.length) segs.push(cur);
+    const guides = [[4, 38], [5, 47], [7, 64], [9, 80]];
+    return `<div class="os-gchart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Weekly score for the last ${series.length} weeks">
+      ${guides.map(([g, b]) => `<line class="guide" x1="${L}" x2="${W - R}" y1="${y(b)}" y2="${y(b)}"></line><text class="glbl" x="${L - 4}" y="${y(b) + 3}" text-anchor="end">${g}</text>`).join('')}
+      <line class="base" x1="${L}" x2="${W - R}" y1="${T + ih}" y2="${T + ih}"></line>
+      ${segs.map(sg => `<polyline class="line" points="${sg.join(' ')}"></polyline>`).join('')}
+      ${have.map(p => p.d.papers
+        ? `<rect class="pt" x="${p.x - 4.5}" y="${p.y - 4.5}" width="9" height="9" rx="2"></rect>`
+        : `<circle class="pt" cx="${p.x}" cy="${p.y}" r="4"></circle>`).join('')}
+      ${have.map(p => `<rect class="hit" x="${p.x - 14}" y="${T}" width="28" height="${ih}" data-tip="${esc('Week of ' + fmt(new Date(p.d.week + 'T12:00'), { day: 'numeric', month: 'short' }) + ': ' + Math.round(p.d.pct) + '% · grade ' + gradeOf(p.d.pct) + (p.d.papers ? ' · includes a past paper' : ''))}"></rect>`).join('')}
+      ${series.map((d, i) => i % 3 === (series.length - 1) % 3 ? `<text class="xlbl" x="${x(i)}" y="${H - 6}" text-anchor="${i === series.length - 1 ? 'end' : i === 0 ? 'start' : 'middle'}">${fmt(new Date(d.week + 'T12:00'), { day: 'numeric', month: 'short' })}</text>` : '').join('')}
+    </svg><div class="os-gtip" hidden></div></div>
+    <div class="os-gkey"><span><svg width="10" height="10"><circle cx="5" cy="5" r="4" class="pt"></circle></svg>practice questions</span><span><svg width="10" height="10"><rect x="1" y="1" width="8" height="8" rx="2" class="pt"></rect></svg>week with a past paper</span><span class="os-muted">dashed lines: grades 4, 5, 7, 9</span></div>`;
+  }
+  function gradeTable(series) {
+    return `<table class="table os-gtable"><thead><tr><th>Week of</th><th style="text-align:right">Score</th><th style="text-align:right">Grade</th></tr></thead><tbody>
+      ${series.slice().reverse().map(d => `<tr><td>${fmt(new Date(d.week + 'T12:00'), { day: 'numeric', month: 'short' })}${d.papers ? ' · paper' : ''}</td><td class="os-num" style="text-align:right">${d.pct == null ? '—' : Math.round(d.pct) + '%'}</td><td class="os-num" style="text-align:right">${d.pct == null ? '—' : gradeOf(d.pct)}</td></tr>`).join('')}</tbody></table>`;
+  }
+
+  // Past-paper log form, used on the Saturday card and on the Revision screen.
+  function paperForm(where) {
+    const d = ui.pd, ts = (st().topics[d.s] || []);
+    return `<form data-form="paper" data-where="${where}" class="os-myq">
+      <div class="os-evgrid" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)">
+        <select class="input os-in" aria-label="Subject" data-in="pd" data-f="s">${DATA.subjects.map((x, i) => `<option value="${i}" ${+d.s === i ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>
+        <input class="input os-in" placeholder="Paper (e.g. June 2023 P1)" aria-label="Paper" value="${esc(d.name || '')}" data-in="pd" data-f="name">
+      </div>
+      <div class="os-evgrid" style="grid-template-columns:1fr auto 1fr;align-items:center">
+        <input class="input os-in os-num" inputmode="numeric" placeholder="Marks" aria-label="Marks you got" value="${esc(d.got || '')}" data-in="pd" data-f="got">
+        <span class="os-muted">out of</span>
+        <input class="input os-in os-num" inputmode="numeric" placeholder="Total" aria-label="Total marks" value="${esc(d.of || '')}" data-in="pd" data-f="of">
+      </div>
+      ${ts.length ? `<span class="os-muted" style="font-size:12px">Tap the topics that lost you marks (they’ll come up more in your questions):</span>
+        <div class="os-chips">${ts.map(t => `<button type="button" class="os-chipsel ${(d.topics || []).includes(t.name) ? 'on' : ''}" data-act="pdTopic" data-v="${esc(t.name)}">${esc(t.name)}</button>`).join('')}</div>` : ''}
+      ${ui.pdErr ? `<span class="os-err">${esc(ui.pdErr)}</span>` : ''}
+      <button class="btn btn-primary os-btn" type="submit">Save result</button></form>`;
+  }
+  function paperList(n) {
+    const list = (st().papers || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, n);
+    return list.map(p => { const pct = p.of ? Math.round(p.got / p.of * 100) : 0;
+      return `<div class="os-between" style="font-size:14px;min-height:40px"><span style="min-width:0"><span class="os-num os-muted" style="font-size:12px">${p.date ? fmt(new Date(p.date + 'T12:00'), { day: 'numeric', month: 'short' }) : '—'}</span> · ${esc(DATA.subjects[p.s] ? DATA.subjects[p.s].name : '')} ${esc(p.name || '')}</span>
+        <span class="os-num" style="flex:none">${p.got}/${p.of} · ${pct}% · <b style="font-weight:500">${gradeOf(pct)}</b></span></div>`; }).join('');
+  }
+
   // ---------- screens ----------
   function today() {
     const day = getDay(), log = getLog(), c = dayView(ui.day);
@@ -686,10 +855,6 @@
 
   function revision() {
     const s = st();
-    const raw = s.scores.slice(-8);
-    const pts = raw.map((v, i) => ({ v, x: raw.length === 1 ? 150 : 20 + i * (260 / (raw.length - 1)), y: 110 - v }));
-    const line = pts.map(p => p.x + ',' + p.y).join(' ');
-    const area = pts.length ? pts[0].x + ',110 ' + line + ' ' + pts[pts.length - 1].x + ',110' : '';
     const mins = weekMins();
     return `
     <header class="os-head"><span class="os-k acc">Revision</span><h3>Priority order</h3></header>
@@ -698,17 +863,15 @@
         <section class="os-card os-hero os-countdown"><div style="display:flex;flex-direction:column;gap:4px"><span class="os-k">First exam</span><span style="font-size:15px">${esc(DATA.firstExam.label)}</span></div>
           <span class="os-num" style="font-size:40px;line-height:1;color:var(--color-accent-300)">${daysLeft()}<span class="os-muted" style="font-size:13px"> days</span></span></section>
         <section class="os-card">
-          <div class="os-between"><span class="os-k">Past-paper scores</span>${raw.length ? `<span class="os-num" style="font-size:13px">latest ${raw[raw.length - 1]}%</span>` : ''}</div>
-          ${raw.length ? `<svg class="os-chart" viewBox="0 0 300 120" role="img" aria-label="Past-paper scores: ${raw.join(', ')} percent">
-              <line class="base" x1="0" y1="110" x2="300" y2="110"></line><line class="guide" x1="0" y1="60" x2="300" y2="60"></line><line class="guide" x1="0" y1="10" x2="300" y2="10"></line>
-              <polygon class="area" points="${area}"></polygon><polyline class="line" points="${line}"></polyline>
-              ${pts.map(p => `<circle class="pt" cx="${p.x}" cy="${p.y}" r="3.5"></circle>`).join('')}</svg>
-            <div class="os-chart-lbls">${pts.map(p => `<span class="os-num">${p.v}</span>`).join('')}</div>`
-          : '<div class="os-muted" style="padding:28px 0;font-size:14px">Add your first past-paper score to start the trend line.</div>'}
-          <form class="os-scoreform" data-form="score" style="display:flex;gap:8px">
-            <input class="input os-in os-num" style="flex:1;min-width:0" inputmode="numeric" placeholder="Score %" aria-label="Score percent" value="${esc(ui.scoreDraft)}" data-in="scoreDraft" id="scoreDraft">
-            <button class="btn btn-primary os-btn" type="submit">Add score</button>
-            <button class="btn btn-secondary os-btn" type="button" data-act="undoScore"${s.scores.length ? '' : ' disabled'}>Undo</button></form>
+          <div class="os-between"><span class="os-k">Past papers</span><button class="btn btn-ghost" data-act="progGrades">Grades ${icon('arrow-right')}</button></div>
+          ${paperList(4) || '<span class="os-muted" style="font-size:14px">Log your first past paper to start your grade graph.</span>'}
+          <button class="btn btn-ghost" style="align-self:flex-start;padding-left:0" data-act="pdToggle" aria-expanded="${ui.pdOpen === 'rev'}">${icon(ui.pdOpen === 'rev' ? 'minus' : 'plus')}Log a past paper</button>
+          ${ui.pdOpen === 'rev' ? paperForm('rev') : ''}
+        </section>
+        <section class="os-card">
+          <button class="os-topics-head" data-act="toggleReport" aria-expanded="${ui.report}">${icon('paper-plane-tilt')}<span style="font-size:14px">Send my progress to Claude</span>${icon(ui.report ? 'caret-up' : 'caret-down')}</button>
+          ${ui.report ? `<span style="font-size:14px;line-height:1.5;color:var(--color-neutral-200)">Copies a short report: your marks per AO, weakest topics, and recent answers that lost marks. Paste it into Claude Code and ask for new questions; they’ll be aimed at what you need.</span>
+            <button class="btn btn-primary os-btn" data-act="copyReport">${icon(ui.copied === 'report' ? 'check' : 'copy')}${ui.copied === 'report' ? 'Report copied' : 'Copy report'}</button>` : ''}
         </section>
       </div>
       <div class="os-col"><span class="os-k">Minutes this week</span>
@@ -727,6 +890,31 @@
     </div>`;
   }
 
+  // Plain-text summary to paste into a chat with Claude, who writes new questions from it.
+  function progressReport() {
+    const today = iso(new Date()), log = st().qlog || {}, lines = ['ELIJAH OS revision report, ' + fmt(new Date(), { day: 'numeric', month: 'long', year: 'numeric' }), ''];
+    lines.push('Marks by AO, last 4 weeks:');
+    DATA.subjects.forEach((sub, i) => { const a = aoStats(i); if (a.some(x => x.of)) lines.push('- ' + sub.name + ': ' + a.map((x, j) => 'AO' + (j + 1) + ' ' + (x.of ? Math.round(x.got / x.of * 100) + '% (' + x.got + '/' + x.of + ')' : 'none')).join(', ')); });
+    const topics = [];
+    DATA.subjects.forEach((sub, i) => (st().topics[i] || []).forEach(t => { const a = topicAcc(i, t.name); topics.push({ name: sub.name + ' · ' + t.name, a, conf: CONF[t.conf || 0] }); }));
+    lines.push('', 'Weakest topics (marks in the last 6 weeks, and my own rating):');
+    topics.filter(t => t.a != null).sort((x, y) => x.a - y.a).slice(0, 8).forEach(t => lines.push('- ' + t.name + ': ' + Math.round(t.a * 100) + '% (' + t.conf + ')'));
+    const unrated = topics.filter(t => t.a == null && t.conf === 'Red'); if (unrated.length) lines.push('- Rated red but not practised yet: ' + unrated.map(t => t.name).join('; '));
+    const papers = (st().papers || []).filter(p => p.date).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
+    if (papers.length) {
+      lines.push('', 'Recent past papers:');
+      papers.forEach(p => lines.push('- ' + p.date + ' ' + (DATA.subjects[p.s] || {}).name + (p.name ? ' ' + p.name : '') + ': ' + p.got + '/' + p.of + ' (' + Math.round(p.got / p.of * 100) + '%)' + ((p.topics || []).length ? '. Lost marks on: ' + p.topics.join(', ') : '')));
+    }
+    const wrong = [];
+    allQuestions().forEach(q => (log[q.id] || []).forEach(x => { if (x.got < x.of) wrong.push({ q, x }); }));
+    wrong.sort((a, b) => b.x.d.localeCompare(a.x.d));
+    lines.push('', 'Recent answers that lost marks:');
+    wrong.slice(0, 15).forEach(({ q, x }) => lines.push('- [' + DATA.subjects[q.s].name + ' · ' + q.t + ' · AO' + q.ao + ' · ' + x.got + '/' + x.of + '] ' + q.q + (x.ans ? ' | My answer: ' + x.ans.replace(/\s+/g, ' ') : '')));
+    if (!wrong.length) lines.push('- none yet');
+    lines.push('', 'Please add new exam questions to js/questions.js aimed at my weakest topics: some AO1 quick markers, mostly AO2, and a few AO3.');
+    return lines.join('\n');
+  }
+
   function topicBlock(i) {
     const ts = st().topics[i] || [];
     const cnt = [0, 0, 0, 0]; ts.forEach(t => cnt[t.conf || 0]++);
@@ -743,13 +931,14 @@
       ${open ? `${ts.map((t, j) => `<div class="os-topic">
           <button class="os-conf c${CONF_CLS[t.conf || 0]}" data-act="conf" data-v="${i}|${j}" aria-label="${esc(t.name)}: ${CONF[t.conf || 0]}. Tap to change.">${CONF[t.conf || 0]}</button>
           <span style="flex:1;min-width:0;font-size:14px">${esc(t.name)}</span>
+          ${(() => { const a = topicAcc(i, t.name); return a == null ? '' : `<span class="os-num ${a >= .75 ? 'cgreen' : a >= .5 ? 'camber' : 'cred'}" style="font-size:12px" title="Your marks on this topic, last 6 weeks">${Math.round(a * 100)}%</span>`; })()}
           <button class="btn btn-ghost btn-icon os-x" aria-label="Remove ${esc(t.name)}" data-act="rmTopic" data-v="${i}|${j}">${icon('x')}</button></div>`).join('')}
         <form data-form="topic" data-i="${i}" style="display:flex;gap:8px">
           <input class="input os-in" style="flex:1;min-width:0" placeholder="Add a topic" aria-label="New ${esc(DATA.subjects[i].name)} topic" value="${esc(ui.topicDraft)}" data-in="topicDraft" id="topic-${i}">
           <button class="btn btn-secondary os-btn" type="submit">Add</button></form>
         <span class="os-muted" style="font-size:12px">Tap a rating to change it. Questions on red topics come up first in your revision cards.</span>
-        <span class="os-k" style="padding-top:8px">Add your own exam question</span>
-        <form data-form="myq" data-i="${i}" class="os-myq">
+        <button class="btn btn-ghost" style="align-self:flex-start;padding-left:0" data-act="qAddToggle" data-v="${i}" aria-expanded="${ui.qAdd === i}">${icon(ui.qAdd === i ? 'minus' : 'plus')}Add your own exam question${mine.length ? ' (' + mine.length + ' added)' : ''}</button>
+        ${ui.qAdd === i ? `<form data-form="myq" data-i="${i}" class="os-myq">
           <div class="os-evgrid">
             <select class="input os-in" aria-label="Topic" data-in="qd" data-f="t" data-i="${i}">${ts.map(t => `<option ${d.t === t.name ? 'selected' : ''}>${esc(t.name)}</option>`).join('')}</select>
             <select class="input os-in" aria-label="AO" data-in="qd" data-f="ao" data-i="${i}">${[1, 2, 3].map(n => `<option value="${n}" ${+(d.ao || 1) === n ? 'selected' : ''}>AO${n}</option>`).join('')}</select>
@@ -759,7 +948,7 @@
           <textarea class="input os-in" rows="2" placeholder="Mark scheme / answer" aria-label="Mark scheme" data-in="qd" data-f="a" data-i="${i}" id="qd-a-${i}">${esc(d.a || '')}</textarea>
           <button class="btn btn-secondary os-btn" type="submit">${icon('plus')}Add question</button>
         </form>
-        ${mine.length ? `<span class="os-muted" style="font-size:12px">Your questions: ${mine.length}</span>${mine.map(q => `<div class="os-topic"><span class="os-num os-muted" style="font-size:11px;flex:none">AO${q.ao} · ${q.m}m</span><span style="flex:1;min-width:0;font-size:13px;overflow-wrap:anywhere">${esc(q.q)}</span><button class="btn btn-ghost btn-icon os-x" data-act="rmMyq" data-v="${esc(q.id)}" aria-label="Delete question">${icon('x')}</button></div>`).join('')}` : ''}` : ''}
+        ${mine.length ? `<span class="os-muted" style="font-size:12px">Your questions: ${mine.length}</span>${mine.map(q => `<div class="os-topic"><span class="os-num os-muted" style="font-size:11px;flex:none">AO${q.ao} · ${q.m}m</span><span style="flex:1;min-width:0;font-size:13px;overflow-wrap:anywhere">${esc(q.q)}</span><button class="btn btn-ghost btn-icon os-x" data-act="rmMyq" data-v="${esc(q.id)}" aria-label="Delete question">${icon('x')}</button></div>`).join('')}` : ''}` : ''}` : ''}
     </div>`;
   }
 
@@ -771,9 +960,12 @@
   }
 
   function progress() {
-    const s = st();
+    const s = st(), view = ui.progTab || 'grades';
+    const seg = `<div class="os-seg" role="tablist">${[['grades', 'Grades'], ['fitness', 'Fitness']].map(([k, l]) => `<button role="tab" class="${view === k ? 'on' : ''}" aria-selected="${view === k}" data-act="progTab" data-v="${k}">${l}</button>`).join('')}</div>`;
+    if (view === 'grades') return `<header class="os-head"><span class="os-k acc">Progress</span><h3>Grades</h3></header>${seg}${gradesView()}`;
     return `
     <header class="os-head"><span class="os-k acc">Progress</span><h3>Benchmarks</h3>
+      ${seg}
       ${DATA.retestWeeks ? `<span class="os-num os-muted" style="font-size:13px">Retest every ${DATA.retestWeeks} weeks · next ${fmt(nextRetest(), { weekday: 'short', day: 'numeric', month: 'short' })}</span>` : ''}</header>
     <div class="os-grid g2">
       <section class="os-card os-table-wrap"><table class="table" style="font-size:13px"><thead><tr><th>Benchmark</th><th style="text-align:right">Base</th><th style="text-align:right">Latest</th><th style="text-align:right">Target</th></tr></thead><tbody>
@@ -949,11 +1141,18 @@
         e.c = Object.assign({}, e.c, { ['q:' + qid]: 1 });
         all[key] = e;
         s.qlog = s.qlog || {};
-        s.qlog[qid] = (s.qlog[qid] || []).filter(x => !(x.d === k && x.k === key)).concat({ d: k, k: key, got: n, of: q.m });
+        s.qlog[qid] = (s.qlog[qid] || []).filter(x => !(x.d === k && x.k === key)).concat({ d: k, k: key, got: n, of: q.m, ans: ((e.ans || {})[qid] || '').slice(0, 600) });
       });
       const p = cardProgress(key);
       if (!cur.done && p.total && p.got >= p.total) { finish(key, true); ui.openCard = null; }
+      // Move on to the next unanswered question (after a moment, so you see your mark land).
+      else if ((cur.q || {})[qid] == null) {
+        const rows = cardRows(key), e2 = getSess(key), here = rows.findIndex(r => r.q && r.q.id === qid);
+        const nxt = rows.findIndex((r, i) => i > here && !qDone(r, e2));
+        if (nxt >= 0) setTimeout(() => { ui.qPos[key] = nxt; render(); }, 600);
+      }
     },
+    qgo(v) { const cut = v.lastIndexOf('|'); ui.qPos[v.slice(0, cut)] = Math.max(0, +v.slice(cut + 1)); },
     tick(v) {
       const cut = v.indexOf('|'), id = v.slice(0, cut), key = v.slice(cut + 1);
       const row = cardRows(id).find(r => r.key === key);
@@ -993,6 +1192,20 @@
         h.log.push({ key: k + '|extra-' + Date.now().toString(36), date: k, idea: idea ? idea.text : '', ideaId: idea ? idea.id : '' }); });
     },
     hLogRm(v) { const cut = v.indexOf('|'), id = v.slice(0, cut), key = v.slice(cut + 1); if (!confirm('Remove this from the log?')) return; updHustle(id, h => { h.log = h.log.filter(u => u.key !== key); }); },
+    progTab(v) { ui.progTab = v; },
+    progGrades() { ui.tab = 'prog'; ui.progTab = 'grades'; window.scrollTo(0, 0); },
+    gradeSubj(v) { ui.gradeSubj = +v; },
+    gradeTable() { ui.gradeTable = !ui.gradeTable; },
+    pdToggle() { ui.pdOpen = ui.pdOpen === 'rev' ? '' : 'rev'; ui.pdErr = ''; },
+    pdTopic(v) { const t = ui.pd.topics || []; ui.pd.topics = t.includes(v) ? t.filter(x => x !== v) : t.concat(v); },
+    allNews() { ui.showAllNews = true; },
+    qAddToggle(v) { ui.qAdd = ui.qAdd === +v ? -1 : +v; },
+    toggleReport() { ui.report = !ui.report; },
+    async copyReport() {
+      const text = progressReport();
+      try { await navigator.clipboard.writeText(text); ui.copied = 'report'; } catch (e) { prompt('Copy this report:', text); }
+      setTimeout(() => { ui.copied = false; render(); }, 2500);
+    },
     seenAll() { const ids = unreadUpdates().map(u => u.id); Store.update(s => { s.seen = (s.seen || []).concat(ids); }); },
     reload() { location.reload(); },
     subj(v) { ui.subj = ui.subj === +v ? -1 : +v; ui.topicDraft = ''; },
@@ -1084,6 +1297,14 @@
       ui.ideaDraft[h.id] = '';
       render();
       const inp = root.querySelector('#idea-' + i); if (inp) inp.focus();
+    } else if (f === 'paper') {
+      const d = ui.pd, got = parseFloat(d.got), of = parseFloat(d.of);
+      if (!(of > 0) || !(got >= 0) || got > of) { ui.pdErr = 'Enter your marks and the total (e.g. 54 out of 80).'; render(); return; }
+      const where = e.target.dataset.where, date = where === 'card' ? dayKey() : iso(new Date());
+      Store.update(s => { s.papers = (s.papers || []).concat({ id: Date.now().toString(36), date, s: +d.s, name: (d.name || '').trim(), got, of, topics: d.topics || [] }); });
+      ui.pd = { s: +d.s, topics: [] }; ui.pdErr = ''; ui.pdOpen = '';
+      if (where === 'card') { const items = DATA.sessions['past-paper'].items || []; Store.update(s => { const k = dayKey(), all = s.sess[k] = s.sess[k] || {}; const en = Object.assign({ c: {}, done: false, added: 0 }, all['past-paper']); items.forEach((_, j) => { en.c['i' + j] = 1; }); all['past-paper'] = en; }); finish('past-paper', true); }
+      render();
     } else if (f === 'myq') {
       const i = +e.target.dataset.i, d = ui.qd[i] || {}, ts = st().topics[i] || [];
       const q = (d.q || '').trim(), a = (d.a || '').trim();
@@ -1135,6 +1356,9 @@
       case 'review': { const wk = weekKey(); Store.update(s => { const r = (s.reviews[wk] || ['', '', '']).slice(); r[i] = v; s.reviews[wk] = r; }); break; }
       case 'scoreDraft': ui.scoreDraft = v; break;
       case 'topicDraft': ui.topicDraft = v; break;
+      case 'qans': { const parts = f.split('|'), qid = parts.pop(), key = parts.join('|'), k = dayKey();
+        Store.update(s => { const all = s.sess[k] = s.sess[k] || {}; const en = Object.assign({ c: {}, done: false, added: 0 }, all[key]); en.ans = Object.assign({}, en.ans, { [qid]: v }); all[key] = en; }); break; }
+      case 'pd': ui.pd[f] = v; if (f === 's') { ui.pd.topics = []; render(); } break;
       case 'qd': ui.qd[i] = Object.assign({}, ui.qd[i], { [f]: v }); break;
       case 'ideaDraft': ui.ideaDraft[f] = v; break;
       case 'hustle': Store.update(s => { const h = s.hustles[i]; if (!h) return; h[f] = f === 'perWeek' ? Math.max(0, parseInt(v, 10) || 0) : v; }); break;
@@ -1149,6 +1373,17 @@
     if (k === 'r' || k === 'goal') render();
   });
 
+  // Grade chart tooltips: hover on desktop, tap on phone.
+  function chartTip(e) {
+    const hit = e.target.closest && e.target.closest('.os-gchart .hit');
+    root.querySelectorAll('.os-gtip').forEach(t => { if (!hit || !t.parentNode.contains(hit)) t.hidden = true; });
+    if (!hit) return;
+    const box = hit.closest('.os-gchart'), tip = box.querySelector('.os-gtip'), r = hit.getBoundingClientRect(), b = box.getBoundingClientRect();
+    tip.textContent = hit.dataset.tip; tip.hidden = false;
+    tip.style.left = Math.min(Math.max(0, r.left - b.left + r.width / 2 - tip.offsetWidth / 2), b.width - tip.offsetWidth) + 'px';
+  }
+  root.addEventListener('pointerover', chartTip);
+  root.addEventListener('click', chartTip);
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && ui.menu) { ui.menu = false; render(); } });
   setInterval(checkReminders, 30000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) checkReminders(); });
