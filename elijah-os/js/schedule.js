@@ -18,7 +18,7 @@ window.ELIJAH_DATA = {
   // Saturday past papers rotate through these subjects, one per week (positions in `subjects`).
   // You can always switch subject on the card. paperMins = default time allowed.
   paperRotation: [0, 1, 3, 2, 4],
-  paperMins: { 0: 90, 1: 105, 2: 105, 3: 105, 4: 75 },
+  paperMins: { 0: 90, 1: 105, 2: 120, 3: 105, 4: 75 },   // AQA triple science papers are 1h45; Eduqas Literature 2h–2h30
 
   // Every day: these session cards are added to each day (same format as `sessions` in a day row).
   daily: [['ao1-reps', '07:45'], ['evening', '21:15']],
@@ -239,13 +239,13 @@ window.ELIJAH_DATA = {
     { name: 'Maths', board: 'AQA', goal: 75, topics: [
       'Algebra: quadratics', 'Simultaneous equations', 'Trigonometry', 'Vectors',
       'Probability', 'Circle theorems', 'Graphs and gradients', 'Ratio and proportion'] },
-    { name: 'Physics', board: 'AQA', goal: 75, topics: [
+    { name: 'Physics', board: 'AQA (triple science)', goal: 75, topics: [
       'Forces and motion', 'Energy', 'Electricity', 'Waves',
       'Magnetism', 'Atomic structure', 'Particle model', 'Space'] },
     { name: 'English', board: 'WJEC Eduqas', goal: 45, topics: [
-      'Shakespeare play', '19th-century novel', 'Modern text', 'Poetry anthology',
+      'Macbeth', 'Jekyll and Hyde', 'An Inspector Calls', 'Poetry anthology',
       'Unseen poetry', 'Language Paper 1', 'Language Paper 2'] },
-    { name: 'Biology / Chemistry', board: 'AQA', goal: 45, topics: [
+    { name: 'Biology / Chemistry', board: 'AQA (triple science)', goal: 45, topics: [
       'Cells', 'Infection and response', 'Homeostasis', 'Inheritance and evolution',
       'Bonding and structure', 'Quantitative chemistry', 'Rates of reaction', 'Organic chemistry'] },
     { name: 'Spanish / PE', board: 'Pearson Edexcel (Spanish) · AQA (PE)', goal: 45, topics: [

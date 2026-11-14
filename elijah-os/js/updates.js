@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-14-english', date: '2026-11-14', kind: 'update',
+    title: 'English questions on your set texts',
+    body: 'English topics are now Macbeth, Jekyll and Hyde and An Inspector Calls, with new quick-recall, paragraph and essay questions on each (Eduqas). Science is set to AQA triple, with 1h45 papers.'
+  },
+  {
     id: '2026-11-14-mock', date: '2026-11-14', kind: 'update',
     title: 'Past papers as real mock exams',
     body: 'Saturday’s paper rotates subject each week (Maths, Physics, Biology/Chemistry, English, Spanish/PE) and you can switch it. Paste the paper and mark scheme links, start the exam timer, then mark it. Add the paper’s grade boundaries to get its real grade. On Revision, past papers can be filtered by subject.'
