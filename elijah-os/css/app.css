@@ -286,6 +286,7 @@ button { -webkit-user-select: none; user-select: none; }
 }
 .os-scard[data-kind="revision"] .os-scard-ic, .os-scard[data-kind="paper"] .os-scard-ic { color: var(--os-amber); background: color-mix(in srgb, var(--os-amber) 14%, transparent); }
 .os-scard[data-kind="mental"] .os-scard-ic, .os-scard[data-kind="routine"] .os-scard-ic { color: var(--color-neutral-200); background: color-mix(in srgb, var(--color-text) 9%, transparent); }
+.os-scard[data-kind="creator"] .os-scard-ic { color: oklch(0.72 0.17 25); background: color-mix(in srgb, oklch(0.72 0.17 25) 14%, transparent); }
 .os-scard[data-kind="recovery"] .os-scard-ic { color: var(--os-green); background: color-mix(in srgb, var(--os-green) 14%, transparent); }
 .os-scard.done .os-scard-ic { color: var(--color-bg); background: var(--color-accent); }
 .os-scard.done .os-scard-title { color: var(--color-neutral-400); }

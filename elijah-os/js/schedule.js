@@ -23,7 +23,7 @@ window.ELIJAH_DATA = {
     { day: 'Tue', title: 'Astro skills + lower body', load: 'Medium',
       time: '15:45 · Physics 75 min', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Skill sequences at 75% pace, light legs, then 75 minutes of Physics.',
-      sessions: [['astro-skill', '15:45'], ['lower-body', '17:00'], ['rev-physics', '18:00'], ['wall', '19:20']] },
+      sessions: [['astro-skill', '15:45'], ['lower-body', '17:00'], ['rev-physics', '18:00'], ['wall', '19:20'], ['shorts', '19:45']] },
     { day: 'Wed', title: 'Academy training', load: 'High',
       time: '18:15 · leave 18:00', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Pick one cue and bring it to academy.',
@@ -35,7 +35,7 @@ window.ELIJAH_DATA = {
     { day: 'Fri', title: 'Astro speed + match reps', load: 'Medium-High',
       time: '15:45–16:30 · revision 60 min', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Short, sharp speed reps. Stop after 2 slow reps.',
-      sessions: [['astro-speed', '15:45'], ['rev-chem-maths', '17:30']] },
+      sessions: [['astro-speed', '15:45'], ['rev-chem-maths', '17:30'], ['shorts', '18:45']] },
     { day: 'Sat', title: 'Past paper + rest', load: 'Low',
       time: 'Morning · 2–3 hr paper', sub: 'Rest in the afternoon',
       mission: 'Timed past paper, mark it properly, then rest.',
@@ -43,11 +43,11 @@ window.ELIJAH_DATA = {
     { day: 'Sun', title: 'Match day', load: 'High',
       time: 'Match day · no revision', sub: '',
       mission: 'Match day. Play simple, play fast.',
-      sessions: ['match'] }
+      sessions: ['match', ['shorts', '18:00']] }
   ],
 
   // Session cards. Each one shows on Today and Week for the days that list it.
-  //   kind: 'gym' | 'football' | 'recovery' | 'revision' | 'paper' | 'mental' | 'routine'
+  //   kind: 'gym' | 'football' | 'recovery' | 'revision' | 'paper' | 'mental' | 'routine' | 'creator'
   //   items: one row each. sets = how many ticks the row has (leave it out for a single tick).
   //   fixed: true = the planner never moves or drops it (academy, match).
   //   onClash: 'skip' = if an event clashes, skip it instead of moving it (clashNote says why).
@@ -139,6 +139,17 @@ window.ELIJAH_DATA = {
         { name: 'Two-touch passing, both feet, then one-touch' },
         { name: 'Receiving across body and turning' },
         { name: 'Second half: weak foot only' }
+      ]
+    },
+    'shorts': {
+      kind: 'creator', title: 'YouTube Short', minutes: 30,
+      focus: 'One Reddit story Short, start to finish in 30 minutes. Hook in the first 2 seconds.',
+      items: [
+        { name: 'Pick a story', reps: 'Reddit, under ~60s read' },
+        { name: 'Trim the script, write the hook' },
+        { name: 'AI voiceover' },
+        { name: 'Background gameplay + captions' },
+        { name: 'Title, hashtags, upload' }
       ]
     },
     'visualise': {

@@ -50,7 +50,7 @@
   const KIND = {
     gym: ['Workout', 'barbell'], football: ['Pitch', 'soccer-ball'], recovery: ['Recovery', 'heartbeat'],
     revision: ['Revision', 'book-open-text'], paper: ['Past paper', 'exam'],
-    mental: ['Mindset', 'brain'], routine: ['Routine', 'moon-stars']
+    mental: ['Mindset', 'brain'], routine: ['Routine', 'moon-stars'], creator: ['Shorts', 'youtube-logo']
   };
   const CONF = ['Not rated', 'Red', 'Amber', 'Green'];
   const CONF_CLS = ['', 'red', 'amber', 'green'];

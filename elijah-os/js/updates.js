@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-14-shorts', date: '2026-11-14', kind: 'update',
+    title: 'YouTube Shorts',
+    body: 'Three Shorts a week: Tuesday 19:45, Friday 18:45 and Sunday 18:00. Each card walks you through story, hook, AI voiceover, gameplay and captions, then upload, in about 30 minutes.'
+  },
+  {
     id: '2026-11-14-planner', date: '2026-11-14', kind: 'update',
     title: 'The plan now reorganises itself',
     body: 'Add an event and clashing sessions move to a free slot. On a game day, extra training is dropped. Revision is shortened or moved to tomorrow if there is no room. Clashes with academy or a match are flagged. Delete the event and the plan goes back to normal.'
