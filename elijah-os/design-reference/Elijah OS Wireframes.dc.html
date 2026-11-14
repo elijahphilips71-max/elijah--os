@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="stylesheet" href="_ds/nocturne-c57a258b-69cb-455c-95a2-c71edaa11e2c/styles.css"><script src="_ds/nocturne-c57a258b-69cb-455c-95a2-c71edaa11e2c/_ds_bundle.js"></script><link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"><style>
+html{background:var(--color-neutral-900)}body{margin:0;min-height:100%;background:var(--color-neutral-900);font-family:var(--font-body);--wf-amber:oklch(0.8 0.125 75);--wf-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+a{color:var(--color-accent)}a:hover{color:var(--color-accent-300)}
+.dv-turn{padding:40px 44px 32px;scroll-margin-top:16px}.dv-thd{display:flex;align-items:center;gap:10px;margin:0 0 20px;flex-wrap:wrap}.dv-tid{font:600 10px var(--wf-mono);padding:3px 7px;background:var(--color-text);color:var(--color-bg);border-radius:4px;text-decoration:none}.dv-tname{font:500 14px/1.2 var(--font-body);color:var(--color-text)}.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}.dv-oid{font:600 10.5px var(--wf-mono);padding:3px 7px;background:var(--color-neutral-800);color:var(--color-text);border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 12px/1.3 var(--font-body);color:var(--color-neutral-400)}.dv-opt:target .dv-oid{background:var(--color-accent);color:var(--color-bg)}.dv-next{margin:22px 0 0;font:12px/1.5 var(--font-body);color:var(--color-neutral-400)}
+.wf-phone{width:360px;min-height:760px;display:flex;flex-direction:column;color:var(--color-text);background-color:var(--color-bg);background-image:linear-gradient(color-mix(in srgb,var(--color-text) 4%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--color-text) 4%,transparent) 1px,transparent 1px);background-size:24px 24px;border-radius:36px;box-shadow:var(--shadow-md);overflow:hidden}
+.wf-nogrid .wf-phone{background-image:none}
+.wf-scr{flex:1;display:flex;flex-direction:column;gap:12px;padding:22px 16px 16px;min-width:0}
+.wf-card{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:var(--radius-lg);background:color-mix(in srgb,var(--color-surface) 82%,transparent);border:1px solid color-mix(in srgb,var(--color-accent) 26%,transparent)}
+.wf-hero{border-color:var(--color-accent);box-shadow:0 0 18px color-mix(in srgb,var(--color-accent) 28%,transparent)}
+.wf-k{font:500 11px var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-400)}
+.wf-num{font-family:var(--wf-mono);font-variant-numeric:tabular-nums}
+.wf-pill{display:inline-flex;gap:.35em;white-space:nowrap;align-items:center;justify-content:center;font:500 11px var(--wf-mono);padding:3px 9px;border-radius:999px;border:1px solid var(--color-neutral-800);color:var(--color-neutral-400)}
+.wf-pill.High{color:var(--color-accent-300);border-color:var(--color-accent);background:color-mix(in srgb,var(--color-accent) 16%,transparent)}
+.wf-pill.Medium{color:var(--color-neutral-200);border-color:var(--color-neutral-600)}
+.wf-row{display:flex;align-items:center;gap:12px;min-height:48px;width:100%;padding:0;background:none;border:0;color:inherit;font:inherit;font-size:15px;text-align:left;cursor:pointer}
+.wf-box{flex:none;width:26px;height:26px;border-radius:8px;border:1.5px solid var(--color-neutral-600);display:grid;place-items:center;color:transparent;font-size:16px}
+.wf-row:hover .wf-box{border-color:var(--color-accent)}
+.wf-row.on .wf-box{border-color:var(--color-accent);background:color-mix(in srgb,var(--color-accent) 20%,transparent);color:var(--color-accent-300);box-shadow:0 0 10px color-mix(in srgb,var(--color-accent) 35%,transparent)}
+.wf-row.on .wf-lbl{color:var(--color-neutral-500);text-decoration:line-through}
+.wf-tile{flex-direction:column;align-items:flex-start;gap:8px;padding:12px;min-height:84px;border-radius:var(--radius-lg);border:1px solid var(--color-neutral-800);background:color-mix(in srgb,var(--color-surface) 82%,transparent);font-size:14px}
+.wf-tile.on{border-color:color-mix(in srgb,var(--color-accent) 50%,transparent)}
+.wf-day{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:44px;min-width:0;padding:6px 0;border-radius:var(--radius-md);border:1px solid transparent;background:none;color:var(--color-neutral-400);font:500 12px var(--font-body);cursor:pointer}
+.wf-day:hover{background:color-mix(in srgb,var(--color-text) 7%,transparent)}
+.wf-day.on{color:var(--color-accent-300);border-color:var(--color-accent);box-shadow:0 0 12px color-mix(in srgb,var(--color-accent) 30%,transparent)}
+.wf-drow{display:grid;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:10px;min-height:52px;padding:6px 10px;width:100%;border-radius:var(--radius-md);border:1px solid transparent;background:none;color:inherit;font:inherit;font-size:14px;text-align:left;cursor:pointer}
+.wf-drow.on{border-color:color-mix(in srgb,var(--color-accent) 50%,transparent);background:color-mix(in srgb,var(--color-accent) 8%,transparent)}
+.wf-rpe{min-height:44px;border-radius:var(--radius-md);border:1px solid var(--color-divider);background:none;color:var(--color-text);font:500 15px var(--wf-mono);cursor:pointer}
+.wf-rpe:hover{background:color-mix(in srgb,var(--color-text) 7%,transparent)}
+.wf-rpe.on{border-color:var(--color-accent);color:var(--color-accent-300);background:color-mix(in srgb,var(--color-accent) 16%,transparent)}
+.wf-chip{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid color-mix(in srgb,var(--color-accent) 40%,transparent);background:color-mix(in srgb,var(--color-surface) 82%,transparent);color:var(--color-text);font:inherit;font-size:14px;cursor:pointer;width:100%}
+.wf-amber{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:var(--radius-lg);border:1px solid var(--wf-amber);background:color-mix(in srgb,var(--wf-amber) 12%,transparent);color:var(--wf-amber);font-size:14px;line-height:1.4}
+.wf-tabs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;border-top:1px solid var(--color-divider);background:var(--color-bg);padding-bottom:10px}
+.wf-tabs a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:58px;font-size:11px;color:var(--color-neutral-500);text-decoration:none}
+.wf-tabs a i{font-size:22px}.wf-tabs a.on{color:var(--color-accent-300)}
+.wf-dock{display:flex;justify-content:space-between;gap:4px;margin:4px 20px 20px;padding:6px;border-radius:999px;background:var(--color-surface);border:1px solid color-mix(in srgb,var(--color-accent) 40%,transparent);box-shadow:0 0 18px color-mix(in srgb,var(--color-accent) 22%,transparent)}
+.wf-dock a{display:flex;align-items:center;justify-content:center;gap:6px;min-width:46px;height:46px;padding:0 12px;border-radius:999px;color:var(--color-neutral-400);text-decoration:none;font-size:13px}
+.wf-dock a i{font-size:22px}.wf-dock a span{display:none}
+.wf-dock a.on{color:var(--color-accent-300);background:color-mix(in srgb,var(--color-accent) 18%,transparent)}.wf-dock a.on span{display:inline}
+.wf-slide{display:grid;grid-template-columns:92px minmax(0,1fr) 22px;align-items:center;gap:10px;min-height:44px;font-size:14px}
+.wf-slide input{width:100%;height:44px;margin:0;accent-color:var(--color-accent)}
+.wf-in{min-height:44px}
+.wf-side a{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 14px;border-radius:999px;color:var(--color-neutral-400);text-decoration:none;font-size:14px}
+.wf-side a i{font-size:20px}.wf-side a:hover{background:color-mix(in srgb,var(--color-text) 7%,transparent)}
+.wf-side a.on{color:var(--color-accent-300);background:color-mix(in srgb,var(--color-accent) 18%,transparent)}
+.wf-cell{width:58px;min-height:44px;padding:4px 6px;text-align:right;font-family:var(--wf-mono);font-size:13px}
+</style></helmet>
+<section class="dv-turn" id="t3">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">Desktop version of <a class="dv-oid" href="#2a">2a</a> · live-editable benchmarks</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="3a"><div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a>Desktop · Today command centre · the dock becomes a side rail</div>
+<div class="wf-phone" data-screen-label="Desktop Today" style="width:1180px;min-height:720px;border-radius:18px;flex-direction:row">
+<nav class="wf-side" style="flex:none;width:200px;display:flex;flex-direction:column;gap:6px;padding:24px 14px;border-right:1px solid var(--color-divider)"><span class="wf-k" style="color:var(--color-accent-300);padding:0 14px 14px">Elijah OS</span>
+<sc-for list="{{ dock0 }}" as="t" hint-placeholder-count="5"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i><span>{{ t.label }}</span></a></sc-for></nav>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:18px;padding:24px 28px">
+<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px"><div style="display:flex;flex-direction:column;gap:4px"><h3 style="margin:0">{{ greeting }}, Elijah</h3><span class="wf-num" style="font-size:13px;color:var(--color-neutral-400)">{{ dateStr }}</span></div>
+<div style="display:flex;align-items:baseline;gap:8px"><span class="wf-k">First exam</span><span class="wf-num" style="font-size:22px">{{ daysLeft }}</span><span style="font-size:13px;color:var(--color-neutral-400)">days</span></div></div>
+<sc-if value="{{ low }}" hint-placeholder-val="{{ false }}"><div class="wf-amber"><i class="ph ph-warning" style="font-size:20px"></i><div><strong style="font-weight:500">Adjust today</strong> · {{ lowText }}</div></div></sc-if>
+<div style="display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+<div class="wf-card wf-hero"><div style="display:flex;justify-content:space-between;align-items:center"><span class="wf-k">Session · {{ dayName }}</span><span class="wf-pill {{ load }}">{{ load }} load</span></div><div style="font-size:19px;font-weight:500;line-height:1.25">{{ sessTitle }}</div><div class="wf-num" style="font-size:13px;color:var(--color-neutral-400)">{{ sessTime }}</div>
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;padding-top:4px"><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="wf-day {{ d.on }}" onClick="{{ d.pick }}"><span>{{ d.k }}</span><span class="wf-pill {{ d.load }}" style="padding:1px 6px;font-size:10px">{{ d.l }}</span></button></sc-for></div></div>
+<div style="display:flex;align-items:center;gap:16px;padding:4px 2px"><div style="position:relative;width:104px;height:104px;flex:none"><svg width="104" height="104" viewBox="0 0 104 104"><circle cx="52" cy="52" r="46" style="fill:none;stroke:var(--color-neutral-800);stroke-width:5"></circle><circle cx="52" cy="52" r="46" transform="rotate(-90 52 52)" style="fill:none;stroke:var(--color-accent);stroke-width:5;stroke-linecap:round;stroke-dasharray:289;stroke-dashoffset:{{ ringOffBig }};transition:stroke-dashoffset .3s"></circle></svg><span style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span class="wf-num" style="font-size:26px;line-height:1">{{ pct }}%</span><span class="wf-k" style="font-size:10px">of day</span></span></div>
+<div style="display:flex;flex-direction:column;gap:6px;min-width:0"><span class="wf-k">Today's mission</span><div style="font-size:15px;line-height:1.45;text-wrap:pretty">{{ mission }}</div></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><sc-for list="{{ checks }}" as="c" hint-placeholder-count="4"><button class="wf-row wf-tile {{ c.on }}" onClick="{{ c.toggle }}"><span class="wf-box"><i class="ph ph-check"></i></span><span class="wf-lbl">{{ c.label }}</span></button></sc-for></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+<sc-if value="{{ rOpen }}" hint-placeholder-val="{{ true }}"><div class="wf-card"><span class="wf-k">Morning readiness</span>
+<sc-for list="{{ sliders }}" as="s" hint-placeholder-count="3"><label class="wf-slide"><span>{{ s.label }}</span><input type="range" min="1" max="5" step="1" value="{{ s.val }}" onChange="{{ s.set }}"><span class="wf-num" style="text-align:right">{{ s.val }}</span></label></sc-for>
+<button class="btn btn-primary" style="min-height:44px" onClick="{{ doneCheckin }}">Log check-in</button></div></sc-if>
+<sc-if value="{{ rClosed }}" hint-placeholder-val="{{ false }}"><button class="wf-chip" onClick="{{ openReady }}"><i class="ph ph-pulse" style="font-size:18px;color:var(--color-accent)"></i><span>Readiness</span><span class="wf-num" style="margin-left:auto">{{ chipText }}</span><span style="color:var(--color-accent-300);font-size:13px">Edit</span></button></sc-if>
+<div class="wf-card"><span class="wf-k">2-line log</span><input class="input wf-in" placeholder="One win" value="{{ win }}" onChange="{{ setWin }}"><input class="input wf-in" placeholder="One fix" value="{{ fix }}" onChange="{{ setFix }}"><button class="btn btn-primary" style="min-height:44px" onClick="{{ saveLog }}">Save log</button></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+<div class="wf-card" style="gap:2px;padding:8px"><span class="wf-k" style="padding:6px 10px">This week</span><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="wf-drow {{ d.on }}" onClick="{{ d.pick }}"><span class="wf-num" style="color:var(--color-neutral-400)">{{ d.k }}</span><span style="line-height:1.3">{{ d.title }}</span><span class="wf-pill {{ d.load }}">{{ d.l }}</span></button></sc-for></div>
+</div>
+</div></div></div></div>
+
+<div class="dv-opt" id="3b"><div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a>Progress · tap any number to edit · saved on this device</div>
+<div class="wf-phone" data-screen-label="Progress editable"><div class="wf-scr">
+<span class="wf-k" style="color:var(--color-accent-300)">Progress</span>
+<div class="wf-card" style="padding:10px 8px"><table class="table" style="font-size:13px"><thead><tr><th>Benchmark</th><th style="text-align:right">Base</th><th style="text-align:right">Latest</th><th style="text-align:right">Target</th></tr></thead><tbody><sc-for list="{{ benchEdit }}" as="b" hint-placeholder-count="9"><tr><td style="line-height:1.25">{{ b.name }}</td><td style="padding:3px 2px"><input class="input wf-cell" placeholder="—" value="{{ b.base }}" onChange="{{ b.setBase }}"></td><td style="padding:3px 2px"><input class="input wf-cell" placeholder="—" value="{{ b.latest }}" onChange="{{ b.setLatest }}"></td><td style="padding:3px 2px"><input class="input wf-cell" placeholder="—" value="{{ b.target }}" onChange="{{ b.setTarget }}"></td></tr></sc-for></tbody></table>
+<button class="btn btn-secondary" style="min-height:44px;margin:4px 6px"><i class="ph ph-plus"></i>Add benchmark</button></div>
+</div><nav class="wf-dock"><sc-for list="{{ dock3 }}" as="t" hint-placeholder-count="5"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i><span>{{ t.label }}</span></a></sc-for></nav></div></div>
+
+</div>
+<p class="dv-next">Try next: "take <a class="dv-oid" href="#3a">3a</a> and <a class="dv-oid" href="#2a">2a</a>–<a class="dv-oid" href="#2e">2e</a> to hi-fi" · "show Revision on desktop" · "make session times editable like <a class="dv-oid" href="#3b">3b</a>"</p>
+</section>
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Combined direction · pill dock on every screen</span>
+<span style="display:flex;align-items:center;gap:6px;margin-left:16px"><span class="wf-k">Preview day</span>
+<sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="wf-day {{ d.on }}" style="width:44px;flex-direction:row" onClick="{{ d.pick }}">{{ d.k }}</button></sc-for></span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="2a"><div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Today · <a class="dv-oid" href="#1c">1c</a> layout with the <a class="dv-oid" href="#1b">1b</a> session box</div>
+<div class="wf-phone" data-screen-label="Today 1c"><div class="wf-scr">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span class="wf-k" style="color:var(--color-accent-300)">Elijah OS</span><span class="wf-num" style="font-size:12px;color:var(--color-neutral-400)">{{ dateStr }}</span></div>
+<h4 style="margin:0">{{ greeting }}, Elijah</h4>
+<sc-if value="{{ low }}" hint-placeholder-val="{{ false }}"><div class="wf-amber"><i class="ph ph-warning" style="font-size:20px"></i><div><strong style="font-weight:500">Adjust today</strong><br>{{ lowText }}</div></div></sc-if>
+<div class="wf-card wf-hero"><div style="display:flex;justify-content:space-between;align-items:center"><span class="wf-k">Session · {{ dayName }}</span><span class="wf-pill {{ load }}">{{ load }} load</span></div><div style="font-size:17px;font-weight:500;line-height:1.25">{{ sessTitle }}</div><div class="wf-num" style="font-size:13px;color:var(--color-neutral-400)">{{ sessTime }}</div>
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;padding-top:4px"><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="wf-day {{ d.on }}" onClick="{{ d.pick }}"><span>{{ d.letter }}</span><span class="wf-pill {{ d.load }}" style="padding:1px 6px;font-size:10px">{{ d.l }}</span></button></sc-for></div></div>
+<div style="display:flex;align-items:center;gap:16px;padding:4px 2px"><div style="position:relative;width:104px;height:104px;flex:none"><svg width="104" height="104" viewBox="0 0 104 104"><circle cx="52" cy="52" r="46" style="fill:none;stroke:var(--color-neutral-800);stroke-width:5"></circle><circle cx="52" cy="52" r="46" transform="rotate(-90 52 52)" style="fill:none;stroke:var(--color-accent);stroke-width:5;stroke-linecap:round;stroke-dasharray:289;stroke-dashoffset:{{ ringOffBig }};transition:stroke-dashoffset .3s"></circle></svg><span style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span class="wf-num" style="font-size:26px;line-height:1">{{ pct }}%</span><span class="wf-k" style="font-size:10px">of day</span></span></div><div style="display:flex;flex-direction:column;gap:6px;min-width:0"><span class="wf-k">Today's mission</span><div style="font-size:15px;line-height:1.45;text-wrap:pretty">{{ mission }}</div><span class="wf-num" style="font-size:13px;color:var(--color-neutral-400)">{{ doneCount }} of 4 done</span></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><sc-for list="{{ checks }}" as="c" hint-placeholder-count="4"><button class="wf-row wf-tile {{ c.on }}" onClick="{{ c.toggle }}"><span class="wf-box"><i class="ph ph-check"></i></span><span class="wf-lbl">{{ c.label }}</span></button></sc-for></div>
+<sc-if value="{{ rOpen }}" hint-placeholder-val="{{ true }}"><div class="wf-card"><span class="wf-k">Morning readiness</span>
+<sc-for list="{{ sliders }}" as="s" hint-placeholder-count="3"><label class="wf-slide"><span>{{ s.label }}</span><input type="range" min="1" max="5" step="1" value="{{ s.val }}" onChange="{{ s.set }}"><span class="wf-num" style="text-align:right">{{ s.val }}</span></label></sc-for>
+<button class="btn btn-primary" style="min-height:44px" onClick="{{ doneCheckin }}">Log check-in</button></div></sc-if>
+<sc-if value="{{ rClosed }}" hint-placeholder-val="{{ false }}"><button class="wf-chip" onClick="{{ openReady }}"><i class="ph ph-pulse" style="font-size:18px;color:var(--color-accent)"></i><span>Readiness</span><span class="wf-num" style="margin-left:auto">{{ chipText }}</span><span style="color:var(--color-accent-300);font-size:13px">Edit</span></button></sc-if>
+<div class="wf-card"><span class="wf-k">2-line log</span><input class="input wf-in" placeholder="One win" value="{{ win }}" onChange="{{ setWin }}"><input class="input wf-in" placeholder="One fix" value="{{ fix }}" onChange="{{ setFix }}"><button class="btn btn-primary" style="min-height:44px" onClick="{{ saveLog }}">Save log</button></div>
+</div><nav class="wf-dock"><sc-for list="{{ dock0 }}" as="t" hint-placeholder-count="5"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i><span>{{ t.label }}</span></a></sc-for></nav></div></div>
+
+<div class="dv-opt" id="2b"><div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>Week · <a class="dv-oid" href="#1d">1d</a> with the pill dock</div>
+<div class="wf-phone" data-screen-label="Week"><div class="wf-scr">
+<div style="display:flex;flex-direction:column;gap:4px"><span class="wf-k" style="color:var(--color-accent-300)">Week</span><h4 style="margin:0">{{ weekRange }}</h4></div>
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px"><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="wf-day {{ d.on }}" style="min-height:76px" onClick="{{ d.pick }}"><span>{{ d.k }}</span><span class="wf-num" style="font-size:15px;color:var(--color-text)">{{ d.dnum }}</span><span class="wf-pill {{ d.load }}" style="padding:1px 6px;font-size:10px">{{ d.l }}</span></button></sc-for></div>
+<div class="wf-card wf-hero"><div style="display:flex;justify-content:space-between;align-items:center"><span class="wf-k">{{ dayName }}</span><span class="wf-pill {{ load }}">{{ load }} load</span></div><div style="font-size:19px;font-weight:500;line-height:1.25">{{ sessTitle }}</div><div class="wf-num" style="font-size:13px;color:var(--color-neutral-400)">{{ sessTime }}</div></div>
+<div class="wf-card" style="gap:2px;padding:8px"><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="wf-drow {{ d.on }}" onClick="{{ d.pick }}"><span class="wf-num" style="color:var(--color-neutral-400)">{{ d.k }}</span><span style="line-height:1.3">{{ d.title }}</span><span class="wf-pill {{ d.load }}">{{ d.load }}</span></button></sc-for></div>
+</div><nav class="wf-dock"><sc-for list="{{ dock1 }}" as="t" hint-placeholder-count="5"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i><span>{{ t.label }}</span></a></sc-for></nav></div></div>
+
+<div class="dv-opt" id="2c"><div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>Revision · <a class="dv-oid" href="#1e">1e</a> with the pill dock</div>
+<div class="wf-phone" data-screen-label="Revision"><div class="wf-scr">
+<span class="wf-k" style="color:var(--color-accent-300)">Revision</span>
+<div class="wf-card wf-hero" style="flex-direction:row;align-items:center;justify-content:space-between"><div style="display:flex;flex-direction:column;gap:4px"><span class="wf-k">First exam</span><span style="font-size:14px">10 May 2027</span></div><span class="wf-num" style="font-size:34px;line-height:1">{{ daysLeft }}<span style="font-size:13px;color:var(--color-neutral-400)"> days</span></span></div>
+<span class="wf-k">Subjects · minutes this week</span>
+<sc-for list="{{ subjects }}" as="s" hint-placeholder-count="5"><div class="wf-card" style="gap:8px;padding:12px 14px"><div style="display:flex;align-items:baseline;gap:10px"><span class="wf-num" style="font-size:12px;color:var(--color-accent-300)">{{ s.rank }}</span><span style="font-size:15px;font-weight:500">{{ s.name }}</span><span class="wf-num" style="margin-left:auto;font-size:13px;color:var(--color-neutral-400)">{{ s.done }} / {{ s.goal }} min</span></div><div style="height:6px;border-radius:3px;background:var(--color-neutral-800);overflow:hidden"><div style="height:100%;border-radius:3px;background:var(--color-accent);width:{{ s.pct }}%"></div></div></div></sc-for>
+<div class="wf-card"><div style="display:flex;justify-content:space-between;align-items:baseline"><span class="wf-k">Past-paper scores</span><span class="wf-num" style="font-size:13px">latest {{ lastScore }}%</span></div>
+<sc-if value="{{ chartLine }}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 300 120" style="width:100%;display:block"><line x1="0" y1="110" x2="300" y2="110" style="stroke:var(--color-neutral-800)"></line><line x1="0" y1="50" x2="300" y2="50" style="stroke:var(--color-neutral-800);stroke-dasharray:3 4"></line><sc-if value="{{ chartArea }}" hint-placeholder-val="{{ false }}"><polygon points="{{ areaPts }}" style="fill:color-mix(in srgb,var(--color-accent) 18%,transparent)"></polygon></sc-if><polyline points="{{ pts }}" style="fill:none;stroke:var(--color-accent);stroke-width:2;stroke-linejoin:round"></polyline><sc-for list="{{ scores }}" as="p" hint-placeholder-count="6"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="3.5" style="fill:var(--color-bg);stroke:var(--color-accent);stroke-width:2"></circle></sc-for></svg></sc-if>
+<sc-if value="{{ chartBars }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:flex-end;gap:10px;height:120px;border-bottom:1px solid var(--color-neutral-800)"><sc-for list="{{ scores }}" as="p" hint-placeholder-count="6"><div style="flex:1;border-radius:4px 4px 0 0;border:1px solid var(--color-accent);border-bottom:0;background:color-mix(in srgb,var(--color-accent) 18%,transparent);height:{{ p.s }}%"></div></sc-for></div></sc-if>
+<div style="display:flex;justify-content:space-between"><sc-for list="{{ scores }}" as="p" hint-placeholder-count="6"><span class="wf-num" style="font-size:11px;color:var(--color-neutral-400);flex:1;text-align:center">{{ p.label }}</span></sc-for></div>
+<button class="btn btn-primary" style="min-height:44px">Add score</button></div>
+</div><nav class="wf-dock"><sc-for list="{{ dock2 }}" as="t" hint-placeholder-count="5"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i><span>{{ t.label }}</span></a></sc-for></nav></div></div>
+
+<div class="dv-opt" id="2d"><div class="dv-olabel"><a class="dv-oid" href="#2d">2d</a>Progress · pill dock</div>
+<div class="wf-phone" data-screen-label="Progress"><div class="wf-scr">
+<span class="wf-k" style="color:var(--color-accent-300)">Progress</span>
+<div class="wf-card" style="padding:10px 8px"><table class="table" style="font-size:13px"><thead><tr><th>Benchmark</th><th style="text-align:right">Base</th><th style="text-align:right">Latest</th><th style="text-align:right">Target</th></tr></thead><tbody><sc-for list="{{ bench }}" as="b" hint-placeholder-count="10"><tr style="height:44px"><td>{{ b.name }}</td><td class="wf-num" style="text-align:right;color:var(--color-neutral-400)">{{ b.base }}</td><td class="wf-num" style="text-align:right;color:var(--color-accent-300)">{{ b.latest }}</td><td class="wf-num" style="text-align:right">{{ b.target }}</td></tr></sc-for></tbody></table>
+<button class="btn btn-primary" style="min-height:44px;margin:4px 6px">Log a test</button></div>
+<div class="wf-card wf-hero"><span class="wf-k">Skill of the month</span><div style="font-size:19px;font-weight:500">[Skill name]</div>
+<sc-for list="{{ ladder }}" as="l" hint-placeholder-count="5"><div class="wf-drow {{ l.on }}" style="cursor:default;grid-template-columns:28px minmax(0,1fr) auto;min-height:44px"><span class="wf-num" style="color:var(--color-neutral-400)">{{ l.n }}</span><span>{{ l.label }}</span><span class="wf-num" style="font-size:11px;color:var(--color-accent-300)">{{ l.tag }}</span></div></sc-for></div>
+</div><nav class="wf-dock"><sc-for list="{{ dock3 }}" as="t" hint-placeholder-count="5"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i><span>{{ t.label }}</span></a></sc-for></nav></div></div>
+
+<div class="dv-opt" id="2e"><div class="dv-olabel"><a class="dv-oid" href="#2e">2e</a>Log · pill dock</div>
+<div class="wf-phone" data-screen-label="Log"><div class="wf-scr">
+<span class="wf-k" style="color:var(--color-accent-300)">Log · {{ dayName }}</span>
+<div class="wf-card wf-hero"><span class="wf-k">Quick entry</span>
+<button class="wf-row {{ doneOn }}" onClick="{{ toggleDone }}"><span class="wf-box"><i class="ph ph-check"></i></span><span>Session done</span></button>
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:14px">RPE</span><span class="wf-num" style="font-size:13px;color:var(--color-neutral-400)">{{ rpeText }}</span></div>
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px"><sc-for list="{{ rpes }}" as="r" hint-placeholder-count="10"><button class="wf-rpe {{ r.on }}" onClick="{{ r.pick }}">{{ r.n }}</button></sc-for></div>
+<div class="field"><label>One win</label><input class="input wf-in" value="{{ win }}" onChange="{{ setWin }}"></div>
+<div class="field"><label>One fix</label><input class="input wf-in" value="{{ fix }}" onChange="{{ setFix }}"></div>
+<button class="btn btn-primary" style="min-height:48px" onClick="{{ saveLog }}">{{ saveLabel }}</button></div>
+<div class="wf-card"><div style="display:flex;justify-content:space-between;align-items:center"><span class="wf-k">Sunday review</span><span class="tag tag-outline">Sundays</span></div>
+<div class="field"><label>What went well this week?</label><input class="input wf-in"></div>
+<div class="field"><label>What held me back?</label><input class="input wf-in"></div>
+<div class="field"><label>One focus for next week</label><input class="input wf-in"></div></div>
+<div class="wf-card"><div style="display:flex;justify-content:space-between;align-items:center"><span class="wf-k">Month-end review</span><span class="wf-num" style="font-size:12px;color:var(--color-neutral-400)">opens {{ monthEnd }}</span></div><div style="font-size:14px;line-height:1.5;color:var(--color-neutral-200)">Re-test benchmarks, review the past-paper trend, pick next month's skill.</div><button class="btn btn-secondary" style="min-height:44px" disabled>Start review</button></div>
+</div><nav class="wf-dock"><sc-for list="{{ dock4 }}" as="t" hint-placeholder-count="5"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i><span>{{ t.label }}</span></a></sc-for></nav></div></div>
+
+</div>
+<p class="dv-next">Try next: "take <a class="dv-oid" href="#2a">2a</a>–<a class="dv-oid" href="#2e">2e</a> to hi-fi" · "move the ring above the session box in <a class="dv-oid" href="#2a">2a</a>" · "fill in my real benchmarks in <a class="dv-oid" href="#2d">2d</a>"</p>
+</section>
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Elijah OS · Today in three layouts, plus Week, Revision, Progress, Log</span>
+<span style="display:flex;align-items:center;gap:6px;margin-left:16px"><span class="wf-k">Preview day</span>
+<sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="wf-day {{ d.on }}" style="width:44px;flex-direction:row" onClick="{{ d.pick }}">{{ d.k }}</button></sc-for></span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a"><div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Today · calm stack · 5-tab bar · ring in checklist header · log opens Log tab</div>
+<div class="wf-phone" data-screen-label="Today 1a"><div class="wf-scr">
+<div style="display:flex;flex-direction:column;gap:4px"><span class="wf-k" style="color:var(--color-accent-300)">Elijah OS</span><h4 style="margin:0">{{ greeting }}, Elijah</h4><span class="wf-num" style="font-size:13px;color:var(--color-neutral-400)">{{ dateStr }}</span></div>
+<div style="font-size:15px;line-height:1.45;text-wrap:pretty"><span class="wf-k">Today's mission</span><br>{{ mission }}</div>
+<sc-if value="{{ low }}" hint-placeholder-val="{{ false }}"><div class="wf-amber"><i class="ph ph-warning" style="font-size:20px"></i><div><strong style="font-weight:500">Adjust today</strong><br>{{ lowText }}</div></div></sc-if>
+<div class="wf-card wf-hero"><div style="display:flex;justify-content:space-between;align-items:center"><span class="wf-k">Session · {{ dayName }}</span><span class="wf-pill {{ load }}">{{ load }} load</span></div><div style="font-size:19px;font-weight:500;line-height:1.25">{{ sessTitle }}</div><div class="wf-num" style="font-size:13px;color:var(--color-neutral-400)">{{ sessTime }}</div></div>
+<sc-if value="{{ rOpen }}" hint-placeholder-val="{{ true }}"><div class="wf-card"><span class="wf-k">Morning readiness</span>
+<sc-for list="{{ sliders }}" as="s" hint-placeholder-count="3"><label class="wf-slide"><span>{{ s.label }}</span><input type="range" min="1" max="5" step="1" value="{{ s.val }}" onChange="{{ s.set }}"><span class="wf-num" style="text-align:right">{{ s.val }}</span></label></sc-for>
+<button class="btn btn-primary" style="min-height:44px" onClick="{{ doneCheckin }}">Log check-in</button></div></sc-if>
+<sc-if value="{{ rClosed }}" hint-placeholder-val="{{ false }}"><button class="wf-chip" onClick="{{ openReady }}"><i class="ph ph-pulse" style="font-size:18px;color:var(--color-accent)"></i><span>Readiness</span><span class="wf-num" style="margin-left:auto">{{ chipText }}</span><span style="color:var(--color-accent-300);font-size:13px">Edit</span></button></sc-if>
+<div class="wf-card"><div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;flex-direction:column;gap:2px"><span class="wf-k">Daily checklist</span><span class="wf-num" style="font-size:13px;color:var(--color-neutral-400)">{{ doneCount }} of 4 done</span></div>
+<svg width="52" height="52" viewBox="0 0 56 56"><circle cx="28" cy="28" r="24" style="fill:none;stroke:var(--color-neutral-800);stroke-width:4"></circle><circle cx="28" cy="28" r="24" transform="rotate(-90 28 28)" style="fill:none;stroke:var(--color-accent);stroke-width:4;stroke-linecap:round;stroke-dasharray:150.8;stroke-dashoffset:{{ ringOff }};transition:stroke-dashoffset .3s"></circle></svg></div>
+<sc-for list="{{ checks }}" as="c" hint-placeholder-count="4"><button class="wf-row {{ c.on }}" onClick="{{ c.toggle }}"><span class="wf-box"><i class="ph ph-check"></i></span><span class="wf-lbl">{{ c.label }}</span></button></sc-for>
+<a href="#1g" style="font-size:13px;min-height:44px;display:flex;align-items:center;gap:4px">Write the 2-line log in Log <i class="ph ph-arrow-right"></i></a></div>
+</div><nav class="wf-tabs"><sc-for list="{{ tabsToday }}" as="t" hint-placeholder-count="5"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i>{{ t.label }}</a></sc-for></nav></div></div>
+
+<div class="dv-opt" id="1b"><div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Today · data-rich · 3 tabs + swipeable hub · ring in header</div>
+<div class="wf-phone" data-screen-label="Today 1b"><div class="wf-scr">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><div style="display:flex;flex-direction:column;gap:4px;min-width:0"><span class="wf-k" style="color:var(--color-accent-300)">Elijah OS</span><h5 style="margin:0">{{ greeting }}, Elijah</h5><span class="wf-num" style="font-size:12px;color:var(--color-neutral-400)">{{ dateStr }}</span></div>
+<div style="position:relative;width:64px;height:64px;flex:none"><svg width="64" height="64" viewBox="0 0 56 56"><circle cx="28" cy="28" r="24" style="fill:none;stroke:var(--color-neutral-800);stroke-width:4"></circle><circle cx="28" cy="28" r="24" transform="rotate(-90 28 28)" style="fill:none;stroke:var(--color-accent);stroke-width:4;stroke-linecap:round;stroke-dasharray:150.8;stroke-dashoffset:{{ ringOff }};transition:stroke-dashoffset .3s"></circle></svg><span class="wf-num" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px">{{ doneCount }}/4</span></div></div>
+<div style="font-size:14px;line-height:1.4;color:var(--color-neutral-200)">{{ mission }}</div>
+<sc-if value="{{ low }}" hint-placeholder-val="{{ false }}"><div class="wf-amber"><i class="ph ph-warning" style="font-size:20px"></i><div><strong style="font-weight:500">Adjust today</strong> · {{ lowText }}</div></div></sc-if>
+<div class="wf-card wf-hero"><div style="display:flex;justify-content:space-between;align-items:center"><span class="wf-k">Session · {{ dayName }}</span><span class="wf-pill {{ load }}">{{ load }} load</span></div><div style="font-size:17px;font-weight:500;line-height:1.25">{{ sessTitle }}</div><div class="wf-num" style="font-size:13px;color:var(--color-neutral-400)">{{ sessTime }}</div>
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;padding-top:4px"><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="wf-day {{ d.on }}" onClick="{{ d.pick }}"><span>{{ d.letter }}</span><span class="wf-pill {{ d.load }}" style="padding:1px 6px;font-size:10px">{{ d.l }}</span></button></sc-for></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="wf-card" style="gap:4px;padding:12px"><span class="wf-k">First exam</span><span class="wf-num" style="font-size:22px">{{ daysLeft }}<span style="font-size:12px;color:var(--color-neutral-400)"> days</span></span></div><div class="wf-card" style="gap:4px;padding:12px"><span class="wf-k">Readiness</span><span class="wf-num" style="font-size:22px">{{ chipText }}</span></div></div>
+<div style="display:flex;justify-content:space-between;align-items:center"><span class="wf-k">Swipe: check-in · checklist · log</span><i class="ph ph-arrows-horizontal" style="color:var(--color-neutral-400)"></i></div>
+<div style="display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:0 16px 6px;scrollbar-width:none">
+<div class="wf-card" style="flex:0 0 88%;scroll-snap-align:center"><span class="wf-k">1 · Morning readiness</span>
+<sc-if value="{{ rOpen }}" hint-placeholder-val="{{ true }}"><sc-for list="{{ sliders }}" as="s" hint-placeholder-count="3"><label class="wf-slide"><span>{{ s.label }}</span><input type="range" min="1" max="5" step="1" value="{{ s.val }}" onChange="{{ s.set }}"><span class="wf-num" style="text-align:right">{{ s.val }}</span></label></sc-for><button class="btn btn-primary" style="min-height:44px" onClick="{{ doneCheckin }}">Log check-in</button></sc-if>
+<sc-if value="{{ rClosed }}" hint-placeholder-val="{{ false }}"><button class="wf-chip" onClick="{{ openReady }}"><i class="ph ph-check" style="color:var(--color-accent)"></i><span>Logged</span><span class="wf-num" style="margin-left:auto">{{ chipText }}</span><span style="color:var(--color-accent-300);font-size:13px">Edit</span></button></sc-if></div>
+<div class="wf-card" style="flex:0 0 88%;scroll-snap-align:center"><span class="wf-k">2 · Daily checklist</span><sc-for list="{{ checks }}" as="c" hint-placeholder-count="4"><button class="wf-row {{ c.on }}" onClick="{{ c.toggle }}"><span class="wf-box"><i class="ph ph-check"></i></span><span class="wf-lbl">{{ c.label }}</span></button></sc-for></div>
+<div class="wf-card" style="flex:0 0 88%;scroll-snap-align:center"><span class="wf-k">3 · 2-line log</span><input class="input wf-in" placeholder="One win" value="{{ win }}" onChange="{{ setWin }}"><input class="input wf-in" placeholder="One fix" value="{{ fix }}" onChange="{{ setFix }}"><button class="btn btn-primary" style="min-height:44px" onClick="{{ saveLog }}">Save log</button></div>
+</div>
+</div><nav class="wf-tabs"><sc-for list="{{ tabs3 }}" as="t" hint-placeholder-count="3"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i>{{ t.label }}</a></sc-for></nav></div></div>
+
+<div class="dv-opt" id="1c"><div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Today · ring hero · floating pill dock · checklist tiles · inline log</div>
+<div class="wf-phone" data-screen-label="Today 1c"><div class="wf-scr">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span class="wf-k" style="color:var(--color-accent-300)">Elijah OS</span><span class="wf-num" style="font-size:12px;color:var(--color-neutral-400)">{{ dateStr }}</span></div>
+<h4 style="margin:0">{{ greeting }}, Elijah</h4>
+<sc-if value="{{ low }}" hint-placeholder-val="{{ false }}"><div class="wf-amber"><i class="ph ph-warning" style="font-size:20px"></i><div><strong style="font-weight:500">Adjust today</strong><br>{{ lowText }}</div></div></sc-if>
+<div class="wf-card wf-hero" style="flex-direction:row;align-items:center;gap:14px;padding:16px">
+<div style="position:relative;width:104px;height:104px;flex:none"><svg width="104" height="104" viewBox="0 0 104 104"><circle cx="52" cy="52" r="46" style="fill:none;stroke:var(--color-neutral-800);stroke-width:5"></circle><circle cx="52" cy="52" r="46" transform="rotate(-90 52 52)" style="fill:none;stroke:var(--color-accent);stroke-width:5;stroke-linecap:round;stroke-dasharray:289;stroke-dashoffset:{{ ringOffBig }};transition:stroke-dashoffset .3s"></circle></svg><span style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span class="wf-num" style="font-size:26px;line-height:1">{{ pct }}%</span><span class="wf-k" style="font-size:10px">of day</span></span></div>
+<div style="display:flex;flex-direction:column;gap:8px;min-width:0"><span class="wf-k">Session · {{ dayName }}</span><div style="font-size:17px;font-weight:500;line-height:1.25">{{ sessTitle }}</div><div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px"><span class="wf-pill {{ load }}">{{ load }}</span><span class="wf-num" style="font-size:12px;color:var(--color-neutral-400)">{{ sessTime }}</span></div></div></div>
+<div style="font-size:14px;line-height:1.45;color:var(--color-neutral-200)"><span class="wf-k">Mission</span> · {{ mission }}</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><sc-for list="{{ checks }}" as="c" hint-placeholder-count="4"><button class="wf-row wf-tile {{ c.on }}" onClick="{{ c.toggle }}"><span class="wf-box"><i class="ph ph-check"></i></span><span class="wf-lbl">{{ c.label }}</span></button></sc-for></div>
+<sc-if value="{{ rOpen }}" hint-placeholder-val="{{ true }}"><div class="wf-card"><span class="wf-k">Morning readiness</span>
+<sc-for list="{{ sliders }}" as="s" hint-placeholder-count="3"><label class="wf-slide"><span>{{ s.label }}</span><input type="range" min="1" max="5" step="1" value="{{ s.val }}" onChange="{{ s.set }}"><span class="wf-num" style="text-align:right">{{ s.val }}</span></label></sc-for>
+<button class="btn btn-primary" style="min-height:44px" onClick="{{ doneCheckin }}">Log check-in</button></div></sc-if>
+<sc-if value="{{ rClosed }}" hint-placeholder-val="{{ false }}"><button class="wf-chip" onClick="{{ openReady }}"><i class="ph ph-pulse" style="font-size:18px;color:var(--color-accent)"></i><span>Readiness</span><span class="wf-num" style="margin-left:auto">{{ chipText }}</span><span style="color:var(--color-accent-300);font-size:13px">Edit</span></button></sc-if>
+<div class="wf-card"><span class="wf-k">2-line log</span><input class="input wf-in" placeholder="One win" value="{{ win }}" onChange="{{ setWin }}"><input class="input wf-in" placeholder="One fix" value="{{ fix }}" onChange="{{ setFix }}"><button class="btn btn-primary" style="min-height:44px" onClick="{{ saveLog }}">Save log</button></div>
+</div><nav class="wf-dock"><sc-for list="{{ tabsToday }}" as="t" hint-placeholder-count="5"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i><span>{{ t.label }}</span></a></sc-for></nav></div></div>
+
+<div class="dv-opt" id="1d"><div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a>Week · seven-day strip + load pills</div>
+<div class="wf-phone" data-screen-label="Week"><div class="wf-scr">
+<div style="display:flex;flex-direction:column;gap:4px"><span class="wf-k" style="color:var(--color-accent-300)">Week</span><h4 style="margin:0">{{ weekRange }}</h4></div>
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px"><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="wf-day {{ d.on }}" style="min-height:76px" onClick="{{ d.pick }}"><span>{{ d.k }}</span><span class="wf-num" style="font-size:15px;color:var(--color-text)">{{ d.dnum }}</span><span class="wf-pill {{ d.load }}" style="padding:1px 6px;font-size:10px">{{ d.l }}</span></button></sc-for></div>
+<div class="wf-card wf-hero"><div style="display:flex;justify-content:space-between;align-items:center"><span class="wf-k">{{ dayName }}</span><span class="wf-pill {{ load }}">{{ load }} load</span></div><div style="font-size:19px;font-weight:500;line-height:1.25">{{ sessTitle }}</div><div class="wf-num" style="font-size:13px;color:var(--color-neutral-400)">{{ sessTime }}</div></div>
+<div class="wf-card" style="gap:2px;padding:8px"><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="wf-drow {{ d.on }}" onClick="{{ d.pick }}"><span class="wf-num" style="color:var(--color-neutral-400)">{{ d.k }}</span><span style="line-height:1.3">{{ d.title }}</span><span class="wf-pill {{ d.load }}">{{ d.load }}</span></button></sc-for></div>
+</div><nav class="wf-tabs"><sc-for list="{{ tabsWeek }}" as="t" hint-placeholder-count="5"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i>{{ t.label }}</a></sc-for></nav></div></div>
+
+<div class="dv-opt" id="1e"><div class="dv-olabel"><a class="dv-oid" href="#1e">1e</a>Revision · countdown, subjects by priority, past-paper chart (sample numbers)</div>
+<div class="wf-phone" data-screen-label="Revision"><div class="wf-scr">
+<span class="wf-k" style="color:var(--color-accent-300)">Revision</span>
+<div class="wf-card wf-hero" style="flex-direction:row;align-items:center;justify-content:space-between"><div style="display:flex;flex-direction:column;gap:4px"><span class="wf-k">First exam</span><span style="font-size:14px">10 May 2027</span></div><span class="wf-num" style="font-size:34px;line-height:1">{{ daysLeft }}<span style="font-size:13px;color:var(--color-neutral-400)"> days</span></span></div>
+<span class="wf-k">Subjects · minutes this week</span>
+<sc-for list="{{ subjects }}" as="s" hint-placeholder-count="5"><div class="wf-card" style="gap:8px;padding:12px 14px"><div style="display:flex;align-items:baseline;gap:10px"><span class="wf-num" style="font-size:12px;color:var(--color-accent-300)">{{ s.rank }}</span><span style="font-size:15px;font-weight:500">{{ s.name }}</span><span class="wf-num" style="margin-left:auto;font-size:13px;color:var(--color-neutral-400)">{{ s.done }} / {{ s.goal }} min</span></div><div style="height:6px;border-radius:3px;background:var(--color-neutral-800);overflow:hidden"><div style="height:100%;border-radius:3px;background:var(--color-accent);width:{{ s.pct }}%"></div></div></div></sc-for>
+<div class="wf-card"><div style="display:flex;justify-content:space-between;align-items:baseline"><span class="wf-k">Past-paper scores</span><span class="wf-num" style="font-size:13px">latest {{ lastScore }}%</span></div>
+<sc-if value="{{ chartLine }}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 300 120" style="width:100%;display:block"><line x1="0" y1="110" x2="300" y2="110" style="stroke:var(--color-neutral-800)"></line><line x1="0" y1="50" x2="300" y2="50" style="stroke:var(--color-neutral-800);stroke-dasharray:3 4"></line><sc-if value="{{ chartArea }}" hint-placeholder-val="{{ false }}"><polygon points="{{ areaPts }}" style="fill:color-mix(in srgb,var(--color-accent) 18%,transparent)"></polygon></sc-if><polyline points="{{ pts }}" style="fill:none;stroke:var(--color-accent);stroke-width:2;stroke-linejoin:round"></polyline><sc-for list="{{ scores }}" as="p" hint-placeholder-count="6"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="3.5" style="fill:var(--color-bg);stroke:var(--color-accent);stroke-width:2"></circle></sc-for></svg></sc-if>
+<sc-if value="{{ chartBars }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:flex-end;gap:10px;height:120px;border-bottom:1px solid var(--color-neutral-800)"><sc-for list="{{ scores }}" as="p" hint-placeholder-count="6"><div style="flex:1;border-radius:4px 4px 0 0;border:1px solid var(--color-accent);border-bottom:0;background:color-mix(in srgb,var(--color-accent) 18%,transparent);height:{{ p.s }}%"></div></sc-for></div></sc-if>
+<div style="display:flex;justify-content:space-between"><sc-for list="{{ scores }}" as="p" hint-placeholder-count="6"><span class="wf-num" style="font-size:11px;color:var(--color-neutral-400);flex:1;text-align:center">{{ p.label }}</span></sc-for></div>
+<button class="btn btn-primary" style="min-height:44px">Add score</button></div>
+</div><nav class="wf-tabs"><sc-for list="{{ tabsRev }}" as="t" hint-placeholder-count="5"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i>{{ t.label }}</a></sc-for></nav></div></div>
+
+<div class="dv-opt" id="1f"><div class="dv-olabel"><a class="dv-oid" href="#1f">1f</a>Progress · benchmarks + skill ladder (blanks until you give numbers)</div>
+<div class="wf-phone" data-screen-label="Progress"><div class="wf-scr">
+<span class="wf-k" style="color:var(--color-accent-300)">Progress</span>
+<div class="wf-card" style="padding:10px 8px"><table class="table" style="font-size:13px"><thead><tr><th>Benchmark</th><th style="text-align:right">Base</th><th style="text-align:right">Latest</th><th style="text-align:right">Target</th></tr></thead><tbody><sc-for list="{{ bench }}" as="b" hint-placeholder-count="10"><tr style="height:44px"><td>{{ b.name }}</td><td class="wf-num" style="text-align:right;color:var(--color-neutral-400)">{{ b.base }}</td><td class="wf-num" style="text-align:right;color:var(--color-accent-300)">{{ b.latest }}</td><td class="wf-num" style="text-align:right">{{ b.target }}</td></tr></sc-for></tbody></table>
+<button class="btn btn-primary" style="min-height:44px;margin:4px 6px">Log a test</button></div>
+<div class="wf-card wf-hero"><span class="wf-k">Skill of the month</span><div style="font-size:19px;font-weight:500">[Skill name]</div>
+<sc-for list="{{ ladder }}" as="l" hint-placeholder-count="5"><div class="wf-drow {{ l.on }}" style="cursor:default;grid-template-columns:28px minmax(0,1fr) auto;min-height:44px"><span class="wf-num" style="color:var(--color-neutral-400)">{{ l.n }}</span><span>{{ l.label }}</span><span class="wf-num" style="font-size:11px;color:var(--color-accent-300)">{{ l.tag }}</span></div></sc-for></div>
+</div><nav class="wf-tabs"><sc-for list="{{ tabsProg }}" as="t" hint-placeholder-count="5"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i>{{ t.label }}</a></sc-for></nav></div></div>
+
+<div class="dv-opt" id="1g"><div class="dv-olabel"><a class="dv-oid" href="#1g">1g</a>Log · quick entry, Sunday review, month-end card</div>
+<div class="wf-phone" data-screen-label="Log"><div class="wf-scr">
+<span class="wf-k" style="color:var(--color-accent-300)">Log · {{ dayName }}</span>
+<div class="wf-card wf-hero"><span class="wf-k">Quick entry</span>
+<button class="wf-row {{ doneOn }}" onClick="{{ toggleDone }}"><span class="wf-box"><i class="ph ph-check"></i></span><span>Session done</span></button>
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:14px">RPE</span><span class="wf-num" style="font-size:13px;color:var(--color-neutral-400)">{{ rpeText }}</span></div>
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px"><sc-for list="{{ rpes }}" as="r" hint-placeholder-count="10"><button class="wf-rpe {{ r.on }}" onClick="{{ r.pick }}">{{ r.n }}</button></sc-for></div>
+<div class="field"><label>One win</label><input class="input wf-in" value="{{ win }}" onChange="{{ setWin }}"></div>
+<div class="field"><label>One fix</label><input class="input wf-in" value="{{ fix }}" onChange="{{ setFix }}"></div>
+<button class="btn btn-primary" style="min-height:48px" onClick="{{ saveLog }}">{{ saveLabel }}</button></div>
+<div class="wf-card"><div style="display:flex;justify-content:space-between;align-items:center"><span class="wf-k">Sunday review</span><span class="tag tag-outline">Sundays</span></div>
+<div class="field"><label>What went well this week?</label><input class="input wf-in"></div>
+<div class="field"><label>What held me back?</label><input class="input wf-in"></div>
+<div class="field"><label>One focus for next week</label><input class="input wf-in"></div></div>
+<div class="wf-card"><div style="display:flex;justify-content:space-between;align-items:center"><span class="wf-k">Month-end review</span><span class="wf-num" style="font-size:12px;color:var(--color-neutral-400)">opens {{ monthEnd }}</span></div><div style="font-size:14px;line-height:1.5;color:var(--color-neutral-200)">Re-test benchmarks, review the past-paper trend, pick next month's skill.</div><button class="btn btn-secondary" style="min-height:44px" disabled>Start review</button></div>
+</div><nav class="wf-tabs"><sc-for list="{{ tabsLog }}" as="t" hint-placeholder-count="5"><a class="{{ t.on }}" href="{{ t.href }}"><i class="{{ t.icon }}"></i>{{ t.label }}</a></sc-for></nav></div></div>
+
+</div>
+<p class="dv-next">Try next: "go with <a class="dv-oid" href="#1c">1c</a> but use the tab bar from <a class="dv-oid" href="#1a">1a</a>" · "apply the dock to <a class="dv-oid" href="#1d">1d</a>–<a class="dv-oid" href="#1g">1g</a>" · "take <a class="dv-oid" href="#1b">1b</a> to hi-fi"</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Nocturne&quot;,&quot;Cyan&quot;],&quot;default&quot;:&quot;Nocturne&quot;,&quot;tsType&quot;:&quot;'Nocturne'|'Cyan'&quot;},&quot;chartStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Line&quot;,&quot;Area&quot;,&quot;Bars&quot;],&quot;default&quot;:&quot;Line&quot;,&quot;tsType&quot;:&quot;'Line'|'Area'|'Bars'&quot;},&quot;showGrid&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { day: (new Date().getDay() + 6) % 7, r: [4, 3, 4], rOpen: true, chk: [false, false, false, false], rpe: 0, done: false, win: '', fix: '', saved: false, bench: (() => { try { return JSON.parse(localStorage.getItem('elijahos.bench')) || {}; } catch (e) { return {}; } })() };
+  componentDidMount() { this.theme(); }
+  componentDidUpdate() { this.theme(); }
+  theme() {
+    const b = document.body;
+    b.style.setProperty('--color-accent', (this.props.accent ?? 'Nocturne') === 'Cyan' ? 'oklch(0.8 0.125 205)' : '#9184d9');
+    b.style.setProperty('--color-accent-300', (this.props.accent ?? 'Nocturne') === 'Cyan' ? 'oklch(0.88 0.09 205)' : '#d2cefd');
+    b.classList.toggle('wf-nogrid', (this.props.showGrid ?? true) === false);
+  }
+  renderVals() {
+    const st = this.state, now = new Date();
+    const D = [
+      ['Mon', 'Recovery, upper-body calisthenics, Maths revision', 'Low', 'Leave 08:20 · school 08:50–15:25 · Maths 60 min after school', 'Recover well. Upper body, then one hour of Maths.'],
+      ['Tue', 'Astro: skill sequences', 'Medium', 'Leave 08:20 · school 08:50–15:25 · Astro 15:45–16:45', 'Clean touches at speed. Repeat each sequence until it is automatic.'],
+      ['Wed', 'Academy training', 'High', 'Leave 08:20 · school 08:50–15:25 · leave 18:00 · train 18:15', 'Bring full focus to academy. Win your first action.'],
+      ['Thu', 'Academy training', 'High', 'Leave 08:20 · school 08:50–15:25 · leave 18:00 · train 18:15', 'Second academy night. Quality over volume.'],
+      ['Fri', 'Astro: speed and match-speed reps', 'Medium', 'Leave 08:20 · school 08:50–15:25 · Astro 15:45–16:45', 'Short, sharp speed reps. Stop while you are still fast.'],
+      ['Sat', 'Past paper (AM), rest (PM)', 'Low', '09:30 · 90 min', 'Past paper under timed conditions, then switch off.'],
+      ['Sun', 'Match', 'High', 'KO 10:30', 'Match day. Play simple, play fast.']
+    ];
+    const full = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+    const dt = i => { const x = new Date(mon); x.setDate(mon.getDate() + i); return x; };
+    const fmt = (x, o) => x.toLocaleDateString('en-GB', o);
+    const days = D.map((d, i) => ({ k: d[0], letter: d[0][0], title: d[1], load: d[2], l: d[2][0], dnum: dt(i).getDate(), on: i === st.day ? 'on' : '', pick: () => this.setState({ day: i }) }));
+    const cur = D[st.day];
+    const labels = ['Sleep', 'Energy', 'Leg freshness'];
+    const sliders = labels.map((label, i) => ({ label, val: st.r[i], set: e => { const r = st.r.slice(); r[i] = +e.target.value; this.setState({ r }); } }));
+    const lows = labels.filter((_, i) => st.r[i] <= 2);
+    const names = ['Morning check-in', 'Revision block', 'Football / physical session', '2-line log'];
+    const checks = names.map((label, i) => ({ label, on: st.chk[i] ? 'on' : '', toggle: () => { const chk = st.chk.slice(); chk[i] = !chk[i]; this.setState(i === 0 ? { chk, rOpen: !chk[0] } : { chk }); } }));
+    const n = st.chk.filter(Boolean).length;
+    const T = [['Today', 'ph ph-house', '#1a'], ['Week', 'ph ph-calendar-blank', '#1d'], ['Revision', 'ph ph-book-open', '#1e'], ['Progress', 'ph ph-chart-line-up', '#1f'], ['Log', 'ph ph-note-pencil', '#1g']];
+    const tabs = (a, hs) => T.map((t, i) => ({ label: t[0], icon: t[1], href: hs ? hs[i] : t[2], on: i === a ? 'on' : '' }));
+    const H2 = ['#2a', '#2b', '#2c', '#2d', '#2e'];
+    const raw = [52, 58, 55, 64, 61, 70];
+    const scores = raw.map((s, i) => ({ s, label: 'P' + (i + 1), x: 25 + i * 50, y: 110 - (s - 40) * 2 }));
+    const pts = scores.map(p => p.x + ',' + p.y).join(' ');
+    const cs = this.props.chartStyle ?? 'Line';
+    const S = [['Maths', 120, 150], ['Physics', 90, 120], ['English', 60, 90], ['Biology / Chemistry', 45, 90], ['Spanish / PE', 20, 60]];
+    const B = [['10m sprint', '—'], ['20m sprint', '—'], ['Wall passes / 60s (L)', '—'], ['Wall passes / 60s (R)', '—'], ['Weak-foot finishes / 10', '—'], ['Pull-ups', '~12'], ['Dips', '—'], ['Hollow hold', '—'], ['Handstand hold', '—']];
+    const mEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const h = now.getHours();
+    const bv = (i, f) => st.bench[i + '.' + f];
+    const setB = (i, f) => e => { const bench = Object.assign({}, st.bench, { [i + '.' + f]: e.target.value }); try { localStorage.setItem('elijahos.bench', JSON.stringify(bench)); } catch (err) {} this.setState({ bench }); };
+    const setChk = (i, v) => { const chk = st.chk.slice(); chk[i] = v; return chk; };
+    return {
+      days, checks, sliders, scores, pts,
+      greeting: h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening',
+      dateStr: fmt(dt(st.day), { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }),
+      weekRange: fmt(dt(0), { day: 'numeric', month: 'short' }) + ' – ' + fmt(dt(6), { day: 'numeric', month: 'short' }),
+      dayName: full[st.day], sessTitle: cur[1], load: cur[2], sessTime: cur[3], mission: cur[4],
+      rOpen: st.rOpen, rClosed: !st.rOpen, chipText: st.r.join(' · '),
+      low: lows.length > 0, lowText: lows.join(' and ') + (lows.length > 1 ? ' are' : ' is') + ' low. Drop the session one load level or shorten it.',
+      doneCheckin: () => this.setState({ chk: setChk(0, true), rOpen: false }),
+      openReady: () => this.setState({ rOpen: true }),
+      doneCount: n, pct: n * 25, ringOff: 150.8 * (1 - n / 4), ringOffBig: 289 * (1 - n / 4),
+      dock0: tabs(0, H2), dock1: tabs(1, H2), dock2: tabs(2, H2), dock3: tabs(3, H2), dock4: tabs(4, H2), tabsToday: tabs(0), tabsWeek: tabs(1), tabsRev: tabs(2), tabsProg: tabs(3), tabsLog: tabs(4),
+      tabs3: [{ label: 'Today', icon: 'ph ph-house', href: '#1b', on: 'on' }, { label: 'Plan', icon: 'ph ph-calendar-blank', href: '#1d', on: '' }, { label: 'Track', icon: 'ph ph-chart-line-up', href: '#1f', on: '' }],
+      daysLeft: Math.max(0, Math.ceil((new Date(2027, 4, 10) - now) / 864e5)),
+      subjects: S.map((s, i) => ({ rank: '0' + (i + 1), name: s[0], done: s[1], goal: s[2], pct: Math.round(s[1] / s[2] * 100) })),
+      lastScore: raw[raw.length - 1], chartLine: cs !== 'Bars', chartArea: cs === 'Area', chartBars: cs === 'Bars',
+      areaPts: '25,110 ' + pts + ' 275,110',
+      bench: B.map((b, i) => ({ name: b[0], base: bv(i, 'base') || b[1], latest: bv(i, 'latest') || '—', target: bv(i, 'target') || '—' })),
+      benchEdit: B.map((b, i) => ({ name: b[0], base: bv(i, 'base') ?? (i === 5 ? '12' : ''), latest: bv(i, 'latest') ?? '', target: bv(i, 'target') ?? '', setBase: setB(i, 'base'), setLatest: setB(i, 'latest'), setTarget: setB(i, 'target') })),
+      ladder: [1, 2, 3, 4, 5].map(i => ({ n: i, label: 'Step ' + i, on: i === 3 ? 'on' : '', tag: i < 3 ? 'done' : i === 3 ? 'current' : '' })),
+      doneOn: st.done ? 'on' : '', toggleDone: () => this.setState({ done: !st.done, saved: false }),
+      rpes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => ({ n: i, on: st.rpe === i ? 'on' : '', pick: () => this.setState({ rpe: i, saved: false }) })),
+      rpeText: st.rpe ? st.rpe + ' / 10' : 'tap 1–10',
+      win: st.win, fix: st.fix,
+      setWin: e => this.setState({ win: e.target.value, saved: false }), setFix: e => this.setState({ fix: e.target.value, saved: false }),
+      saveLog: () => { const chk = st.chk.slice(); chk[3] = true; if (st.done) chk[2] = true; this.setState({ chk, saved: true }); },
+      saveLabel: st.saved ? 'Saved' : 'Save entry',
+      monthEnd: fmt(mEnd, { day: 'numeric', month: 'short' })
+    };
+  }
+}
+</script>
+</body>
+</html>

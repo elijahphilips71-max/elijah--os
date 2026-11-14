@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="stylesheet" href="_ds/nocturne-c57a258b-69cb-455c-95a2-c71edaa11e2c/styles.css"><script src="_ds/nocturne-c57a258b-69cb-455c-95a2-c71edaa11e2c/_ds_bundle.js"></script><link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"><style>
+html{background:var(--color-bg)}body{margin:0;min-height:100%;background:var(--color-bg);--os-amber:oklch(0.8 0.125 75);--os-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+a{color:var(--color-accent)}a:hover{color:var(--color-accent-300)}
+.os{min-height:100vh;display:flex;color:var(--color-text);background-image:linear-gradient(color-mix(in srgb,var(--color-text) 3.5%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--color-text) 3.5%,transparent) 1px,transparent 1px),radial-gradient(ellipse at 20% 0%,color-mix(in srgb,var(--color-accent) 10%,transparent),transparent 60%);background-size:28px 28px,28px 28px,100% 100%}
+.os.phone{flex-direction:column;max-width:430px;margin:0 auto;box-shadow:var(--shadow-sm)}
+.os-rail{display:none}.desk .os-rail{display:flex;flex:none;width:220px;flex-direction:column;gap:6px;padding:28px 14px;border-right:1px solid var(--color-divider);position:sticky;top:0;height:100vh;background:color-mix(in srgb,var(--color-bg) 80%,transparent)}
+.os-nav{display:flex;align-items:center;gap:10px;min-height:46px;padding:0 14px;border-radius:999px;border:0;background:none;color:var(--color-neutral-400);font:inherit;font-size:14px;cursor:pointer}
+.os-nav i{font-size:22px}.os-nav:hover{background:color-mix(in srgb,var(--color-text) 7%,transparent)}
+.os-nav.on{color:var(--color-accent-300);background:color-mix(in srgb,var(--color-accent) 18%,transparent)}
+.os-dock{position:fixed;z-index:5;bottom:16px;left:50%;transform:translateX(-50%);width:min(390px,calc(100% - 32px));display:flex;justify-content:space-between;gap:2px;padding:6px;border-radius:999px;background:color-mix(in srgb,var(--color-surface) 92%,transparent);backdrop-filter:blur(10px);border:1px solid color-mix(in srgb,var(--color-accent) 40%,transparent);box-shadow:0 0 22px color-mix(in srgb,var(--color-accent) 22%,transparent),0 10px 30px rgba(0,0,0,.5)}
+.desk .os-dock{display:none}.os-dock .os-nav{justify-content:center;min-width:46px;padding:0 12px;gap:6px;font-size:13px}.os-dock .os-nav span{display:none}.os-dock .os-nav.on span{display:inline}
+.os-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:16px;padding:26px 16px 110px}.desk .os-main{padding:30px 34px 40px;max-width:1240px}
+.os-grid{display:grid;gap:14px;grid-template-columns:minmax(0,1fr);align-items:start}.desk .g3{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}.desk .g2{grid-template-columns:repeat(auto-fit,minmax(360px,1fr))}
+.os-col{display:flex;flex-direction:column;gap:14px;min-width:0}.os-deskonly{display:none}.desk .os-deskonly{display:flex}
+.os-card{display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:var(--radius-lg);background:linear-gradient(180deg,color-mix(in srgb,var(--color-surface) 94%,transparent),color-mix(in srgb,var(--color-surface) 66%,transparent));border:1px solid color-mix(in srgb,var(--color-accent) 22%,transparent)}
+.os-hero{border-color:color-mix(in srgb,var(--color-accent) 85%,transparent);box-shadow:0 0 22px color-mix(in srgb,var(--color-accent) 24%,transparent),inset 0 0 24px color-mix(in srgb,var(--color-accent) 6%,transparent)}
+.os-k{white-space:nowrap;font:500 11px var(--os-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-400)}
+.os-num{white-space:nowrap;font-family:var(--os-mono);font-variant-numeric:tabular-nums}
+.os-pill{display:inline-flex;gap:.35em;white-space:nowrap;align-items:center;justify-content:center;font:500 11px var(--os-mono);padding:3px 9px;border-radius:999px;border:1px solid var(--color-neutral-800);color:var(--color-neutral-400)}
+.os-pill.High{color:var(--color-accent-300);border-color:var(--color-accent);background:color-mix(in srgb,var(--color-accent) 16%,transparent);box-shadow:0 0 8px color-mix(in srgb,var(--color-accent) 30%,transparent)}
+.os-pill.Medium{color:var(--color-neutral-200);border-color:var(--color-neutral-600)}
+.os-row{display:flex;align-items:center;gap:12px;min-height:48px;width:100%;padding:0;background:none;border:0;color:inherit;font:inherit;font-size:15px;text-align:left;cursor:pointer}
+.os-box{flex:none;width:26px;height:26px;border-radius:8px;border:1.5px solid var(--color-neutral-600);display:grid;place-items:center;color:transparent;font-size:16px;transition:all .15s}
+.os-row:hover .os-box{border-color:var(--color-accent)}
+.os-row.on .os-box{border-color:var(--color-accent);background:color-mix(in srgb,var(--color-accent) 20%,transparent);color:var(--color-accent-300);box-shadow:0 0 10px color-mix(in srgb,var(--color-accent) 40%,transparent)}
+.os-row.on .os-lbl{color:var(--color-neutral-500);text-decoration:line-through}
+.os-tile{flex-direction:column;align-items:flex-start;gap:10px;padding:14px;min-height:92px;border-radius:var(--radius-lg);border:1px solid var(--color-neutral-800);background:color-mix(in srgb,var(--color-surface) 80%,transparent);font-size:14px;line-height:1.3;transition:border-color .15s}
+.os-tile:hover{border-color:var(--color-neutral-600)}.os-tile.on{border-color:color-mix(in srgb,var(--color-accent) 55%,transparent)}
+.os-day{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:48px;min-width:0;padding:6px 0;border-radius:var(--radius-md);border:1px solid transparent;background:none;color:var(--color-neutral-400);font:500 12px var(--font-body);cursor:pointer}
+.os-day:hover{background:color-mix(in srgb,var(--color-text) 7%,transparent)}
+.os-day.on{color:var(--color-accent-300);border-color:var(--color-accent);box-shadow:0 0 12px color-mix(in srgb,var(--color-accent) 30%,transparent)}
+.os-drow{display:grid;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:10px;min-height:52px;padding:6px 10px;width:100%;border-radius:var(--radius-md);border:1px solid transparent;background:none;color:inherit;font:inherit;font-size:14px;text-align:left;cursor:pointer}
+.os-drow:hover{background:color-mix(in srgb,var(--color-text) 5%,transparent)}
+.os-drow.on{border-color:color-mix(in srgb,var(--color-accent) 50%,transparent);background:color-mix(in srgb,var(--color-accent) 8%,transparent)}
+.os-rpe{min-height:46px;border-radius:var(--radius-md);border:1px solid var(--color-divider);background:none;color:var(--color-text);font:500 15px var(--os-mono);cursor:pointer}
+.os-rpe:hover{background:color-mix(in srgb,var(--color-text) 7%,transparent)}
+.os-rpe.on{border-color:var(--color-accent);color:var(--color-accent-300);background:color-mix(in srgb,var(--color-accent) 16%,transparent);box-shadow:0 0 10px color-mix(in srgb,var(--color-accent) 30%,transparent)}
+.os-chip{display:flex;align-items:center;gap:10px;min-height:48px;padding:0 16px;border-radius:999px;border:1px solid color-mix(in srgb,var(--color-accent) 40%,transparent);background:color-mix(in srgb,var(--color-surface) 82%,transparent);color:var(--color-text);font:inherit;font-size:14px;cursor:pointer;width:100%}
+.os-chip:hover{border-color:var(--color-accent)}
+.os-amber{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:var(--radius-lg);border:1px solid var(--os-amber);background:color-mix(in srgb,var(--os-amber) 12%,transparent);color:var(--os-amber);font-size:14px;line-height:1.4;box-shadow:0 0 16px color-mix(in srgb,var(--os-amber) 18%,transparent)}
+.os-slide{display:grid;grid-template-columns:96px minmax(0,1fr) 22px;align-items:center;gap:10px;min-height:46px;font-size:14px}
+.os-slide input{width:100%;height:46px;margin:0;accent-color:var(--color-accent)}
+.os-in{min-height:46px}.os-btn{min-height:46px}
+.os-cell{width:60px;min-height:44px;padding:4px 6px;text-align:right;font-family:var(--os-mono);font-size:13px}
+.os-bare{background:transparent;border-color:transparent;padding-left:4px}
+.os-step{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--color-neutral-600);background:none;color:var(--color-neutral-400);font:500 13px var(--os-mono);cursor:pointer}
+.os-step:hover{border-color:var(--color-accent)}
+.os-step.done{border-color:color-mix(in srgb,var(--color-accent) 50%,transparent);color:var(--color-accent-300)}
+.os-step.on{border-color:var(--color-accent);color:var(--color-accent-300);background:color-mix(in srgb,var(--color-accent) 20%,transparent);box-shadow:0 0 12px color-mix(in srgb,var(--color-accent) 40%,transparent)}
+</style></helmet>
+<div class="os {{ mode }}">
+<sc-if value="{{ isSignin }}" hint-placeholder-val="{{ false }}"><div data-screen-label="Sign in" style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px 16px"><form class="os-card os-hero" style="width:100%;max-width:380px;padding:24px;gap:14px" onSubmit="{{ sendLink }}">
+<span class="os-k" style="color:var(--color-accent-300)">Elijah OS</span><h3 style="margin:0">Sign in</h3>
+<p style="margin:0;font-size:14px;line-height:1.5;color:var(--color-neutral-200);text-wrap:pretty">Enter your email and we'll send you a sign-in link. Use the same email on your phone and laptop to keep them in sync.</p>
+<div class="field"><label>Email</label><input class="input os-in" type="email" autocomplete="email" placeholder="you@example.com" value="{{ email }}" onChange="{{ setEmail }}"></div>
+<sc-if value="{{ emailErr }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:var(--os-amber)">Enter a valid email address.</span></sc-if>
+<button class="btn btn-primary os-btn" type="submit">Send sign-in link</button></form></div></sc-if>
+<sc-if value="{{ isSent }}" hint-placeholder-val="{{ false }}"><div data-screen-label="Check email" style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px 16px"><div class="os-card os-hero" style="width:100%;max-width:380px;padding:24px;gap:14px">
+<i class="ph ph-envelope-simple" style="font-size:32px;color:var(--color-accent)"></i><h3 style="margin:0">Check your email</h3>
+<p style="margin:0;font-size:14px;line-height:1.5;color:var(--color-neutral-200);overflow-wrap:anywhere">We sent a sign-in link to <span style="color:var(--color-accent-300)">{{ emailShown }}</span>. Open it on this device to finish signing in.</p>
+<button class="btn btn-secondary os-btn" onClick="{{ resend }}">{{ resendLabel }}</button>
+<button class="btn btn-ghost os-btn" onClick="{{ otherEmail }}">Use a different email</button>
+<button class="btn btn-ghost os-btn" style="color:var(--color-neutral-400)" onClick="{{ skipAuth }}">Skip (prototype only)</button></div></div></sc-if>
+<sc-if value="{{ isApp }}" hint-placeholder-val="{{ true }}">
+<nav class="os-rail"><span class="os-k" style="color:var(--color-accent-300);padding:0 14px 16px">Elijah OS</span>
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5"><button class="os-nav {{ t.on }}" onClick="{{ t.go }}"><i class="{{ t.icon }}"></i><span>{{ t.label }}</span></button></sc-for>
+<div style="margin-top:auto;padding:0 14px;display:flex;flex-direction:column;gap:2px"><span class="os-k">First exam</span><span class="os-num" style="font-size:22px">{{ daysLeft }}<span style="font-size:12px;color:var(--color-neutral-400)"> days</span></span></div></nav>
+<main class="os-main">
+
+<sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
+<header style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px"><div style="display:flex;flex-direction:column;gap:5px;min-width:0"><span class="os-k" style="color:var(--color-accent-300)">Elijah OS</span><h3 style="margin:0">{{ greeting }}, Elijah</h3><span class="os-num" style="font-size:13px;color:var(--color-neutral-400)">{{ dateStr }}</span></div>
+<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex:none"><span class="os-k">Exam in</span><span class="os-num" style="font-size:20px">{{ daysLeft }}<span style="font-size:12px;color:var(--color-neutral-400)">d</span></span></div></header>
+<sc-if value="{{ low }}" hint-placeholder-val="{{ false }}"><div class="os-amber"><i class="ph ph-warning" style="font-size:20px"></i><div><strong style="font-weight:500">Adjust today</strong><br>{{ lowText }}</div></div></sc-if>
+<div class="os-grid g3">
+<div class="os-col">
+<section class="os-card os-hero"><div style="display:flex;justify-content:space-between;align-items:center"><span class="os-k">Session · {{ dayName }}</span><span class="os-pill {{ load }}">{{ load }} load</span></div>
+<div style="font-size:21px;font-weight:500;line-height:1.2;letter-spacing:-0.01em;text-wrap:pretty">{{ sessTitle }}</div>
+<div style="display:flex;align-items:center;gap:8px"><i class="ph ph-clock" style="font-size:18px;color:var(--color-accent)"></i><span class="os-num" style="font-size:15px;color:var(--color-accent-300)">{{ sessMain }}</span></div>
+<div class="os-num" style="white-space:normal;font-size:12px;line-height:1.5;color:var(--color-neutral-400)">{{ sessSub }}</div>
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;padding-top:4px"><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="os-day {{ d.on }}" onClick="{{ d.pick }}"><span>{{ d.k }}</span><span class="os-pill {{ d.load }}" style="padding:1px 6px;font-size:10px">{{ d.l }}</span></button></sc-for></div></section>
+<div style="display:flex;align-items:center;gap:18px;padding:6px 4px"><div style="position:relative;width:108px;height:108px;flex:none"><svg width="108" height="108" viewBox="0 0 104 104" style="filter:drop-shadow(0 0 6px color-mix(in srgb,var(--color-accent) 45%,transparent))"><circle cx="52" cy="52" r="46" style="fill:none;stroke:var(--color-neutral-800);stroke-width:5"></circle><circle cx="52" cy="52" r="46" transform="rotate(-90 52 52)" style="fill:none;stroke:var(--color-accent);stroke-width:5;stroke-linecap:round;stroke-dasharray:289;stroke-dashoffset:{{ ringOff }};transition:stroke-dashoffset .35s"></circle></svg><span style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px"><span class="os-num" style="font-size:27px;line-height:1">{{ pct }}%</span><span class="os-k" style="font-size:10px">{{ doneCount }} of 4</span></span></div>
+<div style="display:flex;flex-direction:column;gap:6px;min-width:0"><span class="os-k">Today's mission</span><div style="font-size:16px;line-height:1.45;text-wrap:pretty">{{ mission }}</div></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><sc-for list="{{ checks }}" as="c" hint-placeholder-count="4"><button class="os-row os-tile {{ c.on }}" onClick="{{ c.toggle }}"><span class="os-box"><i class="ph ph-check"></i></span><span class="os-lbl">{{ c.label }}</span></button></sc-for></div>
+</div>
+<div class="os-col">
+<sc-if value="{{ rOpen }}" hint-placeholder-val="{{ true }}"><section class="os-card"><span class="os-k">Morning readiness</span>
+<sc-for list="{{ sliders }}" as="s" hint-placeholder-count="3"><label class="os-slide"><span>{{ s.label }}</span><input type="range" min="1" max="5" step="1" value="{{ s.val }}" onChange="{{ s.set }}"><span class="os-num" style="text-align:right;color:var(--color-accent-300)">{{ s.val }}</span></label></sc-for>
+<button class="btn btn-primary os-btn" onClick="{{ doneCheckin }}">Log check-in</button></section></sc-if>
+<sc-if value="{{ rClosed }}" hint-placeholder-val="{{ false }}"><button class="os-chip" onClick="{{ openReady }}"><i class="ph ph-pulse" style="font-size:18px;color:var(--color-accent)"></i><span>Readiness</span><span class="os-num" style="margin-left:auto">{{ chipText }}</span><span style="color:var(--color-accent-300);font-size:13px">Edit</span></button></sc-if>
+<section class="os-card"><div style="display:grid;grid-template-columns:minmax(0,1fr) 56px 56px 44px;gap:6px;align-items:center"><span class="os-k">Workout</span><span class="os-k" style="text-align:right">Sets</span><span class="os-k" style="text-align:right">Reps</span><span></span></div>
+<sc-if value="{{ noWorkout }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:var(--color-neutral-400)">No exercises for this day yet.</span></sc-if>
+<sc-for list="{{ workout }}" as="x" hint-placeholder-count="4"><div style="display:grid;grid-template-columns:minmax(0,1fr) 56px 56px 44px;gap:6px;align-items:center"><input class="input os-bare" style="min-height:44px;min-width:0;font-size:14px" placeholder="Exercise" value="{{ x.name }}" onChange="{{ x.setName }}"><input class="input os-cell" style="width:100%" inputmode="numeric" placeholder="—" value="{{ x.sets }}" onChange="{{ x.setSets }}"><input class="input os-cell" style="width:100%" placeholder="—" value="{{ x.reps }}" onChange="{{ x.setReps }}"><button class="btn btn-ghost btn-icon" style="min-height:44px;min-width:44px" aria-label="Remove exercise" onClick="{{ x.remove }}"><i class="ph ph-x"></i></button></div></sc-for>
+<button class="btn btn-secondary os-btn" onClick="{{ addEx }}"><i class="ph ph-plus"></i>Add exercise</button></section>
+<section class="os-card"><span class="os-k">2-line log</span><input class="input os-in" placeholder="One win" value="{{ win }}" onChange="{{ setWin }}"><input class="input os-in" placeholder="One fix" value="{{ fix }}" onChange="{{ setFix }}"><button class="btn btn-primary os-btn" onClick="{{ saveLog }}">{{ saveLabel }}</button></section>
+</div>
+<div class="os-col os-deskonly"><section class="os-card" style="gap:2px;padding:8px"><span class="os-k" style="padding:8px 10px">This week</span><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="os-drow {{ d.on }}" onClick="{{ d.pick }}"><span class="os-num" style="color:var(--color-neutral-400)">{{ d.k }}</span><span style="line-height:1.3">{{ d.title }}</span><span class="os-pill {{ d.load }}">{{ d.l }}</span></button></sc-for></section></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isWeek }}" hint-placeholder-val="{{ false }}">
+<header style="display:flex;flex-direction:column;gap:5px"><span class="os-k" style="color:var(--color-accent-300)">Week</span><h3 style="margin:0">{{ weekRange }}</h3></header>
+<div class="os-grid g2">
+<div class="os-col">
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px"><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="os-day {{ d.on }}" style="min-height:82px" onClick="{{ d.pick }}"><span>{{ d.k }}</span><span class="os-num" style="font-size:16px;color:var(--color-text)">{{ d.dnum }}</span><span class="os-pill {{ d.load }}" style="padding:1px 6px;font-size:10px">{{ d.l }}</span></button></sc-for></div>
+<section class="os-card os-hero"><div style="display:flex;justify-content:space-between;align-items:center"><span class="os-k">{{ dayName }}</span><span class="os-pill {{ load }}">{{ load }} load</span></div><div style="font-size:21px;font-weight:500;line-height:1.2;text-wrap:pretty">{{ sessTitle }}</div><div style="display:flex;align-items:center;gap:8px"><i class="ph ph-clock" style="font-size:18px;color:var(--color-accent)"></i><span class="os-num" style="font-size:15px;color:var(--color-accent-300)">{{ sessMain }}</span></div><div class="os-num" style="font-size:12px;line-height:1.5;color:var(--color-neutral-400)">{{ sessSub }}</div></section>
+</div>
+<section class="os-card" style="gap:2px;padding:8px"><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button class="os-drow {{ d.on }}" onClick="{{ d.pick }}"><span class="os-num" style="color:var(--color-neutral-400)">{{ d.k }}</span><span style="line-height:1.3">{{ d.title }}</span><span class="os-pill {{ d.load }}">{{ d.load }}</span></button></sc-for></section>
+</div>
+</sc-if>
+
+<sc-if value="{{ isRev }}" hint-placeholder-val="{{ false }}">
+<header style="display:flex;flex-direction:column;gap:5px"><span class="os-k" style="color:var(--color-accent-300)">Revision</span><h3 style="margin:0">Priority order</h3></header>
+<div class="os-grid g2">
+<div class="os-col">
+<section class="os-card os-hero" style="flex-direction:row;align-items:center;justify-content:space-between"><div style="display:flex;flex-direction:column;gap:4px"><span class="os-k">First exam</span><span style="font-size:15px">10 May 2027</span></div><span class="os-num" style="font-size:40px;line-height:1;color:var(--color-accent-300)">{{ daysLeft }}<span style="font-size:13px;color:var(--color-neutral-400)"> days</span></span></section>
+<section class="os-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="os-k">Past-paper scores</span><sc-if value="{{ scoreSample }}" hint-placeholder-val="{{ false }}"><span class="tag tag-neutral">sample</span></sc-if><sc-if value="{{ hasLast }}" hint-placeholder-val="{{ true }}"><span class="os-num" style="font-size:13px;margin-left:auto">latest {{ lastScore }}%</span></sc-if></div>
+<sc-if value="{{ hasScores }}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 300 120" style="width:100%;display:block"><line x1="0" y1="110" x2="300" y2="110" style="stroke:var(--color-neutral-800)"></line><line x1="0" y1="60" x2="300" y2="60" style="stroke:var(--color-neutral-800);stroke-dasharray:3 4"></line><line x1="0" y1="10" x2="300" y2="10" style="stroke:var(--color-neutral-800);stroke-dasharray:3 4"></line><polygon points="{{ areaPts }}" style="fill:color-mix(in srgb,var(--color-accent) 16%,transparent)"></polygon><polyline points="{{ pts }}" style="fill:none;stroke:var(--color-accent);stroke-width:2;stroke-linejoin:round;filter:drop-shadow(0 0 4px var(--color-accent))"></polyline><sc-for list="{{ scores }}" as="p" hint-placeholder-count="6"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="3.5" style="fill:var(--color-bg);stroke:var(--color-accent);stroke-width:2"></circle></sc-for></svg>
+<div style="display:flex"><sc-for list="{{ scores }}" as="p" hint-placeholder-count="6"><span class="os-num" style="font-size:11px;color:var(--color-neutral-400);flex:1;text-align:center">{{ p.s }}</span></sc-for></div></sc-if>
+<sc-if value="{{ noScores }}" hint-placeholder-val="{{ false }}"><div style="padding:28px 0;font-size:14px;color:var(--color-neutral-400)">Add your first past-paper score to start the trend line.</div></sc-if>
+<div style="display:flex;gap:8px"><input class="input os-in os-num" style="flex:1;min-width:0" inputmode="numeric" placeholder="Score %" value="{{ scoreDraft }}" onChange="{{ setScoreDraft }}"><button class="btn btn-primary os-btn" onClick="{{ addScore }}">Add score</button><button class="btn btn-secondary os-btn" onClick="{{ undoScore }}">Undo</button></div></section>
+</div>
+<div class="os-col"><div style="display:flex;align-items:center;gap:8px"><span class="os-k">Minutes this week</span><sc-if value="{{ minSample }}" hint-placeholder-val="{{ false }}"><span class="tag tag-neutral">sample</span></sc-if></div>
+<sc-for list="{{ subjects }}" as="s" hint-placeholder-count="5"><section class="os-card" style="display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px 14px"><div style="display:flex;flex-direction:column;gap:8px;min-width:0"><div style="display:flex;align-items:baseline;gap:10px"><span class="os-num" style="font-size:12px;color:var(--color-accent-300)">{{ s.rank }}</span><span style="font-size:15px;font-weight:500">{{ s.name }}</span><span class="os-num" style="margin-left:auto;font-size:12px;color:var(--color-neutral-400)">{{ s.done }} / {{ s.goal }}</span></div><div style="height:6px;border-radius:3px;background:var(--color-neutral-800);overflow:hidden"><div style="height:100%;border-radius:3px;background:var(--color-accent);box-shadow:0 0 8px var(--color-accent);transition:width .3s;width:{{ s.pct }}%"></div></div></div><button class="btn btn-secondary os-btn os-num" onClick="{{ s.add }}">+15</button></section></sc-for></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isProg }}" hint-placeholder-val="{{ false }}">
+<header style="display:flex;flex-direction:column;gap:5px"><span class="os-k" style="color:var(--color-accent-300)">Progress</span><h3 style="margin:0">Benchmarks</h3></header>
+<div class="os-grid g2">
+<section class="os-card" style="padding:12px 8px"><table class="table" style="font-size:13px"><thead><tr><th>Benchmark</th><th style="text-align:right">Base</th><th style="text-align:right">Latest</th><th style="text-align:right">Target</th></tr></thead><tbody><sc-for list="{{ bench }}" as="b" hint-placeholder-count="9"><tr><td style="padding:3px 2px"><input class="input os-bare" style="min-height:44px;font-size:13px" placeholder="Name" value="{{ b.name }}" onChange="{{ b.setName }}"></td><td style="padding:3px 2px"><input class="input os-cell" placeholder="—" value="{{ b.base }}" onChange="{{ b.setBase }}"></td><td style="padding:3px 2px"><input class="input os-cell" style="color:var(--color-accent-300)" placeholder="—" value="{{ b.latest }}" onChange="{{ b.setLatest }}"></td><td style="padding:3px 2px"><input class="input os-cell" placeholder="—" value="{{ b.target }}" onChange="{{ b.setTarget }}"></td></tr></sc-for></tbody></table>
+<button class="btn btn-secondary os-btn" style="margin:4px 6px" onClick="{{ addBench }}"><i class="ph ph-plus"></i>Add benchmark</button></section>
+<section class="os-card os-hero"><span class="os-k">Skill of the month</span><input class="input os-in" style="font-size:17px" placeholder="Name this month's skill" value="{{ skillName }}" onChange="{{ setSkillName }}">
+<sc-for list="{{ ladder }}" as="l" hint-placeholder-count="5"><div style="display:flex;align-items:center;gap:10px"><button class="os-step {{ l.on }}" onClick="{{ l.pick }}">{{ l.n }}</button><input class="input os-in" style="flex:1;min-width:0" placeholder="{{ l.ph }}" value="{{ l.text }}" onChange="{{ l.setText }}"><span class="os-num" style="font-size:11px;width:52px;color:var(--color-accent-300)">{{ l.tag }}</span></div></sc-for>
+<span style="font-size:12px;color:var(--color-neutral-400)">Tap a number to mark your current step.</span></section>
+</div>
+</sc-if>
+
+<sc-if value="{{ isLog }}" hint-placeholder-val="{{ false }}">
+<header style="display:flex;flex-direction:column;gap:5px"><span class="os-k" style="color:var(--color-accent-300)">Log</span><h3 style="margin:0">{{ dayName }}</h3></header>
+<div class="os-grid g3">
+<section class="os-card os-hero"><span class="os-k">Quick entry</span>
+<button class="os-row {{ doneOn }}" onClick="{{ toggleDone }}"><span class="os-box"><i class="ph ph-check"></i></span><span>Session done</span></button>
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:14px">RPE</span><span class="os-num" style="font-size:13px;color:var(--color-neutral-400)">{{ rpeText }}</span></div>
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px"><sc-for list="{{ rpes }}" as="r" hint-placeholder-count="10"><button class="os-rpe {{ r.on }}" onClick="{{ r.pick }}">{{ r.n }}</button></sc-for></div>
+<div class="field"><label>One win</label><input class="input os-in" value="{{ win }}" onChange="{{ setWin }}"></div>
+<div class="field"><label>One fix</label><input class="input os-in" value="{{ fix }}" onChange="{{ setFix }}"></div>
+<button class="btn btn-primary os-btn" onClick="{{ saveLog }}">{{ saveLabel }}</button></section>
+<div class="os-col">
+<section class="os-card"><div style="display:flex;justify-content:space-between;align-items:center"><span class="os-k">Sunday review</span><span class="tag tag-outline">Sundays</span></div>
+<sc-for list="{{ reviewQs }}" as="q" hint-placeholder-count="3"><div class="field"><label>{{ q.label }}</label><input class="input os-in" value="{{ q.val }}" onChange="{{ q.set }}"></div></sc-for></section>
+<section class="os-card"><div style="display:flex;justify-content:space-between;align-items:center"><span class="os-k">Month-end review</span><span class="os-num" style="font-size:12px;color:var(--color-neutral-400)">opens {{ monthEnd }}</span></div><div style="font-size:14px;line-height:1.5;color:var(--color-neutral-200)">Re-test benchmarks, review the past-paper trend, pick next month's skill.</div><button class="btn btn-secondary os-btn" disabled>Start review</button></section>
+</div>
+<section class="os-card"><span class="os-k">Recent entries</span>
+<sc-if value="{{ noRecent }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;color:var(--color-neutral-400)">Saved entries appear here.</span></sc-if>
+<sc-for list="{{ recent }}" as="e" hint-placeholder-count="0"><div style="display:flex;flex-direction:column;gap:3px;padding:6px 0;font-size:14px;line-height:1.4"><div style="display:flex;justify-content:space-between"><span class="os-num" style="font-size:12px;color:var(--color-neutral-400)">{{ e.date }}</span><span class="os-num" style="font-size:12px;color:var(--color-accent-300)">{{ e.rpe }}</span></div><span><span style="color:var(--color-neutral-400)">Win</span> · {{ e.win }}</span><span><span style="color:var(--color-neutral-400)">Fix</span> · {{ e.fix }}</span></div></sc-for></section>
+</div>
+</sc-if>
+
+<sc-if value="{{ isLog }}" hint-placeholder-val="{{ false }}"><section class="os-card" style="flex-direction:row;align-items:center;gap:12px"><i class="ph ph-cloud-check" style="font-size:24px;color:var(--color-accent);flex:none"></i><div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:14px">Synced</span><span class="os-num" style="font-size:12px;color:var(--color-neutral-400);overflow:hidden;text-overflow:ellipsis">{{ emailShown }}</span></div><button class="btn btn-secondary os-btn" style="margin-left:auto;flex:none" onClick="{{ signOut }}">Sign out</button></section></sc-if>
+</main>
+<nav class="os-dock"><sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5"><button class="os-nav {{ t.on }}" onClick="{{ t.go }}"><i class="{{ t.icon }}"></i><span>{{ t.label }}</span></button></sc-for></nav>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Auto&quot;,&quot;Phone&quot;,&quot;Desktop&quot;],&quot;default&quot;:&quot;Auto&quot;,&quot;tsType&quot;:&quot;'Auto'|'Phone'|'Desktop'&quot;},&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;App&quot;,&quot;Sign in&quot;,&quot;Check email&quot;],&quot;default&quot;:&quot;App&quot;,&quot;tsType&quot;:&quot;'App'|'Sign in'|'Check email'&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Nocturne&quot;,&quot;Cyan&quot;],&quot;default&quot;:&quot;Nocturne&quot;,&quot;tsType&quot;:&quot;'Nocturne'|'Cyan'&quot;},&quot;sampleData&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const B = ['10m sprint', '20m sprint', 'Wall passes / 60s (L)', 'Wall passes / 60s (R)', 'Weak-foot finishes / 10', 'Pull-ups', 'Dips', 'Hollow hold', 'Handstand hold'];
+    const base = {
+      tab: 'today', day: (new Date().getDay() + 6) % 7, w: window.innerWidth, savedFor: '', scoreDraft: '', authStep: null, email: '', emailErr: false, resent: false,
+      daily: {}, logs: {}, mins: [0, 0, 0, 0, 0], scores: [],
+      bench: B.map(name => ({ name, base: name === 'Pull-ups' ? '12' : '', latest: '', target: '' })),
+      skill: { name: '', steps: ['', '', '', '', ''], cur: 0 }, review: ['', '', ''],
+      workouts: { 0: ['Pull-ups', 'Dips', 'Hollow hold', 'Handstand hold'].map(name => ({ name, sets: '', reps: '' })) }
+    };
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem('elijahos.v1')) || {}; } catch (e) {}
+    this.state = Object.assign(base, saved);
+    this.onResize = () => this.setState({ w: window.innerWidth });
+  }
+  componentDidMount() { window.addEventListener('resize', this.onResize); this.theme(); }
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); }
+  componentDidUpdate(prevProps) {
+    this.theme();
+    if (prevProps.screen !== this.props.screen && this.state.authStep) this.setState({ authStep: null });
+    const s = this.state;
+    try { localStorage.setItem('elijahos.v1', JSON.stringify({ daily: s.daily, logs: s.logs, mins: s.mins, scores: s.scores, bench: s.bench, skill: s.skill, review: s.review, workouts: s.workouts })); } catch (e) {}
+  }
+  theme() {
+    const b = document.body, cyan = (this.props.accent ?? 'Nocturne') === 'Cyan';
+    b.style.setProperty('--color-accent', cyan ? 'oklch(0.8 0.125 205)' : '#9184d9');
+    b.style.setProperty('--color-accent-300', cyan ? 'oklch(0.88 0.09 205)' : '#d2cefd');
+  }
+  renderVals() {
+    const st = this.state, now = new Date();
+    const SCH = 'Leave 08:20 · school 08:50–15:25';
+    const D = [
+      ['Mon', 'Recovery, upper-body calisthenics, Maths revision', 'Low', 'After school · Maths 60 min', SCH, 'Recover well. Upper body, then one hour of Maths.'],
+      ['Tue', 'Astro: skill sequences', 'Medium', '15:45–16:45', SCH, 'Clean touches at speed. Repeat each sequence until it is automatic.'],
+      ['Wed', 'Academy training', 'High', '18:15 · leave 18:00', SCH, 'Bring full focus to academy. Win your first action.'],
+      ['Thu', 'Academy training', 'High', '18:15 · leave 18:00', SCH, 'Second academy night. Quality over volume.'],
+      ['Fri', 'Astro: speed and match-speed reps', 'Medium', '15:45–16:45', SCH, 'Short, sharp speed reps. Stop while you are still fast.'],
+      ['Sat', 'Past paper, then rest', 'Low', 'Morning', 'Rest in the afternoon', 'Past paper under timed conditions, then switch off.'],
+      ['Sun', 'Match', 'High', 'Match day', '', 'Match day. Play simple, play fast.']
+    ];
+    const full = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+    const dt = i => { const x = new Date(mon); x.setDate(mon.getDate() + i); return x; };
+    const fmt = (x, o) => x.toLocaleDateString('en-GB', o);
+    const iso = x => x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0');
+    const dk = iso(dt(st.day));
+    const day = st.daily[dk] || { r: [3, 3, 3], open: true, chk: [false, false, false, false] };
+    const setDay = patch => this.setState({ daily: Object.assign({}, st.daily, { [dk]: Object.assign({}, day, patch) }) });
+    const log = st.logs[dk] || { done: false, rpe: 0, win: '', fix: '' };
+    const setLog = patch => this.setState({ logs: Object.assign({}, st.logs, { [dk]: Object.assign({}, log, patch) }), savedFor: '' });
+    const view = this.props.view ?? 'Auto';
+    const desk = view === 'Desktop' || (view === 'Auto' && st.w >= 900);
+    const sample = this.props.sampleData ?? true;
+    const scr = st.authStep || ({ 'Sign in': 'signin', 'Check email': 'sent' })[this.props.screen ?? 'App'] || 'app';
+    const cur = D[st.day];
+    const labels = ['Sleep', 'Energy', 'Leg freshness'];
+    const lows = labels.filter((_, i) => day.r[i] <= 2);
+    const n = day.chk.filter(Boolean).length;
+    const T = [['today', 'Today', 'ph ph-house'], ['week', 'Week', 'ph ph-calendar-blank'], ['rev', 'Revision', 'ph ph-book-open'], ['prog', 'Progress', 'ph ph-chart-line-up'], ['log', 'Log', 'ph ph-note-pencil']];
+    const scoreSample = sample && st.scores.length === 0;
+    const raw = (scoreSample ? [52, 58, 55, 64, 61, 70] : st.scores).slice(-8);
+    const scores = raw.map((s, i) => ({ s, x: raw.length === 1 ? 150 : 20 + i * (260 / (raw.length - 1)), y: 110 - s }));
+    const pts = scores.map(p => p.x + ',' + p.y).join(' ');
+    const S = [['Maths', 150], ['Physics', 120], ['English', 90], ['Biology / Chemistry', 90], ['Spanish / PE', 60]];
+    const minSample = sample && st.mins.every(m => m === 0);
+    const mins = minSample ? [120, 90, 60, 45, 20] : st.mins;
+    const setBench = (i, f) => e => { const bench = st.bench.slice(); bench[i] = Object.assign({}, bench[i], { [f]: e.target.value }); this.setState({ bench }); };
+    const h = now.getHours();
+    const wk = st.workouts[st.day] || [];
+    const setWk = list => this.setState({ workouts: Object.assign({}, st.workouts, { [st.day]: list }) });
+    const setEx = (i, f) => e => { const list = wk.slice(); list[i] = Object.assign({}, list[i], { [f]: e.target.value }); setWk(list); };
+    const recent = Object.keys(st.logs).sort().reverse().filter(k => st.logs[k].win || st.logs[k].fix).slice(0, 4).map(k => ({ date: fmt(new Date(k + 'T12:00'), { weekday: 'short', day: 'numeric', month: 'short' }), rpe: st.logs[k].rpe ? 'RPE ' + st.logs[k].rpe : '', win: st.logs[k].win || '—', fix: st.logs[k].fix || '—' }));
+    const Q = ['What went well this week?', 'What held me back?', 'One focus for next week'];
+    return {
+      mode: desk ? 'desk' : 'phone',
+      isApp: scr === 'app', isSignin: scr === 'signin', isSent: scr === 'sent',
+      email: st.email, emailShown: st.email || 'you@example.com', emailErr: st.emailErr,
+      setEmail: e => this.setState({ email: e.target.value, emailErr: false }),
+      sendLink: e => { e.preventDefault(); const ok = /^\S+@\S+\.\S+$/.test(st.email); this.setState(ok ? { authStep: 'sent', emailErr: false, resent: false } : { emailErr: true }); },
+      resend: () => this.setState({ resent: true }), resendLabel: st.resent ? 'Link sent again' : 'Resend link',
+      otherEmail: () => this.setState({ authStep: 'signin' }), skipAuth: () => this.setState({ authStep: 'app' }),
+      signOut: () => { this.setState({ authStep: 'signin' }); window.scrollTo(0, 0); },
+      tabs: T.map(t => ({ label: t[1], icon: t[2], on: st.tab === t[0] ? 'on' : '', go: () => { this.setState({ tab: t[0] }); window.scrollTo(0, 0); } })),
+      isToday: st.tab === 'today', isWeek: st.tab === 'week', isRev: st.tab === 'rev', isProg: st.tab === 'prog', isLog: st.tab === 'log',
+      days: D.map((d, i) => ({ k: d[0], title: d[1], load: d[2], l: d[2][0], dnum: dt(i).getDate(), on: i === st.day ? 'on' : '', pick: () => this.setState({ day: i }) })),
+      greeting: h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening',
+      dateStr: fmt(dt(st.day), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }),
+      weekRange: fmt(dt(0), { day: 'numeric', month: 'short' }) + ' – ' + fmt(dt(6), { day: 'numeric', month: 'short' }),
+      dayName: full[st.day], sessTitle: cur[1], load: cur[2], sessMain: cur[3], sessSub: cur[4], mission: cur[5],
+      daysLeft: Math.max(0, Math.ceil((new Date(2027, 4, 10) - now) / 864e5)),
+      sliders: labels.map((label, i) => ({ label, val: day.r[i], set: e => { const r = day.r.slice(); r[i] = +e.target.value; setDay({ r }); } })),
+      low: lows.length > 0, lowText: lows.join(' and ') + (lows.length > 1 ? ' are' : ' is') + ' low. Drop the session one load level or shorten it.',
+      rOpen: day.open, rClosed: !day.open, chipText: day.r.join(' · '),
+      doneCheckin: () => { const chk = day.chk.slice(); chk[0] = true; setDay({ chk, open: false }); },
+      openReady: () => setDay({ open: true }),
+      checks: ['Morning check-in', 'Revision block', 'Football / physical session', '2-line log'].map((label, i) => ({ label, on: day.chk[i] ? 'on' : '', toggle: () => { const chk = day.chk.slice(); chk[i] = !chk[i]; setDay(i === 0 ? { chk, open: !chk[0] } : { chk }); } })),
+      doneCount: n, pct: n * 25, ringOff: 289 * (1 - n / 4),
+      win: log.win, fix: log.fix, setWin: e => setLog({ win: e.target.value }), setFix: e => setLog({ fix: e.target.value }),
+      doneOn: log.done ? 'on' : '', toggleDone: () => setLog({ done: !log.done }),
+      rpes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => ({ n: i, on: log.rpe === i ? 'on' : '', pick: () => setLog({ rpe: i }) })),
+      rpeText: log.rpe ? log.rpe + ' / 10' : 'tap 1–10',
+      saveLog: () => { const chk = day.chk.slice(); chk[3] = true; if (log.done) chk[2] = true; this.setState({ daily: Object.assign({}, st.daily, { [dk]: Object.assign({}, day, { chk }) }), logs: Object.assign({}, st.logs, { [dk]: log }), savedFor: dk }); },
+      saveLabel: st.savedFor === dk ? 'Saved' : 'Save entry',
+      scores, pts, areaPts: scores.length ? scores[0].x + ',110 ' + pts + ' ' + scores[scores.length - 1].x + ',110' : '',
+      hasScores: scores.length > 0, noScores: scores.length === 0, scoreSample, hasLast: scores.length > 0, lastScore: raw[raw.length - 1],
+      scoreDraft: st.scoreDraft, setScoreDraft: e => this.setState({ scoreDraft: e.target.value }),
+      addScore: () => { const v = Math.round(parseFloat(st.scoreDraft)); if (!(v >= 0 && v <= 100)) return; this.setState({ scores: st.scores.concat(v), scoreDraft: '' }); },
+      undoScore: () => this.setState({ scores: st.scores.slice(0, -1) }),
+      minSample,
+      subjects: S.map((s, i) => ({ rank: '0' + (i + 1), name: s[0], done: mins[i], goal: s[1] + ' min', pct: Math.min(100, Math.round(mins[i] / s[1] * 100)), add: () => { const m = st.mins.slice(); m[i] += 15; this.setState({ mins: m }); } })),
+      bench: st.bench.map((b, i) => ({ name: b.name, base: b.base, latest: b.latest, target: b.target, setName: setBench(i, 'name'), setBase: setBench(i, 'base'), setLatest: setBench(i, 'latest'), setTarget: setBench(i, 'target') })),
+      addBench: () => this.setState({ bench: st.bench.concat({ name: '', base: '', latest: '', target: '' }) }),
+      skillName: st.skill.name, setSkillName: e => this.setState({ skill: Object.assign({}, st.skill, { name: e.target.value }) }),
+      ladder: st.skill.steps.map((text, i) => ({ n: i + 1, text, ph: 'Step ' + (i + 1), on: i === st.skill.cur ? 'on' : i < st.skill.cur ? 'done' : '', tag: i === st.skill.cur ? 'current' : i < st.skill.cur ? 'done' : '', pick: () => this.setState({ skill: Object.assign({}, st.skill, { cur: i }) }), setText: e => { const steps = st.skill.steps.slice(); steps[i] = e.target.value; this.setState({ skill: Object.assign({}, st.skill, { steps }) }); } })),
+      reviewQs: Q.map((label, i) => ({ label, val: st.review[i], set: e => { const review = st.review.slice(); review[i] = e.target.value; this.setState({ review }); } })),
+      monthEnd: fmt(new Date(now.getFullYear(), now.getMonth() + 1, 0), { day: 'numeric', month: 'short' }),
+      workout: wk.map((x, i) => ({ name: x.name, sets: x.sets, reps: x.reps, setName: setEx(i, 'name'), setSets: setEx(i, 'sets'), setReps: setEx(i, 'reps'), remove: () => setWk(wk.filter((_, j) => j !== i)) })),
+      noWorkout: wk.length === 0, addEx: () => setWk(wk.concat({ name: '', sets: '', reps: '' })),
+      recent, noRecent: recent.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>
