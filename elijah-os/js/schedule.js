@@ -8,6 +8,13 @@ window.ELIJAH_DATA = {
   // First exam: year, month (1-12), day
   firstExam: { year: 2027, month: 5, day: 10, label: '10 May 2027' },
 
+  // Side hustles: starting projects. After the first load they live in the app (Side hustles screen),
+  // where you can rename, pause, add or remove them. The `hustle` slots in the week use the main project.
+  sideHustles: [
+    { id: 'shorts', name: 'YouTube Shorts', about: 'Reddit stories with AI voiceovers', perWeek: 3, ideasLabel: 'Story ideas',
+      steps: ['Pick a story', 'Trim the script, write the hook', 'AI voiceover', 'Background gameplay + captions', 'Title, hashtags, upload'] }
+  ],
+
   // Every day: these session cards are added to each day (same format as `sessions` in a day row).
   daily: [['flashcards', '07:45'], ['evening', '21:15']],
 
@@ -23,7 +30,7 @@ window.ELIJAH_DATA = {
     { day: 'Tue', title: 'Astro skills + lower body', load: 'Medium',
       time: '15:45 · Physics 75 min', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Skill sequences at 75% pace, light legs, then 75 minutes of Physics.',
-      sessions: [['astro-skill', '15:45'], ['lower-body', '17:00'], ['rev-physics', '18:00'], ['wall', '19:20'], ['shorts', '19:45']] },
+      sessions: [['astro-skill', '15:45'], ['lower-body', '17:00'], ['rev-physics', '18:00'], ['wall', '19:20'], ['hustle', '19:45']] },
     { day: 'Wed', title: 'Academy training', load: 'High',
       time: '18:15 · leave 18:00', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Pick one cue and bring it to academy.',
@@ -35,7 +42,7 @@ window.ELIJAH_DATA = {
     { day: 'Fri', title: 'Astro speed + match reps', load: 'Medium-High',
       time: '15:45–16:30 · revision 60 min', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Short, sharp speed reps. Stop after 2 slow reps.',
-      sessions: [['astro-speed', '15:45'], ['rev-chem-maths', '17:30'], ['shorts', '18:45']] },
+      sessions: [['astro-speed', '15:45'], ['rev-chem-maths', '17:30'], ['hustle', '18:45']] },
     { day: 'Sat', title: 'Past paper + rest', load: 'Low',
       time: 'Morning · 2–3 hr paper', sub: 'Rest in the afternoon',
       mission: 'Timed past paper, mark it properly, then rest.',
@@ -43,11 +50,11 @@ window.ELIJAH_DATA = {
     { day: 'Sun', title: 'Match day', load: 'High',
       time: 'Match day · no revision', sub: '',
       mission: 'Match day. Play simple, play fast.',
-      sessions: ['match', ['shorts', '18:00']] }
+      sessions: ['match', ['hustle', '18:00']] }
   ],
 
   // Session cards. Each one shows on Today and Week for the days that list it.
-  //   kind: 'gym' | 'football' | 'recovery' | 'revision' | 'paper' | 'mental' | 'routine' | 'creator'
+  //   kind: 'gym' | 'football' | 'recovery' | 'revision' | 'paper' | 'mental' | 'routine' | 'hustle'
   //   items: one row each. sets = how many ticks the row has (leave it out for a single tick).
   //   fixed: true = the planner never moves or drops it (academy, match).
   //   onClash: 'skip' = if an event clashes, skip it instead of moving it (clashNote says why).
@@ -141,16 +148,10 @@ window.ELIJAH_DATA = {
         { name: 'Second half: weak foot only' }
       ]
     },
-    'shorts': {
-      kind: 'creator', title: 'YouTube Short', minutes: 30,
-      focus: 'One Reddit story Short, start to finish in 30 minutes. Hook in the first 2 seconds.',
-      items: [
-        { name: 'Pick a story', reps: 'Reddit, under ~60s read' },
-        { name: 'Trim the script, write the hook' },
-        { name: 'AI voiceover' },
-        { name: 'Background gameplay + captions' },
-        { name: 'Title, hashtags, upload' }
-      ]
+    'hustle': {
+      kind: 'hustle', title: 'Side hustle', minutes: 30,
+      focus: 'Thirty focused minutes on your main side hustle.',
+      items: []   // the steps come from the project (Side hustles screen)
     },
     'visualise': {
       kind: 'mental', title: 'Visualisation', minutes: 5,
@@ -195,6 +196,7 @@ window.ELIJAH_DATA = {
     },
     'rev-maths': {
       kind: 'revision', subject: 0, title: 'Maths revision', minutes: 75, topics: 2,
+      onClash: 'skip', clashNote: 'Maths stays at its time; dropped today because of a clash',
       focus: 'Two weak topics, then exam questions on them.',
       items: [{ name: '10 exam questions on today’s topics' }]
     },

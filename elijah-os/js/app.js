@@ -15,7 +15,8 @@
     ['week', 'Week', 'calendar-blank'],
     ['rev', 'Revision', 'book-open'],
     ['prog', 'Progress', 'chart-line-up'],
-    ['log', 'Log', 'note-pencil']
+    ['log', 'Log', 'note-pencil'],
+    ['hustle', 'Side hustles', 'rocket-launch']
   ];
   const CHECKS = ['Morning check-in', 'Revision block', 'Football / physical session', '2-line log'];
   const LABELS = ['Sleep', 'Energy', 'Leg freshness'];
@@ -35,6 +36,8 @@
     subj: -1,         // subject whose topic list is open on Revision
     topicDraft: '',
     newVersion: false,
+    ideaDraft: {},    // per project
+    hOpen: null,      // open project on Side hustles (null = the first)
     menu: false,
     week: 0,          // 0 = this week, -1 = last week, 1 = next week ...
     showPlanned: false,
@@ -50,7 +53,7 @@
   const KIND = {
     gym: ['Workout', 'barbell'], football: ['Pitch', 'soccer-ball'], recovery: ['Recovery', 'heartbeat'],
     revision: ['Revision', 'book-open-text'], paper: ['Past paper', 'exam'],
-    mental: ['Mindset', 'brain'], routine: ['Routine', 'moon-stars'], creator: ['Shorts', 'youtube-logo']
+    mental: ['Mindset', 'brain'], routine: ['Routine', 'moon-stars'], hustle: ['Side hustle', 'rocket-launch']
   };
   const CONF = ['Not rated', 'Red', 'Amber', 'Green'];
   const CONF_CLS = ['', 'red', 'amber', 'green'];
@@ -81,7 +84,7 @@
   const eventsOn = k => (st().events || []).filter(e => e.date === k).sort((a, b) => (a.start || '').localeCompare(b.start || ''));
   const replacingEvent = k => eventsOn(k).find(e => e.replace);
   // The day's real plan after events (see planner.js), and the cards to show.
-  const planFor = d => Planner.planDay(DATA, iso(dt(d)), eventsOn);
+  const planFor = d => Planner.planDay(DATA, iso(dt(d)), eventsOn, false, planOpts);
   const shownItems = d => planFor(d).items.filter(Planner.shown);
   const sid = key => key.split('@')[0];
   // What a day effectively looks like once events are applied.
@@ -264,11 +267,11 @@
     const sess = st().sess[k] || {};
     const add = (key, at, lead, title, body) => out.push({ key, at, remindAt: Cal.addMin(at, -lead + 24 * 60), title, body });
     if (!daily.chk[0]) add('checkin', '07:30', 0, 'Morning check-in', 'Sleep, energy, legs: 1 to 5.');
-    Planner.planDay(DATA, k, eventsOn).items.filter(Planner.shown).forEach(r => {
+    Planner.planDay(DATA, k, eventsOn, false, planOpts).items.filter(Planner.shown).forEach(r => {
       const c = DATA.sessions[r.id];
       if (!c || !r.at || c.optional || (sess[r.key] && sess[r.key].done)) return;
       const lead = c.remind != null ? c.remind : cfg.lead;
-      add('s-' + r.key + '-' + r.at, r.at, lead, c.title, (lead ? 'Starts at ' + r.at + '. ' : '') + (r.status !== 'ok' && r.note ? r.note + '. ' : '') + (c.focus || ''));
+      add('s-' + r.key + '-' + r.at, r.at, lead, c.kind === 'hustle' && mainHustle() ? mainHustle().name : c.title, (lead ? 'Starts at ' + r.at + '. ' : '') + (r.status !== 'ok' && r.note ? r.note + '. ' : '') + (c.focus || ''));
     });
     eventsOn(k).forEach(e => { if (e.start) add('e-' + e.id, e.start, Math.max(30, cfg.lead), e.title, 'Starts at ' + e.start + (e.note ? '. ' + e.note : '')); });
     if (!daily.chk[3]) add('log', '21:00', 0, '2-line log', 'One win, one fix.');
@@ -329,10 +332,15 @@
         rows.push({ key: 't:' + t.name, name: t.name, sets: 1, detail: CONF[t.conf || 0], conf: t.conf || 0 }));
       if (!ts.length) rows.push({ key: 'none', name: 'Add topics on the Revision screen', sets: 0, detail: '' });
     }
-    (c.items || []).forEach((x, i) => rows.push({
-      key: 'i' + i, name: x.name, sets: x.sets || 1,
-      detail: [x.sets ? x.sets + ' × ' + (x.reps || '') : x.reps, x.rest ? 'rest ' + x.rest : ''].filter(Boolean).join(' · ')
-    }));
+    (c.items || []).forEach((x, i) => {
+      let detail = [x.sets ? x.sets + ' × ' + (x.reps || '') : x.reps, x.rest ? 'rest ' + x.rest : ''].filter(Boolean).join(' · ');
+      rows.push({ key: 'i' + i, name: x.name, sets: x.sets || 1, detail });
+    });
+    if (c.kind === 'hustle') {
+      const h = mainHustle(), idea = ideaFor(id);
+      (h ? h.steps || [] : []).forEach((t, i) => rows.push({ key: 'h' + i, name: t, sets: 1,
+        detail: i === 0 ? (idea ? 'Next idea: ' + idea.text : 'No ideas saved yet: add some in Side hustles') : '' }));
+    }
     return rows;
   }
   function cardProgress(id) {
@@ -373,7 +381,7 @@
       <button class="os-scard-head" data-act="card" data-v="${esc(id)}" aria-expanded="${open}">
         <span class="os-scard-ic">${icon(e.done ? 'check' : k[1])}</span>
         <span class="os-scard-t"><span class="os-k">${c.optional ? 'Optional · ' : ''}${esc(k[0])}${sub ? ' · ' + esc(sub.name) : ''} · <span class="os-num">${it.min} min</span></span>
-          <span class="os-scard-title">${esc(c.title)}</span>
+          <span class="os-scard-title">${esc(c.kind === 'hustle' && mainHustle() ? mainHustle().name : c.title)}</span>
           ${it.status !== 'ok' && it.note ? `<span class="os-scard-note">${icon(skipped ? 'prohibit' : 'arrows-clockwise')} ${esc(it.note)}</span>` : ''}</span>
         <span class="os-num os-scard-pct">${it.at ? `<span class="${it.status === 'ok' ? 'os-muted' : 'camber'}">${esc(it.at)}</span><br>` : ''}${e.done ? 'Done' : p.got + '/' + p.total}</span>
         ${icon(open ? 'caret-up' : 'caret-down')}
@@ -415,6 +423,18 @@
         else { const was = e.subj != null ? e.subj : sj; s.mins[was] = Math.max(0, s.mins[was] - (e.added || 0)); e.added = 0; }
       }
       all[id] = e;
+      if (c.kind === 'hustle') {
+        const ukey = k + '|' + id, h = on ? s.hustles.find(x => !x.paused) : s.hustles.find(x => x.log.some(u => u.key === ukey));
+        if (h && on) {
+          const idea = h.ideas.find(x => !x.used);
+          if (idea) idea.used = k;
+          h.log = h.log.filter(u => u.key !== ukey).concat({ key: ukey, date: k, idea: idea ? idea.text : '', ideaId: idea ? idea.id : '' });
+        } else if (h) {
+          const u = h.log.find(x => x.key === ukey);
+          if (u && u.ideaId) { const idea = h.ideas.find(x => x.id === u.ideaId); if (idea) idea.used = false; }
+          h.log = h.log.filter(x => x.key !== ukey);
+        }
+      }
       const ci = checkFor(c);
       if (on && ci >= 0) { const chk = day.chk.slice(); chk[ci] = true; s.daily[k] = Object.assign({}, day, { chk }); }
     });
@@ -442,6 +462,95 @@
   function updateBar() {
     return ui.newVersion ? `<div class="os-updbar" role="status">${icon('arrow-clockwise')}<span>A new version of Elijah OS is ready.</span>
       <button class="btn btn-primary" data-act="reload">Reload</button></div>` : '';
+  }
+
+  // ---------- side hustles ----------
+  const hustles = () => st().hustles || [];
+  const mainHustle = () => hustles().find(h => !h.paused) || null;
+  const planOpts = { hide: id => DATA.sessions[id] && DATA.sessions[id].kind === 'hustle' && !mainHustle() };
+  // The idea a hustle card uses: the one it was finished with, otherwise the main project's next unused idea.
+  function ideaFor(key) {
+    const h = mainHustle(); if (!h) return null;
+    const u = h.log.find(x => x.key === dayKey() + '|' + key);
+    if (u) return u.idea ? { text: u.idea } : null;
+    return h.ideas.find(x => !x.used) || null;
+  }
+  function weekLog(h) {
+    const a = curWeekKey(), b = iso(new Date(realMonday().getTime() + 7 * 864e5));
+    return h.log.filter(u => u.date >= a && u.date < b);
+  }
+  // Upcoming side-hustle slots over the next week, from the real (reorganised) plan.
+  function nextHustleSlots() {
+    const out = [], now = new Date(), nowHM = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    for (let n = 0; n < 8 && out.length < 3; n++) {
+      const d = new Date(now); d.setDate(now.getDate() + n); const k = iso(d);
+      Planner.planDay(DATA, k, eventsOn, false, planOpts).items.filter(Planner.shown).forEach(it => {
+        if (DATA.sessions[it.id].kind !== 'hustle' || (n === 0 && it.at && it.at < nowHM)) return;
+        if (!((st().sess[k] || {})[it.key] || {}).done) out.push({ date: d, at: it.at, moved: it.status !== 'ok' ? it.note : '' });
+      });
+    }
+    return out.slice(0, 3);
+  }
+  const hIdx = id => hustles().findIndex(h => h.id === id);
+  const updHustle = (id, fn) => Store.update(s => { const h = s.hustles.find(x => x.id === id); if (h) fn(h, s); });
+
+  function hustleCard(h, i) {
+    const wk = weekLog(h), open = ui.hOpen === h.id || (ui.hOpen == null && i === 0), ideas = h.ideas.filter(x => !x.used);
+    const isMain = mainHustle() && mainHustle().id === h.id;
+    const recent = h.log.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
+    return `<section class="os-card ${isMain ? 'os-hero' : ''} os-hustle ${h.paused ? 'paused' : ''}">
+      <button class="os-topics-head" data-act="hOpen" data-v="${esc(h.id)}" aria-expanded="${open}">
+        <span class="os-scard-ic">${icon(h.paused ? 'pause' : 'rocket-launch')}</span>
+        <span class="os-scard-t"><span class="os-k ${isMain ? 'acc' : ''}">${h.paused ? 'Paused' : isMain ? 'Main · in your week' : 'Side project'}</span>
+          <span class="os-scard-title">${esc(h.name || 'Untitled')}</span>${h.about ? `<span class="os-muted" style="font-size:13px">${esc(h.about)}</span>` : ''}</span>
+        <span class="os-num" style="font-size:13px;flex:none">${wk.length} / ${h.perWeek || 0}</span>${icon(open ? 'caret-up' : 'caret-down')}</button>
+      <div class="os-uploads">${Array.from({ length: Math.max(h.perWeek || 0, wk.length) }, (_, j) => `<span class="${j < wk.length ? 'on' : ''}">${icon(j < wk.length ? 'check' : 'rocket-launch')}</span>`).join('')}</div>
+      ${open ? `
+      <div class="field"><label for="h-name-${i}">Name</label><input class="input os-in" id="h-name-${i}" value="${esc(h.name)}" data-in="hustle" data-f="name" data-i="${i}"></div>
+      <div class="os-evgrid" style="grid-template-columns:minmax(0,1fr) 110px">
+        <div class="field"><label for="h-about-${i}">What it is</label><input class="input os-in" id="h-about-${i}" value="${esc(h.about || '')}" data-in="hustle" data-f="about" data-i="${i}"></div>
+        <div class="field"><label for="h-per-${i}">Per week</label><input class="input os-in os-num" inputmode="numeric" id="h-per-${i}" value="${esc(h.perWeek || '')}" data-in="hustle" data-f="perWeek" data-i="${i}"></div></div>
+      <span class="os-k" style="padding-top:6px">Steps on the card</span>
+      ${(h.steps || []).map((t, j) => `<div class="os-topic"><span class="os-num os-muted" style="width:20px;font-size:12px">${j + 1}</span>
+        <input class="input os-in" style="flex:1;min-width:0" value="${esc(t)}" aria-label="Step ${j + 1}" data-in="hStep" data-f="${i}" data-i="${j}" id="h-step-${i}-${j}">
+        <button class="btn btn-ghost btn-icon os-x" data-act="hStepRm" data-v="${esc(h.id)}|${j}" aria-label="Remove step">${icon('x')}</button></div>`).join('')}
+      <button class="btn btn-ghost" style="align-self:flex-start;padding-left:0" data-act="hStepAdd" data-v="${esc(h.id)}">${icon('plus')}Add step</button>
+      <div class="os-between" style="padding-top:6px"><span class="os-k">${esc(h.ideasLabel || 'Ideas')}</span><span class="os-num os-muted" style="font-size:12px">${ideas.length} ready</span></div>
+      <form data-form="idea" data-i="${i}" style="display:flex;gap:8px">
+        <input class="input os-in" style="flex:1;min-width:0" placeholder="Save an idea (title or link)" aria-label="New idea" value="${esc(ui.ideaDraft[h.id] || '')}" data-in="ideaDraft" data-f="${esc(h.id)}" id="idea-${i}">
+        <button class="btn btn-primary os-btn" type="submit">Save</button></form>
+      ${ideas.map((x, j) => `<div class="os-idea ${j === 0 ? 'next' : ''}">
+        ${j === 0 ? '<span class="os-k acc" style="flex:none">Next</span>' : `<span class="os-num os-muted" style="flex:none;width:34px;font-size:12px">${j + 1}</span>`}
+        <span class="os-idea-t">${/^https?:\/\//.test(x.text) ? `<a href="${esc(x.text)}" target="_blank" rel="noopener">${esc(x.text)}</a>` : esc(x.text)}</span>
+        ${j ? `<button class="btn btn-ghost btn-icon os-x" data-act="ideaTop" data-v="${esc(h.id)}|${esc(x.id)}" aria-label="Use this one next">${icon('arrow-up')}</button>` : ''}
+        <button class="btn btn-ghost btn-icon os-x" data-act="ideaRm" data-v="${esc(h.id)}|${esc(x.id)}" aria-label="Delete idea">${icon('x')}</button></div>`).join('')}
+      <div class="os-between" style="padding-top:6px"><span class="os-k">Done</span><button class="btn btn-ghost" data-act="hLog" data-v="${esc(h.id)}">${icon('plus')}Log one</button></div>
+      ${recent.map(u => `<div class="os-between" style="font-size:14px;min-height:36px"><span style="min-width:0;overflow-wrap:anywhere"><span class="os-num os-muted" style="font-size:12px">${fmt(new Date(u.date + 'T12:00'), { day: 'numeric', month: 'short' })}</span> · ${esc(u.idea || 'Done')}</span>
+        <button class="btn btn-ghost btn-icon os-x" data-act="hLogRm" data-v="${esc(h.id)}|${esc(u.key)}" aria-label="Remove">${icon('x')}</button></div>`).join('') || '<span class="os-muted" style="font-size:13px">Finished side-hustle cards are logged here.</span>'}
+      <span class="os-num os-muted" style="font-size:12px">${h.log.length} in total</span>
+      <div class="os-chips" style="padding-top:6px">
+        ${!isMain && !h.paused ? `<button class="os-chipsel" data-act="hMain" data-v="${esc(h.id)}">${icon('star')}Make main</button>` : ''}
+        <button class="os-chipsel" data-act="hPause" data-v="${esc(h.id)}">${icon(h.paused ? 'play' : 'pause')}${h.paused ? 'Resume' : 'Pause'}</button>
+        <button class="os-chipsel" data-act="hDel" data-v="${esc(h.id)}">${icon('trash')}Delete</button></div>` : ''}
+    </section>`;
+  }
+
+  function hustleScreen() {
+    const slots = nextHustleSlots(), main = mainHustle();
+    return `
+    <header class="os-head"><span class="os-k acc">Side hustles</span><h3>Projects</h3>
+      <span class="os-muted" style="font-size:13px;line-height:1.5">Early days: change, pause or swap projects any time. Your weekly side-hustle slots always go to the main project.</span></header>
+    <div class="os-grid g2">
+      <div class="os-col">
+        ${hustles().map(hustleCard).join('') || '<section class="os-card"><span class="os-muted" style="font-size:14px">No projects yet. Your side-hustle slots are hidden until you add one.</span></section>'}
+        <button class="btn btn-secondary os-btn" data-act="hAdd">${icon('plus')}New project</button>
+      </div>
+      <section class="os-card"><span class="os-k">Next slots</span>
+        ${main ? (slots.length ? slots.map(x => `<div class="os-between" style="font-size:14px;min-height:36px"><span>${fmt(x.date, { weekday: 'long', day: 'numeric', month: 'short' })}${x.moved ? ` <span class="camber" style="font-size:12px">· ${esc(x.moved)}</span>` : ''}</span><span class="os-num os-muted" style="font-size:12px">${esc(x.at || '')}</span></div>`).join('') : '<span class="os-muted" style="font-size:14px">No slots in the next week.</span>')
+          : '<span class="os-muted" style="font-size:14px">All projects are paused, so the slots are hidden from your plan and that time is free.</span>'}
+        <span class="os-muted" style="font-size:12px;line-height:1.5">Slots: Tuesday 19:45, Friday 18:45, Sunday 18:00, 30 minutes each. They move around games like everything else.</span>
+      </section>
+    </div>`;
   }
 
   // ---------- screens ----------
@@ -682,7 +791,7 @@
     if (Store.auth === 'signedout') {
       root.innerHTML = `<div class="os">${authScreen()}</div>`;
     } else {
-      const screen = { today, week, rev: revision, prog: progress, log: logScreen }[ui.tab]();
+      const screen = { today, week, rev: revision, prog: progress, log: logScreen, hustle: hustleScreen }[ui.tab]();
       root.innerHTML = `<div class="os">
         <nav class="os-rail" aria-label="Main">${menuBody()}</nav>
         <main class="os-main">${topBar()}${screen}</main>
@@ -764,6 +873,26 @@
       if (!cur.done && p.total && p.got >= p.total) { finish(id, true); ui.openCard = null; }
     },
     sessDone(v) { const on = !getSess(v).done; finish(v, on); if (on) ui.openCard = null; },
+    hOpen(v) { const cur = ui.hOpen == null ? (hustles()[0] || {}).id : ui.hOpen; ui.hOpen = cur === v ? '' : v; },
+    hAdd() {
+      const id = 'p' + Date.now().toString(36);
+      Store.update(s => { s.hustles.push({ id, name: 'New project', about: '', perWeek: 2, steps: ['Plan', 'Make', 'Publish'], ideasLabel: 'Ideas', ideas: [], log: [], paused: false }); });
+      ui.hOpen = id;
+      setTimeout(() => { const el = root.querySelector('#h-name-' + (hustles().length - 1)); if (el) { el.focus(); el.select(); el.scrollIntoView({ block: 'center' }); } });
+    },
+    hMain(v) { Store.update(s => { const i = s.hustles.findIndex(x => x.id === v); if (i > 0) s.hustles.unshift(s.hustles.splice(i, 1)[0]); }); },
+    hPause(v) { updHustle(v, h => { h.paused = !h.paused; }); },
+    hDel(v) { const h = hustles()[hIdx(v)]; if (!h || !confirm('Delete "' + h.name + '" and its ideas and log?')) return; Store.update(s => { s.hustles = s.hustles.filter(x => x.id !== v); }); },
+    hStepAdd(v) { updHustle(v, h => { h.steps = (h.steps || []).concat(''); }); },
+    hStepRm(v) { const [id, j] = v.split('|'); updHustle(id, h => { h.steps = h.steps.filter((_, x) => x !== +j); }); },
+    ideaRm(v) { const [id, x] = v.split('|'); updHustle(id, h => { h.ideas = h.ideas.filter(i => i.id !== x); }); },
+    ideaTop(v) { const [id, x] = v.split('|'); updHustle(id, h => { const i = h.ideas.findIndex(y => y.id === x); if (i > 0) h.ideas.unshift(h.ideas.splice(i, 1)[0]); }); },
+    hLog(v) {
+      const k = iso(new Date());
+      updHustle(v, h => { const idea = h.ideas.find(x => !x.used); if (idea) idea.used = k;
+        h.log.push({ key: k + '|extra-' + Date.now().toString(36), date: k, idea: idea ? idea.text : '', ideaId: idea ? idea.id : '' }); });
+    },
+    hLogRm(v) { const cut = v.indexOf('|'), id = v.slice(0, cut), key = v.slice(cut + 1); if (!confirm('Remove this from the log?')) return; updHustle(id, h => { h.log = h.log.filter(u => u.key !== key); }); },
     seenAll() { const ids = unreadUpdates().map(u => u.id); Store.update(s => { s.seen = (s.seen || []).concat(ids); }); },
     reload() { location.reload(); },
     subj(v) { ui.subj = ui.subj === +v ? -1 : +v; ui.topicDraft = ''; },
@@ -847,6 +976,14 @@
       ui.week = Math.floor(diff / 7); ui.day = ((diff % 7) + 7) % 7;
       ui.evForm = false; ui.ev = null; ui.evErr = ''; ui.showPlanned = false;
       render();
+    } else if (f === 'idea') {
+      const i = +e.target.dataset.i, h = hustles()[i]; if (!h) return;
+      const text = (ui.ideaDraft[h.id] || '').trim();
+      if (!text) return;
+      updHustle(h.id, x => { x.ideas.push({ id: Date.now().toString(36), text, used: false }); });
+      ui.ideaDraft[h.id] = '';
+      render();
+      const inp = root.querySelector('#idea-' + i); if (inp) inp.focus();
     } else if (f === 'topic') {
       const i = +e.target.dataset.i, name = ui.topicDraft.trim();
       if (!name) return;
@@ -891,6 +1028,9 @@
       case 'review': { const wk = weekKey(); Store.update(s => { const r = (s.reviews[wk] || ['', '', '']).slice(); r[i] = v; s.reviews[wk] = r; }); break; }
       case 'scoreDraft': ui.scoreDraft = v; break;
       case 'topicDraft': ui.topicDraft = v; break;
+      case 'ideaDraft': ui.ideaDraft[f] = v; break;
+      case 'hustle': Store.update(s => { const h = s.hustles[i]; if (!h) return; h[f] = f === 'perWeek' ? Math.max(0, parseInt(v, 10) || 0) : v; }); break;
+      case 'hStep': Store.update(s => { const h = s.hustles[+f]; if (h) h.steps[i] = v; }); break;
       case 'ev': if (ui.ev) ui.ev[f] = v; break;
       case 'goal': { const n = parseInt(v, 10); if (n > 0) Store.update(s => { s.goals[i] = n; }); break; }
     }

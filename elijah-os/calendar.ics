@@ -127,19 +127,16 @@ DESCRIPTION:Optional\, after revision. Weak foot only for the second half.
  dy and turning\n• Second half: weak foot only
 END:VEVENT
 BEGIN:VEVENT
-UID:plan-1-shorts@elijah-os
+UID:plan-1-hustle@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261110T194500
 DTEND:20261110T201500
 RRULE:FREQ=WEEKLY
-SUMMARY:YouTube Short
-DESCRIPTION:One Reddit story Short\, start to finish in 30 minutes. Hook i
- n the first 2 seconds.\n• Pick a story — Reddit\, under ~60s read\n• Trim
-  the script\, write the hook\n• AI voiceover\n• Background gameplay + cap
- tions\n• Title\, hashtags\, upload
+SUMMARY:Side hustle
+DESCRIPTION:Thirty focused minutes on your main side hustle.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:YouTube Short
+DESCRIPTION:Side hustle
 TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
@@ -269,19 +266,16 @@ TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:plan-4-shorts@elijah-os
+UID:plan-4-hustle@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261113T184500
 DTEND:20261113T191500
 RRULE:FREQ=WEEKLY
-SUMMARY:YouTube Short
-DESCRIPTION:One Reddit story Short\, start to finish in 30 minutes. Hook i
- n the first 2 seconds.\n• Pick a story — Reddit\, under ~60s read\n• Trim
-  the script\, write the hook\n• AI voiceover\n• Background gameplay + cap
- tions\n• Title\, hashtags\, upload
+SUMMARY:Side hustle
+DESCRIPTION:Thirty focused minutes on your main side hustle.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:YouTube Short
+DESCRIPTION:Side hustle
 TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
@@ -351,19 +345,16 @@ DESCRIPTION:Play simple\, play fast.\n• Breakfast 3 hours before kick-off\
  within an hour
 END:VEVENT
 BEGIN:VEVENT
-UID:plan-6-shorts@elijah-os
+UID:plan-6-hustle@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261115T180000
 DTEND:20261115T183000
 RRULE:FREQ=WEEKLY
-SUMMARY:YouTube Short
-DESCRIPTION:One Reddit story Short\, start to finish in 30 minutes. Hook i
- n the first 2 seconds.\n• Pick a story — Reddit\, under ~60s read\n• Trim
-  the script\, write the hook\n• AI voiceover\n• Background gameplay + cap
- tions\n• Title\, hashtags\, upload
+SUMMARY:Side hustle
+DESCRIPTION:Thirty focused minutes on your main side hustle.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:YouTube Short
+DESCRIPTION:Side hustle
 TRIGGER:-PT10M
 END:VALARM
 END:VEVENT

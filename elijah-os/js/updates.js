@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-14-hustles', date: '2026-11-14', kind: 'update',
+    title: 'Side hustles, and Maths stays put',
+    body: 'New Side hustles tab. YouTube Shorts is your first project: save story ideas, track 3 a week, and see your next slots. You can rename, pause or swap projects any time; the weekly slots always go to your main one. Monday Maths no longer moves: if something clashes, it is dropped for that day.'
+  },
+  {
     id: '2026-11-14-shorts', date: '2026-11-14', kind: 'update',
     title: 'YouTube Shorts',
     body: 'Three Shorts a week: Tuesday 19:45, Friday 18:45 and Sunday 18:00. Each card walks you through story, hook, AI voiceover, gameplay and captions, then upload, in about 30 minutes.'

@@ -24,6 +24,8 @@
       sess: {},
       // ids of updates/notices already dismissed
       seen: [],
+      // Side hustle projects: { id, name, about, perWeek, steps[], ideasLabel, ideas[{id,text,used}], log[{key,date,idea,ideaId}], paused }
+      hustles: (DATA.sideHustles || []).map(h => Object.assign({ ideas: [], log: [], paused: false }, JSON.parse(JSON.stringify(h)))),
       // Temporary events: { id, date, title, kind, start, end, note, replace }
       events: [],
       // Revision topics per subject. conf: 0 not rated, 1 red, 2 amber, 3 green
@@ -58,6 +60,8 @@
     while (s.goals.length < DATA.subjects.length) s.goals.push(DATA.subjects[s.goals.length].goal);
     // Goals never edited from the first version's defaults follow the new plan's defaults.
     if ([150, 120, 90, 90, 60].every((g, i) => s.goals[i] === g)) s.goals = DATA.subjects.map(x => x.goal);
+    if (!Array.isArray(s.hustles)) s.hustles = defaults().hustles;
+    delete s.studio;
     if (!Array.isArray(s.topics)) s.topics = [];
     while (s.topics.length < DATA.subjects.length) s.topics.push(seedTopics(DATA.subjects[s.topics.length]));
     dropOldMonday(s.workouts);
