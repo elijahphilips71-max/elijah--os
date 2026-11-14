@@ -26,6 +26,8 @@
       seen: [],
       // Exam questions: your own (myq) and every mark you've given yourself (qlog[questionId] = [{ d, got, of }])
       myq: [],
+      // Past papers: { id, date, s (subject), name, got, of, topics: [topic names that lost marks] }
+      papers: [],
       qlog: {},
       // Side hustle projects: { id, name, about, perWeek, steps[], ideasLabel, ideas[{id,text,used}], log[{key,date,idea,ideaId}], paused }
       hustles: (DATA.sideHustles || []).map(h => Object.assign({ ideas: [], log: [], paused: false }, JSON.parse(JSON.stringify(h)))),
@@ -65,6 +67,10 @@
     if ([150, 120, 90, 90, 60].every((g, i) => s.goals[i] === g)) s.goals = DATA.subjects.map(x => x.goal);
     if (!Array.isArray(s.hustles)) s.hustles = defaults().hustles;
     delete s.studio;
+    // Old single past-paper % scores become undated Maths papers out of 100.
+    if (Array.isArray(o && o.scores) && o.scores.length && !(o.papers || []).length) {
+      s.papers = o.scores.map((v, i) => ({ id: 'old' + i, date: '', s: 0, name: 'Past paper ' + (i + 1), got: v, of: 100, topics: [] }));
+    }
     if (!Array.isArray(s.topics)) s.topics = [];
     while (s.topics.length < DATA.subjects.length) s.topics.push(seedTopics(DATA.subjects[s.topics.length]));
     dropOldMonday(s.workouts);

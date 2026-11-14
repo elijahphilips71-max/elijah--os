@@ -222,10 +222,9 @@ window.ELIJAH_DATA = {
       items: [
         { name: 'Pick the paper and set the timer' },
         { name: 'Sit the paper' },
-        { name: 'Mark it against the mark scheme' },
-        { name: 'Add the score on the Revision screen' },
-        { name: 'Rate the topics you dropped marks on' }
-      ]
+        { name: 'Mark it against the mark scheme' }
+      ],
+      logPaper: true   // the card ends with a form to log the score and the topics that lost marks
     }
   },
 

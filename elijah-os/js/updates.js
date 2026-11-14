@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-14-spaced', date: '2026-11-14', kind: 'update',
+    title: 'Questions that adapt to you',
+    body: 'One question at a time: type your answer, check it against the mark scheme, tap your marks. Questions you nail come back in 1, 2, 4 then 8 weeks; ones you miss come back tomorrow, so weak topics get the time. On Revision, “Send my progress to Claude” copies a report so Claude can write new questions for your weak spots.'
+  },
+  {
     id: '2026-11-14-exam-questions', date: '2026-11-14', kind: 'update',
     title: 'Exam questions instead of flashcards',
     body: 'Revision is now exam questions in a ladder: AO1 quick marks to warm up, AO2 as the main chunk, then heavy AO3 questions. Answer, check the mark scheme, give yourself the marks. Questions you get wrong come back first. Mornings are 15 minutes of AO1 reps. Plus a 30-minute wall session every day that never gets dropped.'
