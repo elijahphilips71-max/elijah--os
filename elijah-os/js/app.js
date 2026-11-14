@@ -332,7 +332,31 @@
   // (red, then not rated, then amber), keeping any topic already ticked today.
   // ---------- exam questions ----------
   const qhash = str => { let h = 5381; for (const ch of str) h = ((h << 5) + h + ch.charCodeAt(0)) | 0; return (h >>> 0).toString(36); };
-  const QBANK = (window.ELIJAH_QUESTIONS || []).map(r => ({ s: r[0], t: r[1], ao: r[2], m: r[3], q: r[4], a: r[5], id: 'b' + qhash(r[4]) }));
+  const QBANK = (window.ELIJAH_QUESTIONS || []).map(r => ({ s: r[0], t: r[1], ao: r[2], m: r[3], q: r[4], a: r[5], g: r[6] || 0, id: 'b' + qhash(r[4]) }));
+  // ----- levels: which grade of question you're working at, per subject -----
+  // Starts at startLevel. Every answer to a question at your level or above counts; over your last 8,
+  // 75%+ moves you up a level and under 45% moves you down one. You see questions within one grade of your level.
+  let levelCache = {};
+  function levelOf(sj, date) {
+    const sub = DATA.subjects[sj];
+    if (!sub || !sub.target) return null;
+    const key = sj + '|' + date;
+    if (levelCache[key] != null) return levelCache[key];
+    const log = st().qlog || {}, ev = [];
+    allQuestions().forEach(q => { if (q.s === sj && q.g) (log[q.id] || []).forEach(x => { if (x.d < date) ev.push({ d: x.d, g: q.g, r: x.of ? x.got / x.of : 0 }); }); });
+    ev.sort((a, b) => a.d.localeCompare(b.d));
+    let L = sub.startLevel || 6, buf = [];
+    const max = Math.max(4, sub.target - 1);
+    ev.forEach(e => {
+      if (e.g < L - 1) return;
+      buf.push(e.r);
+      if (buf.length < 8) return;
+      const acc = buf.reduce((a, b) => a + b, 0) / buf.length;
+      if (acc >= 0.75 && L < max) { L++; buf = []; } else if (acc < 0.45 && L > 4) { L--; buf = []; } else buf.shift();
+    });
+    return (levelCache[key] = L);
+  }
+  const levelRange = L => (L - 1) + '–' + Math.min(9, L + 1);
   const allQuestions = () => QBANK.concat((st().myq || []).map(x => Object.assign({ own: true }, x)));
   const qById = id => allQuestions().find(q => q.id === id);
   // ----- spaced repetition -----
@@ -372,10 +396,13 @@
   // Lower comes first: due or overdue questions (missed ones first), then new questions, then not-yet-due ones
   // (only if there aren't enough). Weak topics come before strong ones in each group.
   function qScore(q, date) {
-    const s = qState(q, date), weak = topicWeak(q.s, q.t, date);
-    if (s.kind === 'new') return 100 + weak * 10;
-    if (s.due <= 0) return (s.kind === 'missed' ? 0 : s.kind === 'part' ? 20 : 40) + weak * 5 + Math.max(-10, s.due);
-    return 300 + s.due * 5 + weak;
+    const s = qState(q, date), weak = topicWeak(q.s, q.t, date), L = q.g ? levelOf(q.s, date) : null;
+    // Questions outside your level (more than one grade away) wait until there's nothing better; harder ones first.
+    const dist = L == null ? 0 : q.g - L, pen = dist > 1 ? 40 + 20 * (dist - 2) : dist < -1 ? 60 + 20 * (-dist - 2) : 0;
+    if (s.kind === 'new') return 100 + weak * 10 + pen;
+    // Reviews you got right that are now below your level go after new questions at your level.
+    if (s.due <= 0) return (s.kind === 'missed' ? 0 : s.kind === 'part' ? 20 : 40) + weak * 5 + Math.max(-10, s.due) + (s.kind === 'solid' && dist < -1 ? 120 : 0);
+    return 300 + s.due * 5 + weak + pen;
   }
   // The questions a ladder card gives today. Ranked on history before today, so the list stays put while you answer.
   function ladderRows(key, c) {
@@ -415,7 +442,9 @@
     if (pos == null || pos >= rows.length) { pos = rows.findIndex(r => !qDone(r, e)); if (pos < 0) pos = 0; }
     const r = rows[pos], aoOf = x => x.q ? x.q.ao : +x.key.slice(2);
     const head = ['AO1 · quick marks', 'AO2 · main chunk', 'AO3 · heavy questions'][aoOf(r) - 1];
-    return `<div class="os-qdots" role="group" aria-label="Questions">${rows.map((x, i) => {
+    const c = DATA.sessions[sid(id)], sj = c.mixed ? null : subjOf(c), L = sj == null ? null : levelOf(sj, dayKey());
+    return `${L != null ? `<div class="os-level">${icon('trend-up')}<span>Working at <b>grade ${levelRange(L)}</b> questions</span><span class="os-muted">target ${DATA.subjects[sj].target}</span></div>` : ''}
+      <div class="os-qdots" role="group" aria-label="Questions">${rows.map((x, i) => {
         const got = x.q ? (e.q || {})[x.q.id] : null, cls = x.q && got != null ? (got >= x.q.m ? 'full' : got ? 'part' : 'miss') : (!x.q && e.c[x.key] ? 'full' : '');
         const gapBefore = i && aoOf(rows[i - 1]) !== aoOf(x);
         return `${gapBefore ? '<span class="os-qdots-gap"></span>' : ''}<button class="os-qdot ${cls} ${i === pos ? 'on' : ''}" data-act="qgo" data-v="${esc(id)}|${i}" aria-label="Question ${i + 1}${cls ? ', answered' : ''}"></button>`; }).join('')}</div>
@@ -433,7 +462,7 @@
     const gap = answered ? nextGap(got, q.m, q, date) : 0;
     const when = gap === 1 ? 'tomorrow' : gap < 7 ? 'in ' + gap + ' days' : 'in ' + gap / 7 + ' week' + (gap > 7 ? 's' : '');
     return `<div class="os-q ${answered ? (got >= q.m ? 'full' : got ? 'part' : 'miss') : ''}">
-      <div class="os-between"><span class="os-k">AO${q.ao} · ${q.m} mark${q.m > 1 ? 's' : ''} · ${esc(DATA.sessions[sid(key)].mixed ? DATA.subjects[q.s].name : q.t)}</span>
+      <div class="os-between"><span class="os-k">AO${q.ao} · ${q.m} mark${q.m > 1 ? 's' : ''}${q.g ? ' · grade ' + q.g : ''} · ${esc(DATA.sessions[sid(key)].mixed ? DATA.subjects[q.s].name : topicShort(q.t))}</span>
         ${answered ? `<span class="os-num os-q-score">${got}/${q.m}</span>` : `<span class="os-q-tag ${state.kind}">${Q_TAG[state.kind]}</span>`}</div>
       <div class="os-q-text">${esc(q.q)}</div>
       <textarea class="input os-in os-q-input" rows="${q.m > 3 ? 4 : 2}" placeholder="Your answer" aria-label="Your answer" data-in="qans" data-f="${v}" id="qa-${esc(key)}-${q.id}"${answered ? ' readonly' : ''}>${esc(ans)}</textarea>
@@ -728,7 +757,7 @@
         const up = g.grade != null && g.prev != null && g.grade !== 'U' && g.prev !== 'U' ? g.grade - g.prev : 0;
         return `<button class="os-grade ${pick === i ? 'on' : ''}" data-act="gradeSubj" data-v="${i}" aria-pressed="${pick === i}">
           <span class="os-grade-n os-num">${g.grade == null ? '–' : g.grade}</span>
-          <span class="os-grade-s">${esc(sub.name)}</span>
+          <span class="os-grade-s">${esc(sub.name)}${sub.target ? ` <span class="os-muted" style="font-size:11px">→ ${sub.target}</span>` : ''}</span>
           <span class="os-num os-muted" style="font-size:11px">${g.now.pct == null ? 'no data yet' : g.grade == null ? g.now.n + ' marks so far' : Math.round(g.now.pct) + '%'}${up ? ` <span class="${up > 0 ? 'cgreen' : 'cred'}">${up > 0 ? '▲' : '▼'}${Math.abs(up)}</span>` : ''}</span></button>`; }).join('')}</div>
       <span class="os-muted" style="font-size:12px;line-height:1.5">A rough guide from typical grade boundaries. Past papers count double. Tap a subject to see its graph.</span>
     </section>
@@ -1001,6 +1030,7 @@
     const hasQs = allQuestions().some(q => q.s === i);
     return `<div class="os-topics">
       ${DATA.subjects[i].board || DATA.subjects[i].note ? `<span class="os-muted" style="font-size:12px">${esc([DATA.subjects[i].board, DATA.subjects[i].note].filter(Boolean).join(' · '))}</span>` : ''}
+      ${levelOf(i, iso(new Date())) != null ? `<div class="os-level">${icon('trend-up')}<span>Level: <b>grade ${levelRange(levelOf(i, iso(new Date())))}</b> questions</span><span class="os-muted">target ${DATA.subjects[i].target}</span></div>` : ''}
       ${hasQs ? `<div class="os-aostats" aria-label="Marks in the last 4 weeks">${ao.map((x, j) => `<span><span class="os-k">AO${j + 1}</span><span class="os-num ${x.of ? (x.got / x.of >= .7 ? 'cgreen' : x.got / x.of >= .4 ? 'camber' : 'cred') : 'os-muted'}">${x.of ? Math.round(x.got / x.of * 100) + '%' : '—'}</span><span class="os-num os-muted" style="font-size:11px">${x.of ? x.got + '/' + x.of : 'no reps'}</span></span>`).join('')}</div>` : ''}
       <button class="os-topics-head" data-act="subj" data-v="${i}" aria-expanded="${open}">
         <span style="font-size:13px">Topics</span>
@@ -1132,6 +1162,7 @@
 
   // ---------- render ----------
   function render() {
+    levelCache = {};
     // keep keyboard focus across re-renders
     const a = document.activeElement;
     const focusSel = a && a.id ? '#' + a.id : a && a.dataset && a.dataset.act ? `[data-act="${a.dataset.act}"]${a.dataset.v != null ? `[data-v="${a.dataset.v}"]` : ''}` : null;
@@ -1209,6 +1240,7 @@
     rmMyq(v) { if (!confirm('Delete this question?')) return; Store.update(s => { s.myq = (s.myq || []).filter(q => q.id !== v); }); },
     qshow(v) { ui.qShown[v] = true; },
     qmark(v) {
+      levelCache = {};
       const parts = v.split('|'), n = +parts.pop(), qid = parts.pop(), key = parts.join('|');
       const q = qById(qid); if (!q) return;
       const k = dayKey(), cur = getSess(key);
