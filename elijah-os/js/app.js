@@ -24,10 +24,9 @@
     day: (new Date().getDay() + 6) % 7,
     savedFor: '',
     scoreDraft: '',
-    authStep: 'signin', // 'signin' | 'sent' (only used when signed out)
     email: '',
+    password: '',
     emailErr: '',
-    resent: false,
     sending: false
   };
 
@@ -254,19 +253,14 @@
   }
 
   function authScreen() {
-    if (ui.authStep === 'sent') {
-      return `<div class="os-auth"><div class="os-card os-hero">${icon('envelope-simple')}<h3>Check your email</h3>
-        <p>We sent a sign-in link to <span style="color:var(--color-accent-300)">${esc(ui.email)}</span>. Open it on this device to finish signing in.</p>
-        ${ui.emailErr ? `<span class="os-err">${esc(ui.emailErr)}</span>` : ''}
-        <button class="btn btn-secondary os-btn" data-act="resend">${ui.resent ? 'Link sent again' : 'Resend link'}</button>
-        <button class="btn btn-ghost os-btn" data-act="otherEmail">Use a different email</button></div></div>`;
-    }
     return `<div class="os-auth"><form class="os-card os-hero" data-form="signin" novalidate>
       <span class="os-k acc">Elijah OS</span><h3>Sign in</h3>
-      <p>Enter your email and we'll send you a sign-in link. Use the same email on your phone and laptop to keep them in sync.</p>
+      <p>Use the same email and password on your phone and laptop to keep them in sync. First time? Press <b>Create account</b>.</p>
       <div class="field"><label for="email">Email</label><input class="input os-in" type="email" autocomplete="email" placeholder="you@example.com" value="${esc(ui.email)}" data-in="email" id="email"></div>
+      <div class="field"><label for="password">Password</label><input class="input os-in" type="password" autocomplete="current-password" placeholder="At least 6 characters" value="${esc(ui.password)}" data-in="password" id="password"></div>
       ${ui.emailErr ? `<span class="os-err" data-email-err>${esc(ui.emailErr)}</span>` : ''}
-      <button class="btn btn-primary os-btn" type="submit"${ui.sending ? ' disabled' : ''}>${ui.sending ? 'Sending…' : 'Send sign-in link'}</button></form></div>`;
+      <button class="btn btn-primary os-btn" type="submit" value="signin"${ui.sending ? ' disabled' : ''}>${ui.sending ? 'Signing in…' : 'Sign in'}</button>
+      <button class="btn btn-secondary os-btn" type="submit" value="signup"${ui.sending ? ' disabled' : ''}>Create account</button></form></div>`;
   }
 
   // ---------- render ----------
@@ -331,21 +325,18 @@
     },
     addBench() { Store.update(s => { s.bench.push({ name: '', base: '', latest: '', target: '' }); }); },
     step(v) { Store.update(s => { s.skill.cur = +v; }); },
-    async signOut() { await Store.signOut(); ui.authStep = 'signin'; window.scrollTo(0, 0); },
-    async resend() {
-      try { await Store.sendLink(ui.email); ui.resent = true; ui.emailErr = ''; }
-      catch (e) { ui.emailErr = linkErr(e); }
-    },
-    otherEmail() { ui.authStep = 'signin'; ui.emailErr = ''; ui.resent = false; }
+    async signOut() { await Store.signOut(); ui.password = ''; window.scrollTo(0, 0); }
   };
 
-  function linkErr(e) {
-    console.warn('Sign-in link failed', e);
+  function authErr(e) {
+    console.warn('Sign-in failed', e);
     const msg = (e && e.message) || '';
-    if ((e && e.status === 429) || /rate limit|security purposes|only request/i.test(msg))
-      return 'Too many sign-in emails. Wait a few minutes (up to an hour), then try again. ' + msg;
     if (!navigator.onLine) return 'You are offline. Check your connection and try again.';
-    return 'Could not send the link: ' + (msg || 'unknown error');
+    if (/invalid login credentials/i.test(msg)) return 'Wrong email or password. First time here? Press Create account.';
+    if (/already registered|already exists/i.test(msg)) return 'That email already has an account. Press Sign in.';
+    if (/email not confirmed/i.test(msg)) return 'This email is not confirmed yet. In Supabase, turn off "Confirm email" (Authentication → Sign In / Providers → Email).';
+    if (/password/i.test(msg)) return msg;
+    return 'Could not sign in: ' + (msg || 'unknown error');
   }
 
   root.addEventListener('click', async e => {
@@ -369,10 +360,18 @@
       const inp = root.querySelector('#scoreDraft'); if (inp) inp.focus();
     } else if (f === 'signin') {
       if (!/^\S+@\S+\.\S+$/.test(ui.email.trim())) { ui.emailErr = 'Enter a valid email address.'; render(); return; }
+      if (ui.password.length < 6) { ui.emailErr = 'Password must be at least 6 characters.'; render(); return; }
       ui.email = ui.email.trim();
-      ui.sending = true; render();
-      try { await Store.sendLink(ui.email); ui.authStep = 'sent'; ui.emailErr = ''; ui.resent = false; }
-      catch (err) { ui.emailErr = linkErr(err); }
+      const signup = e.submitter && e.submitter.value === 'signup';
+      ui.sending = true; ui.emailErr = ''; render();
+      try {
+        if (signup) {
+          const now = await Store.signUp(ui.email, ui.password);
+          if (!now) ui.emailErr = 'Account created, but Supabase wants the email confirmed first. In Supabase, turn off "Confirm email" (Authentication → Sign In / Providers → Email), then press Sign in.';
+        } else {
+          await Store.signIn(ui.email, ui.password);
+        }
+      } catch (err) { ui.emailErr = authErr(err); }
       ui.sending = false; render();
     }
   });
@@ -384,6 +383,7 @@
     const i = +t.dataset.i, f = t.dataset.f, v = t.value;
     const resetSave = () => { ui.savedFor = ''; root.querySelectorAll('[data-save]').forEach(b => { b.textContent = 'Save entry'; }); };
     switch (k) {
+      case 'password': ui.password = v; if (ui.emailErr) { ui.emailErr = ''; const er = root.querySelector('[data-email-err]'); if (er) er.remove(); } break;
       case 'email': ui.email = v; if (ui.emailErr) { ui.emailErr = ''; const er = root.querySelector('[data-email-err]'); if (er) er.remove(); } break;
       case 'win': setLog({ win: v }); resetSave(); break;
       case 'fix': setLog({ fix: v }); resetSave(); break;

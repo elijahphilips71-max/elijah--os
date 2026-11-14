@@ -38,9 +38,9 @@ With sync turned on, the app also keeps a copy on each device, so it still opens
 
 1. Create a free account and a new project at https://supabase.com.
 2. In the project, open **SQL Editor**, paste in everything from `supabase.sql`, and press **Run**.
-3. Open **Authentication → URL Configuration**. Set **Site URL** to where the app lives, for example `https://YOUR-NAME.github.io/elijah-os/`. If you also test locally, add `http://localhost:8000/` under **Redirect URLs**.
+3. Open **Authentication → Sign In / Providers → Email**. Make sure Email is enabled, turn **off** "Confirm email", and save. (The app signs in with email and password, so no emails are sent.)
 4. Open **Project Settings → API**. Copy the **Project URL** and the **anon public** key into `js/config.js`.
-5. Reload the app. You will see the sign-in screen. Enter your email, open the link from the email on that device, and you are in. Sign in with the same email on the other device.
+5. Reload the app. On the sign-in screen, enter your email and a password and press **Create account**. On your other device, enter the same email and password and press **Sign in**.
 
 The anon key is safe to put in a public website. The row-level security rules in `supabase.sql` stop anyone else from reading your data.
 

@@ -67,11 +67,17 @@
     onData(cb) { dataListeners.push(cb); },
     onStatus(cb) { statusListeners.push(cb); },
 
-    async sendLink(email) {
+    async signIn(email, password) {
       if (!sb) throw new Error('Sync is not set up.');
-      const redirect = location.origin + location.pathname;
-      const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: redirect } });
+      const { error } = await sb.auth.signInWithPassword({ email, password });
       if (error) throw error;
+    },
+    // Returns true if signed in straight away, false if Supabase still wants the email confirmed.
+    async signUp(email, password) {
+      if (!sb) throw new Error('Sync is not set up.');
+      const { data, error } = await sb.auth.signUp({ email, password });
+      if (error) throw error;
+      return !!data.session;
     },
     async signOut() {
       if (sb) await sb.auth.signOut();
