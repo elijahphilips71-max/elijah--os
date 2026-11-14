@@ -265,9 +265,10 @@ window.ELIJAH_DATA = {
       'Waves: lenses and visible light', 'Waves: black body radiation',
       'Magnetism: magnets and fields', 'Magnetism: the motor effect', 'Magnetism: generators and transformers',
       'Space: the solar system and life cycle of stars', 'Space: orbits', 'Space: red-shift and the Big Bang'] },
-    { name: 'English', board: 'WJEC Eduqas or AQA (check with your teacher)', goal: 45, topics: [
+    { name: 'English', board: 'WJEC Eduqas', goal: 45,
+      note: 'Literature: Component 1 (Macbeth, poetry anthology) 2h · Component 2 (An Inspector Calls, Jekyll and Hyde, unseen poetry) 2h30. Language: Component 1 1h45 · Component 2 2h.', topics: [
       'Literature: Macbeth', 'Literature: Jekyll and Hyde', 'Literature: An Inspector Calls',
-      'Literature: poetry anthology', 'Literature: unseen poetry',
+      'Literature: Eduqas poetry anthology', 'Literature: unseen poetry',
       'Language: fiction reading', 'Language: non-fiction reading', 'Language: creative writing',
       'Language: viewpoint and transactional writing', 'Language: spelling, punctuation and grammar'] },
     { name: 'Biology / Chemistry', board: 'AQA (triple science)', goal: 45, topics: [
@@ -313,7 +314,7 @@ window.ELIJAH_DATA = {
       'Particle model': 'Particles: density and changes of state', 'Space': 'Space: the solar system and life cycle of stars' },
     2: { 'Shakespeare play': 'Literature: Macbeth', 'Macbeth': 'Literature: Macbeth', '19th-century novel': 'Literature: Jekyll and Hyde',
       'Jekyll and Hyde': 'Literature: Jekyll and Hyde', 'Modern text': 'Literature: An Inspector Calls', 'An Inspector Calls': 'Literature: An Inspector Calls',
-      'Poetry anthology': 'Literature: poetry anthology', 'Unseen poetry': 'Literature: unseen poetry',
+      'Poetry anthology': 'Literature: Eduqas poetry anthology', 'Literature: poetry anthology': 'Literature: Eduqas poetry anthology', 'Unseen poetry': 'Literature: unseen poetry',
       'Language Paper 1': 'Language: fiction reading', 'Language Paper 2': 'Language: non-fiction reading' },
     3: { 'Cells': 'Biology: cell structure and microscopy', 'Infection and response': 'Biology: communicable disease',
       'Homeostasis': 'Biology: hormones and blood glucose', 'Inheritance and evolution': 'Biology: variation and evolution',
