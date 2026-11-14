@@ -24,6 +24,9 @@
       sess: {},
       // ids of updates/notices already dismissed
       seen: [],
+      // Exam questions: your own (myq) and every mark you've given yourself (qlog[questionId] = [{ d, got, of }])
+      myq: [],
+      qlog: {},
       // Side hustle projects: { id, name, about, perWeek, steps[], ideasLabel, ideas[{id,text,used}], log[{key,date,idea,ideaId}], paused }
       hustles: (DATA.sideHustles || []).map(h => Object.assign({ ideas: [], log: [], paused: false }, JSON.parse(JSON.stringify(h)))),
       // Temporary events: { id, date, title, kind, start, end, note, replace }

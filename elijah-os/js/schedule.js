@@ -16,7 +16,7 @@ window.ELIJAH_DATA = {
   ],
 
   // Every day: these session cards are added to each day (same format as `sessions` in a day row).
-  daily: [['flashcards', '07:45'], ['evening', '21:15']],
+  daily: [['ao1-reps', '07:45'], ['evening', '21:15']],
 
   // One row per day, Monday first.
   // load is 'High', 'Medium-High', 'Medium' or 'Low'.
@@ -30,19 +30,19 @@ window.ELIJAH_DATA = {
     { day: 'Tue', title: 'Astro skills + lower body', load: 'Medium',
       time: '15:45 · Physics 75 min', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Skill sequences at 75% pace, light legs, then 75 minutes of Physics.',
-      sessions: [['astro-skill', '15:45'], ['lower-body', '17:00'], ['rev-physics', '18:00'], ['wall', '19:20'], ['hustle', '19:45']] },
+      sessions: [['astro-skill', '15:45'], ['lower-body', '17:00'], ['rev-physics', '18:00'], ['wall', '19:20'], ['hustle', '20:00']] },
     { day: 'Wed', title: 'Academy training', load: 'High',
       time: '18:15 · leave 18:00', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Pick one cue and bring it to academy.',
-      sessions: [['rev-lang', '16:30'], ['cue', '17:50'], ['academy', '18:15']] },
+      sessions: [['wall', '15:45'], ['rev-lang', '16:30'], ['cue', '17:50'], ['academy', '18:15']] },
     { day: 'Thu', title: 'Academy training', load: 'High',
       time: '18:15 · leave 18:00', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Second academy night. One cue, quality over volume.',
-      sessions: [['rev-eng-bio', '16:30'], ['cue', '17:50'], ['academy', '18:15']] },
+      sessions: [['wall', '15:45'], ['rev-eng-bio', '16:30'], ['cue', '17:50'], ['academy', '18:15']] },
     { day: 'Fri', title: 'Astro speed + match reps', load: 'Medium-High',
       time: '15:45–16:30 · revision 60 min', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Short, sharp speed reps. Stop after 2 slow reps.',
-      sessions: [['astro-speed', '15:45'], ['rev-chem-maths', '17:30'], ['hustle', '18:45']] },
+      sessions: [['astro-speed', '15:45'], ['rev-chem-maths', '17:30'], ['hustle', '18:45'], ['wall', '19:30']] },
     { day: 'Sat', title: 'Past paper + rest', load: 'Low',
       time: 'Morning · 2–3 hr paper', sub: 'Rest in the afternoon',
       mission: 'Timed past paper, mark it properly, then rest.',
@@ -50,7 +50,7 @@ window.ELIJAH_DATA = {
     { day: 'Sun', title: 'Match day', load: 'High',
       time: 'Match day · no revision', sub: '',
       mission: 'Match day. Play simple, play fast.',
-      sessions: ['match', ['hustle', '18:00']] }
+      sessions: ['match', ['wall', '17:00'], ['hustle', '18:00']] }
   ],
 
   // Session cards. Each one shows on Today and Week for the days that list it.
@@ -59,15 +59,18 @@ window.ELIJAH_DATA = {
   //   fixed: true = the planner never moves or drops it (academy, match).
   //   onClash: 'skip' = if an event clashes, skip it instead of moving it (clashNote says why).
   //   remind: minutes before the start to remind you (default 10). Optional cards have no reminder.
+  //   ladder: [AO1, AO2, AO3] = how many exam questions of each kind the card gives you, from js/questions.js
+  //     (weak topics and questions you got wrong come first). `mixed: true` draws from every subject.
+  //     `only: { subject: [topics] }` limits a subject to some of its topics (e.g. just the Chemistry ones).
+  //   keep: true = never dropped, even on a game day; if something clashes it moves (wall session).
   //   For kind 'revision', `subject` is the subject's position in `subjects` (0 = first),
   //   or `subjects: [a, b]` to alternate between two subjects week by week.
   //   The card adds your `topics` weakest topics from that subject automatically,
   //   and finishing it adds its minutes to that subject on the Revision screen.
   sessions: {
-    'flashcards': {
-      kind: 'revision', title: 'Flashcards', minutes: 15, remind: 0,
-      focus: 'Fifteen minutes, every day. Say the answer before you flip.',
-      items: [{ name: 'Spanish vocab' }, { name: 'Biology definitions' }, { name: 'Chemistry equations' }]
+    'ao1-reps': {
+      kind: 'revision', mixed: true, ladder: [8, 0, 0], title: 'AO1 reps', minutes: 15, remind: 0,
+      focus: 'Quick 1–3 mark questions across your subjects. Answer, check the mark scheme, mark yourself honestly.'
     },
     'evening': {
       kind: 'routine', title: 'Evening wind-down', minutes: 105, remind: 0,
@@ -140,12 +143,13 @@ window.ELIJAH_DATA = {
       ]
     },
     'wall': {
-      kind: 'football', optional: true, title: 'Home wall session', minutes: 20,
-      focus: 'Optional, after revision. Weak foot only for the second half.',
+      kind: 'football', keep: true, title: 'Wall session', minutes: 30,
+      focus: 'Non-negotiable, every day. Reps over perfection. Second half weak foot only.',
       items: [
-        { name: 'Two-touch passing, both feet, then one-touch' },
-        { name: 'Receiving across body and turning' },
-        { name: 'Second half: weak foot only' }
+        { name: 'Two-touch passing, both feet', reps: '8 min' },
+        { name: 'One-touch passing', reps: '7 min' },
+        { name: 'Receiving across body and turning', reps: '7 min' },
+        { name: 'Weak foot only', reps: '8 min' }
       ]
     },
     'hustle': {
@@ -159,9 +163,9 @@ window.ELIJAH_DATA = {
       items: [{ name: 'Picture your first touch' }, { name: 'Picture the finish' }]
     },
     'rev-chem-maths': {
-      kind: 'revision', subjects: [3, 0], title: 'Chemistry / Maths revision', minutes: 60, topics: 2,
-      focus: 'Chemistry, with Maths questions on alternate weeks.',
-      items: [{ name: 'Exam questions on today’s topics' }]
+      kind: 'revision', subjects: [3, 0], title: 'Chemistry / Maths revision', minutes: 60, ladder: [5, 3, 1],
+      only: { 3: ['Bonding and structure', 'Quantitative chemistry', 'Rates of reaction', 'Organic chemistry'] },
+      focus: 'Chemistry, with Maths questions on alternate weeks. AO1 reps, AO2 main chunk, one AO3.'
     },
     'academy': {
       kind: 'football', fixed: true, title: 'Academy training', minutes: 90, remind: 30,
@@ -195,25 +199,22 @@ window.ELIJAH_DATA = {
       ]
     },
     'rev-maths': {
-      kind: 'revision', subject: 0, title: 'Maths revision', minutes: 75, topics: 2,
+      kind: 'revision', subject: 0, title: 'Maths revision', minutes: 75, ladder: [6, 5, 2],
       onClash: 'skip', clashNote: 'Maths stays at its time; dropped today because of a clash',
-      focus: 'Two weak topics, then exam questions on them.',
-      items: [{ name: '10 exam questions on today’s topics' }]
+      focus: 'AO1 reps to warm up, AO2 as the main chunk, then the heavy AO3 questions.'
     },
     'rev-physics': {
-      kind: 'revision', subject: 1, title: 'Physics revision', minutes: 75, topics: 2,
-      focus: 'Learn it, then test yourself without notes.',
-      items: [{ name: 'Blurt everything from memory, then check' }]
+      kind: 'revision', subject: 1, title: 'Physics revision', minutes: 75, ladder: [6, 5, 2],
+      focus: 'AO1 reps to warm up, AO2 as the main chunk, then the heavy AO3 questions.'
     },
     'rev-lang': {
-      kind: 'revision', subject: 4, title: 'Spanish + PE revision', minutes: 45, topics: 2,
-      focus: '30–45 minutes. Short and active: say it out loud or write it.',
-      items: [{ name: 'Self-test on the topics' }]
+      kind: 'revision', subject: 4, title: 'Spanish + PE revision', minutes: 45, ladder: [5, 3, 1],
+      focus: 'Exam questions: say Spanish answers out loud, then write them.'
     },
     'rev-eng-bio': {
-      kind: 'revision', subjects: [2, 3], title: 'English / Biology revision', minutes: 45, topics: 1,
-      focus: 'English and Biology swap each week.',
-      items: [{ name: 'One timed answer or paragraph' }]
+      kind: 'revision', subjects: [2, 3], title: 'English / Biology revision', minutes: 45, ladder: [4, 3, 1],
+      only: { 3: ['Cells', 'Infection and response', 'Homeostasis', 'Inheritance and evolution'] },
+      focus: 'English and Biology swap each week. AO1 reps, AO2 main chunk, one AO3.'
     },
     'past-paper': {
       kind: 'paper', title: 'Timed past paper', minutes: 150,

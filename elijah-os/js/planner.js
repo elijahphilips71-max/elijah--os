@@ -59,7 +59,7 @@
     // 1. Game / training day: drop extra physical sessions.
     items.forEach(it => {
       const c = DATA.sessions[it.id];
-      if (phys && isPhysical(c) && !c.fixed) {
+      if (phys && isPhysical(c) && !c.fixed && !c.keep) {
         it.status = 'skipped'; it.note = 'No extra training on a ' + PHYSICAL_EVENT[phys.kind];
         if (!c.optional) changes.push(c.title + ' skipped (' + PHYSICAL_EVENT[phys.kind] + ').');
       }
@@ -86,7 +86,7 @@
       movers.push(it);
     });
     if (phys) {
-      const fixedPhys = items.find(it => it.status === 'ok' && DATA.sessions[it.id].fixed && isPhysical(DATA.sessions[it.id]));
+      const fixedPhys = items.find(it => it.status === 'ok' && DATA.sessions[it.id].fixed && isPhysical(DATA.sessions[it.id]) && !DATA.sessions[it.id].keep);
       if (fixedPhys && !warnings.some(w => w.includes(DATA.sessions[fixedPhys.id].title))) warnings.push(phys.title + ' and ' + DATA.sessions[fixedPhys.id].title + ' on the same day: a big load. Keep everything else light.');
     }
 
@@ -130,6 +130,11 @@
       const r = place(it, toMin(it.orig), 'moved from ' + it.orig + ' to');
       if (r.ok) { changes.push(r.text); if (it.status === 'shortened') it.note = 'Shortened · was ' + it.orig + ', ' + c.minutes + ' min'; return; }
       it.at = it.orig;
+      if (c.keep) {
+        it.status = 'moved'; it.note = 'No free slot: fit it in when you can';
+        warnings.push('No free 30 minutes for the ' + c.title.toLowerCase() + '. It still counts: squeeze it in.');
+        return;
+      }
       if (c.kind === 'revision' || c.kind === 'paper') {
         it.status = 'out'; it.note = 'Moved to tomorrow';
         carryOut.push(it.id); changes.push(c.title + ' moved to tomorrow (no time today).');
