@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-14-exam-questions', date: '2026-11-14', kind: 'update',
+    title: 'Exam questions instead of flashcards',
+    body: 'Revision is now exam questions in a ladder: AO1 quick marks to warm up, AO2 as the main chunk, then heavy AO3 questions. Answer, check the mark scheme, give yourself the marks. Questions you get wrong come back first. Mornings are 15 minutes of AO1 reps. Plus a 30-minute wall session every day that never gets dropped.'
+  },
+  {
     id: '2026-11-14-hustles', date: '2026-11-14', kind: 'update',
     title: 'Side hustles, and Maths stays put',
     body: 'New Side hustles tab. YouTube Shorts is your first project: save story ideas, track 3 a week, and see your next slots. You can rename, pause or swap projects any time; the weekly slots always go to your main one. Monday Maths no longer moves: if something clashes, it is dropped for that day.'

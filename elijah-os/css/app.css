@@ -366,6 +366,28 @@ button { -webkit-user-select: none; user-select: none; }
 .os-evdot { position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--os-amber); box-shadow: 0 0 6px var(--os-amber); }
 .os-drow-ev { display: block; font-size: 12px; color: var(--os-amber); }
 
+/* Exam questions */
+.os-q { display: flex; flex-direction: column; gap: 8px; padding: 12px 0; border-top: 1px solid var(--color-divider); }
+.os-q-head { padding: 12px 0 2px; }
+.os-q-head + .os-q, .os-q-head + .os-srow { border-top: 0; }
+.os-q-text { font-size: 15px; line-height: 1.45; text-wrap: pretty; }
+.os-q-ans {
+  display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: var(--radius-md); font-size: 14px; line-height: 1.45;
+  background: color-mix(in srgb, var(--color-text) 6%, transparent); color: var(--color-neutral-200);
+}
+.os-q-marks { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 6px; }
+.os-q-score { font-size: 13px; }
+.os-q.full .os-q-score { color: var(--os-green); }
+.os-q.part .os-q-score { color: var(--os-amber); }
+.os-q.miss .os-q-score { color: var(--os-red); }
+.os-q-total { font-size: 13px; padding: 8px 10px; border-radius: var(--radius-md); background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+.os-aostats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 6px 0 2px; }
+.os-aostats > span { display: flex; flex-direction: column; gap: 1px; }
+.os-aostats .os-num:nth-child(2) { font-size: 16px; }
+.os-myq { display: flex; flex-direction: column; gap: 8px; }
+.os-myq textarea { resize: vertical; font: inherit; font-size: 14px; }
+.os-myq select { min-width: 0; }
+
 /* Planner changes */
 .os-plan {
   display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-radius: var(--radius-lg);

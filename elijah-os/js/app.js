@@ -36,6 +36,8 @@
     subj: -1,         // subject whose topic list is open on Revision
     topicDraft: '',
     newVersion: false,
+    qShown: {},       // mark schemes revealed (not saved)
+    qd: {},           // draft of a new question, per subject
     ideaDraft: {},    // per project
     hOpen: null,      // open project on Side hustles (null = the first)
     menu: false,
@@ -320,8 +322,68 @@
 
   // Rows for one card. Revision cards put the weakest topics of their subject first
   // (red, then not rated, then amber), keeping any topic already ticked today.
+  // ---------- exam questions ----------
+  const qhash = str => { let h = 5381; for (const ch of str) h = ((h << 5) + h + ch.charCodeAt(0)) | 0; return (h >>> 0).toString(36); };
+  const QBANK = (window.ELIJAH_QUESTIONS || []).map(r => ({ s: r[0], t: r[1], ao: r[2], m: r[3], q: r[4], a: r[5], id: 'b' + qhash(r[4]) }));
+  const allQuestions = () => QBANK.concat((st().myq || []).map(x => Object.assign({ own: true }, x)));
+  const qById = id => allQuestions().find(q => q.id === id);
+  // Lower comes first: questions you got wrong last time, then new ones, then ones you got right; red topics before green.
+  function qScore(q, date) {
+    const conf = ((st().topics[q.s] || []).find(t => t.name === q.t) || {}).conf || 0;
+    const h = ((st().qlog || {})[q.id] || []).filter(x => x.d < date), last = h[h.length - 1];
+    const histW = !last ? 1 : last.got < last.of ? 0 : 2 + Math.min(h.length, 3);
+    return histW * 4 + [1, 0, 2, 3][conf];
+  }
+  // The questions a ladder card gives today. Ranked on history before today, so the list stays put while you answer.
+  function ladderRows(key, c) {
+    const e = getSess(key), date = dayKey(), sj = subjOf(c), rows = [];
+    let pool = allQuestions().filter(q => c.mixed ? DATA.subjects[q.s] && q.s !== 5 : q.s === sj);
+    if (!c.mixed && c.only && c.only[sj]) pool = pool.filter(q => c.only[sj].includes(q.t));
+    const rnd = q => parseInt(qhash(date + key + q.id), 36);
+    const LABEL = ['AO1 · quick marks', 'AO2 · main chunk', 'AO3 · heavy questions'];
+    (c.ladder || []).forEach((n, i) => {
+      if (!n) return;
+      const ao = i + 1;
+      let ranked = pool.filter(q => q.ao === ao).sort((a, b) => qScore(a, date) - qScore(b, date) || rnd(a) - rnd(b));
+      if (c.mixed) { // take turns between subjects, starting with a different one each day
+        const by = {}; ranked.forEach(q => (by[q.s] = by[q.s] || []).push(q));
+        const subs = Object.keys(by).map(Number).sort((a, b) => a - b), start = new Date(date + 'T12:00').getDate() % Math.max(1, subs.length), out = [];
+        for (let r = 0; out.length < ranked.length; r++) subs.forEach((_, j) => { const q = by[subs[(j + start) % subs.length]][r]; if (q) out.push(q); });
+        ranked = out;
+      }
+      const chosen = ranked.slice(0, n);
+      ranked.slice(n).forEach(q => { if ((e.q || {})[q.id] != null) chosen.push(q); });
+      chosen.forEach((q, j) => rows.push({ key: 'q:' + q.id, q, sets: 1, head: j === 0 ? LABEL[i] : '' }));
+      if (chosen.length < n) {
+        const more = n - chosen.length;
+        rows.push({ key: 'pp' + ao, name: more + ' more AO' + ao + ' question' + (more > 1 ? 's' : '') + ' from a past paper or your textbook', sets: 1,
+          detail: 'Add your own questions on the Revision screen', head: chosen.length ? '' : LABEL[i] });
+      }
+    });
+    return rows;
+  }
+  function qRow(key, r, e) {
+    const q = r.q, got = (e.q || {})[q.id], answered = got != null, shown = answered || ui.qShown[key + '|' + q.id];
+    const v = esc(key + '|' + q.id);
+    return `<div class="os-q ${answered ? (got >= q.m ? 'full' : got ? 'part' : 'miss') : ''}">
+      <div class="os-between"><span class="os-k">AO${q.ao} · ${q.m} mark${q.m > 1 ? 's' : ''} · ${esc(DATA.sessions[sid(key)].mixed ? DATA.subjects[q.s].name : q.t)}</span>
+        ${answered ? `<span class="os-num os-q-score">${got}/${q.m}</span>` : ''}</div>
+      <div class="os-q-text">${esc(q.q)}</div>
+      ${shown ? `<div class="os-q-ans"><span class="os-k">Mark scheme</span><span>${esc(q.a)}</span></div>
+        <div class="os-q-marks" role="group" aria-label="Your marks">${Array.from({ length: q.m + 1 }, (_, n) => `<button class="os-rpe ${got === n ? 'on' : ''}" data-act="qmark" data-v="${v}|${n}" aria-pressed="${got === n}">${n}</button>`).join('')}</div>`
+      : `<button class="btn btn-secondary os-btn" data-act="qshow" data-v="${v}">Check the mark scheme</button>`}
+    </div>`;
+  }
+  // Marks per AO for a subject over the last 4 weeks: [{ got, of }, ...] for AO1..AO3
+  function aoStats(sj) {
+    const from = iso(new Date(Date.now() - 28 * 864e5)), out = [{ got: 0, of: 0 }, { got: 0, of: 0 }, { got: 0, of: 0 }], log = st().qlog || {};
+    allQuestions().forEach(q => { if (q.s !== sj) return; (log[q.id] || []).forEach(x => { if (x.d >= from) { out[q.ao - 1].got += x.got; out[q.ao - 1].of += x.of; } }); });
+    return out;
+  }
+
   function cardRows(id) {
     const c = DATA.sessions[sid(id)], e = getSess(id), rows = [];
+    if (c.ladder) return ladderRows(id, c);
     const sj = subjOf(c);
     if (c.kind === 'revision' && sj != null) {
       const ts = st().topics[sj] || [];
@@ -389,6 +451,8 @@
       <div class="os-bar os-scard-bar"><div style="width:${e.done ? 100 : pct}%"></div></div>
       ${open ? `<div class="os-scard-body">
         ${c.focus ? `<div class="os-scard-focus">${esc(c.focus)}</div>` : ''}
+        ${c.ladder ? (() => { const qs = cardRows(id).filter(r => r.q && (e.q || {})[r.q.id] != null); const g = qs.reduce((a, r) => a + e.q[r.q.id], 0), o = qs.reduce((a, r) => a + r.q.m, 0);
+          return qs.length ? `<div class="os-between os-q-total"><span>${qs.length} answered</span><span class="os-num">${g} / ${o} marks${o ? ' · ' + Math.round(g / o * 100) + '%' : ''}</span></div>` : ''; })() : ''}
         <div class="os-scard-rows">${cardRows(id).map(r => sessRow(id, r, e)).join('')}</div>
         <button class="btn ${e.done ? 'btn-secondary' : 'btn-primary'} os-btn" data-act="sessDone" data-v="${esc(id)}">${e.done ? 'Undo finish' : 'Finish session'}${!e.done && sub ? ` · +${it.min} min ${esc(sub.name)}` : ''}</button>
       </div>` : ''}
@@ -396,6 +460,9 @@
   }
 
   function sessRow(id, r, e) {
+    const head = r.head ? `<div class="os-q-head os-k acc">${esc(r.head)}</div>` : '';
+    if (r.q) return head + qRow(id, r, e);
+    if (head) return head + sessRow(id, Object.assign({}, r, { head: '' }), e);
     if (!r.sets) return `<div class="os-srow"><span class="os-muted" style="font-size:14px">${esc(r.name)}</span></div>`;
     const n = Math.min(r.sets, e.c[r.key] || 0), full = n >= r.sets;
     const v = esc(id + '|' + r.key);
@@ -664,8 +731,11 @@
     const ts = st().topics[i] || [];
     const cnt = [0, 0, 0, 0]; ts.forEach(t => cnt[t.conf || 0]++);
     const open = ui.subj === i;
+    const ao = aoStats(i), mine = (st().myq || []).filter(q => q.s === i), d = ui.qd[i] || {};
+    const hasQs = allQuestions().some(q => q.s === i);
     return `<div class="os-topics">
       ${DATA.subjects[i].note ? `<span class="os-muted" style="font-size:12px">${esc(DATA.subjects[i].note)}</span>` : ''}
+      ${hasQs ? `<div class="os-aostats" aria-label="Marks in the last 4 weeks">${ao.map((x, j) => `<span><span class="os-k">AO${j + 1}</span><span class="os-num ${x.of ? (x.got / x.of >= .7 ? 'cgreen' : x.got / x.of >= .4 ? 'camber' : 'cred') : 'os-muted'}">${x.of ? Math.round(x.got / x.of * 100) + '%' : '—'}</span><span class="os-num os-muted" style="font-size:11px">${x.of ? x.got + '/' + x.of : 'no reps'}</span></span>`).join('')}</div>` : ''}
       <button class="os-topics-head" data-act="subj" data-v="${i}" aria-expanded="${open}">
         <span style="font-size:13px">Topics</span>
         <span class="os-rag">${cnt[1] ? `<span class="cred">${cnt[1]} red</span>` : ''}${cnt[2] ? `<span class="camber">${cnt[2]} amber</span>` : ''}${cnt[3] ? `<span class="cgreen">${cnt[3]} green</span>` : ''}${cnt[0] ? `<span>${cnt[0]} not rated</span>` : ''}${ts.length ? '' : '<span>none yet</span>'}</span>
@@ -677,7 +747,19 @@
         <form data-form="topic" data-i="${i}" style="display:flex;gap:8px">
           <input class="input os-in" style="flex:1;min-width:0" placeholder="Add a topic" aria-label="New ${esc(DATA.subjects[i].name)} topic" value="${esc(ui.topicDraft)}" data-in="topicDraft" id="topic-${i}">
           <button class="btn btn-secondary os-btn" type="submit">Add</button></form>
-        <span class="os-muted" style="font-size:12px">Tap a rating to change it. Red topics come up first in revision session cards.</span>` : ''}
+        <span class="os-muted" style="font-size:12px">Tap a rating to change it. Questions on red topics come up first in your revision cards.</span>
+        <span class="os-k" style="padding-top:8px">Add your own exam question</span>
+        <form data-form="myq" data-i="${i}" class="os-myq">
+          <div class="os-evgrid">
+            <select class="input os-in" aria-label="Topic" data-in="qd" data-f="t" data-i="${i}">${ts.map(t => `<option ${d.t === t.name ? 'selected' : ''}>${esc(t.name)}</option>`).join('')}</select>
+            <select class="input os-in" aria-label="AO" data-in="qd" data-f="ao" data-i="${i}">${[1, 2, 3].map(n => `<option value="${n}" ${+(d.ao || 1) === n ? 'selected' : ''}>AO${n}</option>`).join('')}</select>
+            <select class="input os-in" aria-label="Marks" data-in="qd" data-f="m" data-i="${i}">${[1, 2, 3, 4, 5, 6, 8, 9, 12].map(n => `<option value="${n}" ${+(d.m || 1) === n ? 'selected' : ''}>${n} mark${n > 1 ? 's' : ''}</option>`).join('')}</select>
+          </div>
+          <textarea class="input os-in" rows="2" placeholder="Question (e.g. from a past paper)" aria-label="Question" data-in="qd" data-f="q" data-i="${i}" id="qd-q-${i}">${esc(d.q || '')}</textarea>
+          <textarea class="input os-in" rows="2" placeholder="Mark scheme / answer" aria-label="Mark scheme" data-in="qd" data-f="a" data-i="${i}" id="qd-a-${i}">${esc(d.a || '')}</textarea>
+          <button class="btn btn-secondary os-btn" type="submit">${icon('plus')}Add question</button>
+        </form>
+        ${mine.length ? `<span class="os-muted" style="font-size:12px">Your questions: ${mine.length}</span>${mine.map(q => `<div class="os-topic"><span class="os-num os-muted" style="font-size:11px;flex:none">AO${q.ao} · ${q.m}m</span><span style="flex:1;min-width:0;font-size:13px;overflow-wrap:anywhere">${esc(q.q)}</span><button class="btn btn-ghost btn-icon os-x" data-act="rmMyq" data-v="${esc(q.id)}" aria-label="Delete question">${icon('x')}</button></div>`).join('')}` : ''}` : ''}
     </div>`;
   }
 
@@ -854,6 +936,24 @@
       const open = ui.openCard != null ? ui.openCard : (ids.find(id => !getSess(id).done) || '');
       ui.openCard = open === v ? '' : v;
     },
+    rmMyq(v) { if (!confirm('Delete this question?')) return; Store.update(s => { s.myq = (s.myq || []).filter(q => q.id !== v); }); },
+    qshow(v) { ui.qShown[v] = true; },
+    qmark(v) {
+      const parts = v.split('|'), n = +parts.pop(), qid = parts.pop(), key = parts.join('|');
+      const q = qById(qid); if (!q) return;
+      const k = dayKey(), cur = getSess(key);
+      Store.update(s => {
+        const all = s.sess[k] = s.sess[k] || {};
+        const e = Object.assign({ c: {}, done: false, added: 0 }, all[key]);
+        e.q = Object.assign({}, e.q, { [qid]: n });
+        e.c = Object.assign({}, e.c, { ['q:' + qid]: 1 });
+        all[key] = e;
+        s.qlog = s.qlog || {};
+        s.qlog[qid] = (s.qlog[qid] || []).filter(x => !(x.d === k && x.k === key)).concat({ d: k, k: key, got: n, of: q.m });
+      });
+      const p = cardProgress(key);
+      if (!cur.done && p.total && p.got >= p.total) { finish(key, true); ui.openCard = null; }
+    },
     tick(v) {
       const cut = v.indexOf('|'), id = v.slice(0, cut), key = v.slice(cut + 1);
       const row = cardRows(id).find(r => r.key === key);
@@ -984,6 +1084,13 @@
       ui.ideaDraft[h.id] = '';
       render();
       const inp = root.querySelector('#idea-' + i); if (inp) inp.focus();
+    } else if (f === 'myq') {
+      const i = +e.target.dataset.i, d = ui.qd[i] || {}, ts = st().topics[i] || [];
+      const q = (d.q || '').trim(), a = (d.a || '').trim();
+      if (!q || !a) { alert('Add the question and its mark scheme.'); return; }
+      Store.update(s => { s.myq = (s.myq || []).concat({ id: 'u' + Date.now().toString(36), s: i, t: d.t || (ts[0] || {}).name || '', ao: +(d.ao || 1), m: +(d.m || 1), q, a }); });
+      ui.qd[i] = { t: d.t, ao: d.ao, m: d.m };
+      render();
     } else if (f === 'topic') {
       const i = +e.target.dataset.i, name = ui.topicDraft.trim();
       if (!name) return;
@@ -1028,6 +1135,7 @@
       case 'review': { const wk = weekKey(); Store.update(s => { const r = (s.reviews[wk] || ['', '', '']).slice(); r[i] = v; s.reviews[wk] = r; }); break; }
       case 'scoreDraft': ui.scoreDraft = v; break;
       case 'topicDraft': ui.topicDraft = v; break;
+      case 'qd': ui.qd[i] = Object.assign({}, ui.qd[i], { [f]: v }); break;
       case 'ideaDraft': ui.ideaDraft[f] = v; break;
       case 'hustle': Store.update(s => { const h = s.hustles[i]; if (!h) return; h[f] = f === 'perWeek' ? Math.max(0, parseInt(v, 10) || 0) : v; }); break;
       case 'hStep': Store.update(s => { const h = s.hustles[+f]; if (h) h.steps[i] = v; }); break;
