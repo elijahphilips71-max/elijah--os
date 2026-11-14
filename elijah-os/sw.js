@@ -1,6 +1,6 @@
 // Elijah OS service worker: lets the app open offline.
 // Bump VERSION whenever you change files, so phones pick up the new version.
-const VERSION = 'elijah-os-v5';
+const VERSION = 'elijah-os-v7';
 const SHELL = [
   './',
   './index.html',
@@ -26,6 +26,15 @@ self.addEventListener('activate', e => {
     caches.keys().then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
+});
+
+// Tapping a reminder opens (or focuses) the app.
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+    const open = list.find(c => c.url.startsWith(self.registration.scope));
+    return open ? open.focus() : self.clients.openWindow(self.registration.scope);
+  }));
 });
 
 self.addEventListener('fetch', e => {

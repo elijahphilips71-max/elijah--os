@@ -48,7 +48,8 @@
   };
   const KIND = {
     gym: ['Workout', 'barbell'], football: ['Pitch', 'soccer-ball'], recovery: ['Recovery', 'heartbeat'],
-    revision: ['Revision', 'book-open-text'], paper: ['Past paper', 'exam']
+    revision: ['Revision', 'book-open-text'], paper: ['Past paper', 'exam'],
+    mental: ['Mindset', 'brain'], routine: ['Routine', 'moon-stars']
   };
   const CONF = ['Not rated', 'Red', 'Amber', 'Green'];
   const CONF_CLS = ['', 'red', 'amber', 'green'];
@@ -89,6 +90,15 @@
   }
   const icon = n => `<i class="ph ph-${n}" aria-hidden="true"></i>`;
   const pill = (load, text, sm) => `<span class="os-pill ${esc(load)}${sm ? ' sm' : ''}">${esc(text)}</span>`;
+  const shortLoad = l => l === 'Medium-High' ? 'M+' : l[0];
+  // Which subject a revision card is for. `subjects: [a, b]` alternates week by week.
+  function subjOf(c) {
+    if (Array.isArray(c.subjects) && c.subjects.length) {
+      const n = Math.round((monday() - new Date(2026, 10, 9, 12)) / (7 * 864e5));
+      return c.subjects[((n % c.subjects.length) + c.subjects.length) % c.subjects.length];
+    }
+    return c.subject;
+  }
 
   // ---------- pieces ----------
   function nav() {
@@ -108,6 +118,7 @@
       <button class="os-nav" data-act="goTopics">${icon('list-checks')}<span>Revision topics</span></button>
       <button class="os-nav" data-act="evNewMenu">${icon('calendar-plus')}<span>Add event</span></button>
       <button class="os-nav" data-act="goCal">${icon('calendar-check')}<span>Calendar</span></button>
+      <button class="os-nav" data-act="goRemind">${icon('bell')}<span>Reminders</span>${remindCfg().on ? '' : '<span class="os-badge os-num" style="background:var(--color-neutral-700);color:var(--color-text)">off</span>'}</button>
       <div style="margin-top:auto;padding:16px 14px 0;display:flex;flex-direction:column;gap:2px"><span class="os-k">First exam</span>
         <span class="os-num" style="font-size:22px">${daysLeft()}<span class="os-muted" style="font-size:12px"> days</span></span></div>`;
   }
@@ -126,13 +137,13 @@
   function strip(tall) {
     return `<div class="os-strip">${DATA.schedule.map((d, i) => { const v = dayView(i), n = eventsOn(iso(dt(i))).length;
       return `<button class="os-day ${tall ? 'tall' : ''} ${i === ui.day ? 'on' : ''} ${ui.week === 0 && i === todayIdx() ? 'now' : ''}" data-act="day" data-v="${i}" aria-label="${FULL[i]}${n ? ', ' + n + ' event' + (n > 1 ? 's' : '') : ''}">
-      <span>${esc(d.day)}</span>${tall ? `<span class="os-num" style="font-size:16px;color:var(--color-text)">${dt(i).getDate()}</span>` : ''}${pill(v.load, v.load[0], true)}${n ? '<span class="os-evdot"></span>' : ''}</button>`; }).join('')}</div>`;
+      <span>${esc(d.day)}</span>${tall ? `<span class="os-num" style="font-size:16px;color:var(--color-text)">${dt(i).getDate()}</span>` : ''}${pill(v.load, shortLoad(v.load), true)}${n ? '<span class="os-evdot"></span>' : ''}</button>`; }).join('')}</div>`;
   }
 
   function dayList(fullLoad, withKicker) {
     return `<section class="os-card os-list">${withKicker ? '<span class="os-k" style="padding:8px 10px">This week</span>' : ''}${DATA.schedule.map((d, i) => { const v = dayView(i), extra = eventsOn(iso(dt(i))).filter(e => !e.replace);
       return `<button class="os-drow ${i === ui.day ? 'on' : ''}" data-act="day" data-v="${i}">
-      <span class="os-num os-muted">${esc(d.day)}</span><span style="line-height:1.3">${v.ev ? icon((EVK[v.ev.kind] || EVK.other)[1]) + ' ' : ''}${esc(v.title)}${extra.map(e => `<span class="os-drow-ev">+ ${esc(e.title)}${e.start ? ' · ' + esc(e.start) : ''}</span>`).join('')}</span>${pill(v.load, fullLoad ? v.load : v.load[0])}</button>`; }).join('')}</section>`;
+      <span class="os-num os-muted">${esc(d.day)}</span><span style="line-height:1.3">${v.ev ? icon((EVK[v.ev.kind] || EVK.other)[1]) + ' ' : ''}${esc(v.title)}${extra.map(e => `<span class="os-drow-ev">+ ${esc(e.title)}${e.start ? ' · ' + esc(e.start) : ''}</span>`).join('')}</span>${pill(v.load, fullLoad ? v.load : shortLoad(v.load))}</button>`; }).join('')}</section>`;
   }
 
   function sessionCard(kicker, withStrip) {
@@ -165,7 +176,7 @@
   // ---------- temporary events ----------
   function evTimes(e) { return e.start ? e.start + (e.end ? '–' + e.end : '') : 'All day'; }
   function evCalData(e) {
-    return { uid: 'event-' + e.id + '@elijah-os', title: e.title, date: e.date, start: e.start, end: e.end, desc: e.note || '' };
+    return { uid: 'event-' + e.id + '@elijah-os', title: e.title, date: e.date, start: e.start, end: e.end, desc: e.note || '', alarm: 30 };
   }
   function eventCard(e) {
     const k = EVK[e.kind] || EVK.other;
@@ -222,25 +233,89 @@
     const evs = [];
     for (let i = 0; i < 7; i++) {
       const k = iso(dt(i));
-      if (!replacingEvent(k)) Cal.refs(DATA.schedule[i]).forEach(r => { if (DATA.sessions[r.id]) evs.push(Object.assign(Cal.planEvent(DATA, i, r, k), { uid: 'plan-' + k + '-' + r.id + '@elijah-os' })); });
+      if (!replacingEvent(k)) dayRefs(i).forEach(r => { evs.push(Object.assign(Cal.planEvent(DATA, i, r, k), { uid: 'plan-' + k + '-' + r.id + '@elijah-os' })); });
       eventsOn(k).forEach(e => evs.push(evCalData(e)));
     }
     return Cal.calendar(evs, 'Elijah OS · week of ' + fmt(dt(0), { day: 'numeric', month: 'short' }));
   }
 
+  // ---------- reminders ----------
+  // Settings live on this device only (notification permission is per device).
+  const RKEY = 'elijahos.remind', FKEY = 'elijahos.fired';
+  const lsGet = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  const remindCfg = () => Object.assign({ on: false, lead: 10 }, lsGet(RKEY, {}));
+  const canNotify = () => 'Notification' in window && 'serviceWorker' in navigator;
+  const isIOS = () => /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const standalone = () => window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const hm = d => String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+
+  // Today's reminders, whatever day the app is showing: [{ key, at: 'HH:MM', remindAt: 'HH:MM', title, body }]
+  function todaysReminders() {
+    const i = todayIdx(), k = iso(new Date()), cfg = remindCfg(), out = [];
+    const daily = st().daily[k] || { chk: [false, false, false, false] };
+    const sess = st().sess[k] || {};
+    const add = (key, at, lead, title, body) => out.push({ key, at, remindAt: Cal.addMin(at, -lead + 24 * 60), title, body });
+    if (!daily.chk[0]) add('checkin', '07:30', 0, 'Morning check-in', 'Sleep, energy, legs: 1 to 5.');
+    if (!replacingEvent(k)) Cal.refs(DATA.schedule[i], DATA.daily).forEach(r => {
+      const c = DATA.sessions[r.id];
+      if (!c || !r.at || c.optional || (sess[r.id] && sess[r.id].done)) return;
+      const lead = c.remind != null ? c.remind : cfg.lead;
+      add('s-' + r.id, r.at, lead, c.title, (lead ? 'Starts at ' + r.at + '. ' : '') + (c.focus || ''));
+    });
+    eventsOn(k).forEach(e => { if (e.start) add('e-' + e.id, e.start, Math.max(30, cfg.lead), e.title, 'Starts at ' + e.start + (e.note ? '. ' + e.note : '')); });
+    if (!daily.chk[3]) add('log', '21:00', 0, '2-line log', 'One win, one fix.');
+    return out.sort((a, b) => a.remindAt.localeCompare(b.remindAt));
+  }
+  async function notify(title, body, tag) {
+    const reg = await navigator.serviceWorker.ready;
+    return reg.showNotification(title, { body, tag, icon: 'icons/icon-192.png', badge: 'icons/icon-192.png' });
+  }
+  // Runs every 30 seconds while the app is open: sends any reminder due in the last 15 minutes, once.
+  function checkReminders() {
+    if (!canNotify() || !remindCfg().on || Notification.permission !== 'granted') return;
+    const now = hm(new Date()), late = hm(new Date(Date.now() - 15 * 6e4)), k = iso(new Date());
+    const fired = lsGet(FKEY, {}), done = fired[k] || [];
+    todaysReminders().forEach(r => {
+      if (done.includes(r.key) || r.remindAt > now || r.remindAt < late) return;
+      done.push(r.key);
+      notify(r.title, r.body, k + '-' + r.key).catch(() => {});
+    });
+    lsSet(FKEY, { [k]: done });
+  }
+  function remindersCard() {
+    const cfg = remindCfg(), perm = canNotify() ? Notification.permission : 'unsupported';
+    const on = cfg.on && perm === 'granted';
+    const upcoming = todaysReminders().filter(r => r.remindAt >= hm(new Date())).slice(0, 5);
+    let status;
+    if (perm === 'unsupported') status = isIOS() && !standalone() ? 'On iPhone, add Elijah OS to your Home Screen first (Share → Add to Home Screen), then open it from there.' : 'This browser cannot show notifications. Use the calendar alerts below.';
+    else if (perm === 'denied') status = 'Notifications are blocked for this site. Allow them in your browser or phone settings, then come back.';
+    else status = on ? 'On. Reminders come while Elijah OS is open or in the background.' : 'Off.';
+    return `<section class="os-card" id="reminders"><div class="os-between"><span class="os-k">Reminders</span>${on ? '<span class="tag tag-outline">On</span>' : ''}</div>
+      <div style="font-size:14px;line-height:1.5;color:var(--color-neutral-200)">${esc(status)}</div>
+      ${perm === 'default' || (perm === 'granted' && !cfg.on) ? `<button class="btn btn-primary os-btn" data-act="remindOn">${icon('bell-ringing')}Turn on reminders</button>` : ''}
+      ${on ? `<div class="os-chips" role="group" aria-label="Remind me before">${[5, 10, 15, 30].map(m => `<button class="os-chipsel ${cfg.lead === m ? 'on' : ''}" data-act="remindLead" data-v="${m}" aria-pressed="${cfg.lead === m}">${m} min before</button>`).join('')}</div>
+        <div style="display:flex;gap:8px"><button class="btn btn-secondary os-btn" style="flex:1" data-act="remindTest">Send a test</button><button class="btn btn-secondary os-btn" style="flex:1" data-act="remindOff">Turn off</button></div>` : ''}
+      ${upcoming.length ? `<span class="os-k" style="padding-top:4px">Still to come today</span>${upcoming.map(r => `<div class="os-between" style="font-size:14px"><span>${esc(r.title)}</span><span class="os-num os-muted" style="font-size:12px">${esc(r.remindAt)}</span></div>`).join('')}` : ''}
+      <div class="os-remind-tip">${icon('calendar-check')}<span>For reminders when the app is closed, subscribe to the calendar on <button class="btn btn-ghost" style="padding:0;min-height:0" data-act="goCal">Week</button>. Every session alerts you before it starts (academy 30 min before).${isIOS() ? ' On iPhone, check Settings → Calendar → Accounts → Subscribed Calendars, and turn off "Remove Alerts".' : ''}</span></div>
+    </section>`;
+  }
+
   // ---------- session cards ----------
-  const dayRefs = d => Cal.refs(DATA.schedule[d]).filter(r => DATA.sessions[r.id]);
+  const dayRefs = d => Cal.refs(DATA.schedule[d], DATA.daily).filter(r => DATA.sessions[r.id]);
   const cardIds = d => dayRefs(d).map(r => r.id);
   const startAt = (d, id) => { const r = dayRefs(d).find(x => x.id === id); return r ? r.at : ''; };
   function getSess(id) { const e = (st().sess[dayKey()] || {})[id]; return Object.assign({ c: {}, done: false, added: 0 }, e); }
-  const isRevKind = c => c.kind === 'revision' || c.kind === 'paper';
+  // Which daily checklist item a finished card ticks: 1 = Revision block, 2 = Football / physical session.
+  const checkFor = c => c.kind === 'revision' || c.kind === 'paper' ? 1 : (c.kind === 'gym' || c.kind === 'football' || c.kind === 'recovery') ? 2 : -1;
 
   // Rows for one card. Revision cards put the weakest topics of their subject first
   // (red, then not rated, then amber), keeping any topic already ticked today.
   function cardRows(id) {
     const c = DATA.sessions[id], e = getSess(id), rows = [];
-    if (c.kind === 'revision' && c.subject != null) {
-      const ts = st().topics[c.subject] || [];
+    const sj = subjOf(c);
+    if (c.kind === 'revision' && sj != null) {
+      const ts = st().topics[sj] || [];
       const order = t => [1, 0, 2, 3][t.conf || 0];
       const ticked = ts.filter(t => e.c['t:' + t.name]);
       const rest = ts.filter(t => !e.c['t:' + t.name] && t.conf !== 3).sort((a, b) => order(a) - order(b));
@@ -264,12 +339,13 @@
   function sessionCards(d, title) {
     const ids = cardIds(d), k = iso(dt(d)), evs = eventsOn(k), rep = replacingEvent(k);
     const open = ui.openCard != null ? ui.openCard : (ids.find(id => !getSess(id).done) || '');
-    const doneN = ids.filter(id => getSess(id).done).length;
+    const core = ids.filter(id => !DATA.sessions[id].optional);
+    const doneN = core.filter(id => getSess(id).done).length;
     const planned = rep && !ui.showPlanned
       ? (ids.length ? `<button class="os-chip" data-act="showPlanned">${icon('eye-slash')}<span>Planned sessions skipped for ${esc(rep.title)}</span><span style="margin-left:auto;color:var(--color-accent-300);font-size:13px">Show</span></button>` : '')
       : ids.map(id => sessCard(id, id === open)).join('');
     return `<section class="os-cards" aria-label="${esc(title)}">
-      <div class="os-between" style="padding:0 2px"><span class="os-k">${esc(title)}</span>${ids.length ? `<span class="os-num os-muted" style="font-size:12px">${doneN} of ${ids.length} done</span>` : ''}</div>
+      <div class="os-between" style="padding:0 2px"><span class="os-k">${esc(title)}</span>${core.length ? `<span class="os-num os-muted" style="font-size:12px">${doneN} of ${core.length} done</span>` : ''}</div>
       ${evs.map(eventCard).join('')}
       ${planned}
       ${ui.evForm ? eventForm() : `<button class="btn btn-secondary os-btn" data-act="evNew">${icon('plus')}Add event for ${fmt(dt(d), { weekday: 'long' })}</button>`}</section>`;
@@ -279,11 +355,11 @@
     const c = DATA.sessions[id], e = getSess(id), k = KIND[c.kind] || KIND.gym;
     const p = cardProgress(id);
     const pct = p.total ? Math.round(p.got / p.total * 100) : 0;
-    const sub = c.kind === 'revision' && c.subject != null ? DATA.subjects[c.subject] : null;
+    const sj = subjOf(c), sub = c.kind === 'revision' && sj != null ? DATA.subjects[sj] : null;
     return `<article class="os-scard ${e.done ? 'done' : ''} ${open ? 'open' : ''}" data-kind="${esc(c.kind)}">
       <button class="os-scard-head" data-act="card" data-v="${esc(id)}" aria-expanded="${open}">
         <span class="os-scard-ic">${icon(e.done ? 'check' : k[1])}</span>
-        <span class="os-scard-t"><span class="os-k">${esc(k[0])}${sub ? ' · ' + esc(sub.name) : ''} · <span class="os-num">${c.minutes} min</span></span>
+        <span class="os-scard-t"><span class="os-k">${c.optional ? 'Optional · ' : ''}${esc(k[0])}${sub ? ' · ' + esc(sub.name) : ''} · <span class="os-num">${c.minutes} min</span></span>
           <span class="os-scard-title">${esc(c.title)}</span></span>
         <span class="os-num os-scard-pct">${startAt(ui.day, id) ? `<span class="os-muted">${esc(startAt(ui.day, id))}</span><br>` : ''}${e.done ? 'Done' : p.got + '/' + p.total}</span>
         ${icon(open ? 'caret-up' : 'caret-down')}
@@ -318,13 +394,15 @@
       const e = Object.assign({ c: {}, done: false, added: 0 }, all[id]);
       if (!!e.done === on) return;
       e.done = on;
-      if (c.kind === 'revision' && c.subject != null && ui.week === 0) {
+      const sj = subjOf(c);
+      if (c.kind === 'revision' && sj != null && ui.week === 0) {
         if (s.minsWeek !== wk) { s.mins = s.mins.map(() => 0); s.minsWeek = wk; }
-        if (on) { s.mins[c.subject] += c.minutes; e.added = c.minutes; }
-        else { s.mins[c.subject] = Math.max(0, s.mins[c.subject] - (e.added || 0)); e.added = 0; }
+        if (on) { s.mins[sj] += c.minutes; e.added = c.minutes; e.subj = sj; }
+        else { const was = e.subj != null ? e.subj : sj; s.mins[was] = Math.max(0, s.mins[was] - (e.added || 0)); e.added = 0; }
       }
       all[id] = e;
-      if (on) { const chk = day.chk.slice(); chk[isRevKind(c) ? 1 : 2] = true; s.daily[k] = Object.assign({}, day, { chk }); }
+      const ci = checkFor(c);
+      if (on && ci >= 0) { const chk = day.chk.slice(); chk[ci] = true; s.daily[k] = Object.assign({}, day, { chk }); }
     });
   }
 
@@ -464,6 +542,7 @@
     const cnt = [0, 0, 0, 0]; ts.forEach(t => cnt[t.conf || 0]++);
     const open = ui.subj === i;
     return `<div class="os-topics">
+      ${DATA.subjects[i].note ? `<span class="os-muted" style="font-size:12px">${esc(DATA.subjects[i].note)}</span>` : ''}
       <button class="os-topics-head" data-act="subj" data-v="${i}" aria-expanded="${open}">
         <span style="font-size:13px">Topics</span>
         <span class="os-rag">${cnt[1] ? `<span class="cred">${cnt[1]} red</span>` : ''}${cnt[2] ? `<span class="camber">${cnt[2]} amber</span>` : ''}${cnt[3] ? `<span class="cgreen">${cnt[3]} green</span>` : ''}${cnt[0] ? `<span>${cnt[0]} not rated</span>` : ''}${ts.length ? '' : '<span>none yet</span>'}</span>
@@ -479,10 +558,18 @@
     </div>`;
   }
 
+  // Retests fall every `retestWeeks` weeks, counted from Monday 9 Nov 2026.
+  function nextRetest() {
+    const step = DATA.retestWeeks * 7 * 864e5, d = new Date(2026, 10, 9, 12), now = new Date(); now.setHours(0, 0, 0, 0);
+    while (d < now) d.setTime(d.getTime() + step);
+    return d;
+  }
+
   function progress() {
     const s = st();
     return `
-    <header class="os-head"><span class="os-k acc">Progress</span><h3>Benchmarks</h3></header>
+    <header class="os-head"><span class="os-k acc">Progress</span><h3>Benchmarks</h3>
+      ${DATA.retestWeeks ? `<span class="os-num os-muted" style="font-size:13px">Retest every ${DATA.retestWeeks} weeks · next ${fmt(nextRetest(), { weekday: 'short', day: 'numeric', month: 'short' })}</span>` : ''}</header>
     <div class="os-grid g2">
       <section class="os-card os-table-wrap"><table class="table" style="font-size:13px"><thead><tr><th>Benchmark</th><th style="text-align:right">Base</th><th style="text-align:right">Latest</th><th style="text-align:right">Target</th></tr></thead><tbody>
         ${s.bench.map((b, i) => `<tr>
@@ -493,14 +580,16 @@
         </tbody></table>
         <button class="btn btn-secondary os-btn" style="margin:4px 6px" data-act="addBench">${icon('plus')}Add benchmark</button></section>
       <section class="os-card os-hero"><span class="os-k">Skill of the month</span>
-        <input class="input os-in" style="font-size:17px" placeholder="Name this month's skill" aria-label="Skill of the month" value="${esc(s.skill.name)}" data-in="skillName" id="skillName">
-        ${s.skill.steps.map((text, i) => {
-          const cls = i === s.skill.cur ? 'on' : i < s.skill.cur ? 'done' : '';
-          const tag = i === s.skill.cur ? 'current' : i < s.skill.cur ? 'done' : '';
-          return `<div class="os-ladder"><button class="os-step ${cls}" data-act="step" data-v="${i}" aria-label="Mark step ${i + 1} as current"${i === s.skill.cur ? ' aria-current="step"' : ''}>${i + 1}</button>
-            <input class="input os-in" style="flex:1;min-width:0" placeholder="Step ${i + 1}" aria-label="Step ${i + 1}" value="${esc(text)}" data-in="stepText" data-i="${i}" id="step-${i}">
-            <span class="os-num" style="font-size:11px;width:52px;color:var(--color-accent-300)">${tag}</span></div>`;
-        }).join('')}
+        ${s.skills.map((sk, k) => `<div class="os-skill">
+          <input class="input os-in" style="font-size:17px" placeholder="Skill name" aria-label="Skill ${k + 1} name" value="${esc(sk.name)}" data-in="skillName" data-i="${k}" id="skillName-${k}">
+          ${sk.steps.map((text, i) => {
+            const cls = i === sk.cur ? 'on' : i < sk.cur ? 'done' : '';
+            const tag = i === sk.cur ? 'current' : i < sk.cur ? 'done' : '';
+            return `<div class="os-ladder"><button class="os-step ${cls}" data-act="step" data-v="${k}|${i}" aria-label="Mark ${esc(text || 'step ' + (i + 1))} as current"${i === sk.cur ? ' aria-current="step"' : ''}>${i + 1}</button>
+              <input class="input os-in" style="flex:1;min-width:0" placeholder="Step ${i + 1}" aria-label="${esc(sk.name)} step ${i + 1}" value="${esc(text)}" data-in="stepText" data-f="${k}" data-i="${i}" id="step-${k}-${i}">
+              <span class="os-num" style="font-size:11px;width:52px;color:var(--color-accent-300)">${tag}</span></div>`;
+          }).join('')}</div>`).join('')}
+        ${DATA.skillNext ? `<span style="font-size:14px;color:var(--color-neutral-200)">${esc(DATA.skillNext)}</span>` : ''}
         <span class="os-muted" style="font-size:12px">Tap a number to mark your current step.</span></section>
     </div>`;
   }
@@ -537,6 +626,7 @@
         : '<span class="os-muted" style="font-size:14px">Saved entries appear here.</span>'}
       </section>
     </div>
+    ${remindersCard()}
     ${accountCard()}`;
   }
 
@@ -627,6 +717,14 @@
       try { await navigator.clipboard.writeText(feedUrl()); } catch (e) { prompt('Copy this link:', feedUrl()); }
       ui.copied = true; setTimeout(() => { ui.copied = false; render(); }, 2500);
     },
+    goRemind() { ui.tab = 'log'; ui.menu = false; setTimeout(() => { const el = root.querySelector('#reminders'); if (el) el.scrollIntoView({ block: 'start' }); }); },
+    async remindOn() {
+      const p = await Notification.requestPermission();
+      if (p === 'granted') { lsSet(RKEY, Object.assign(remindCfg(), { on: true })); notify('Reminders are on', 'Elijah OS will remind you before each session.', 'remind-on').catch(() => {}); }
+    },
+    remindOff() { lsSet(RKEY, Object.assign(remindCfg(), { on: false })); },
+    remindLead(v) { lsSet(RKEY, Object.assign(remindCfg(), { lead: +v })); },
+    remindTest() { const n = todaysReminders()[0]; notify(n ? n.title : 'Elijah OS', n ? n.body : 'Reminders are working.', 'test').catch(() => {}); },
     goCal() { ui.tab = 'week'; ui.menu = false; setTimeout(() => { const el = root.querySelector('#calendar'); if (el) el.scrollIntoView({ block: 'start' }); }); },
     card(v) {
       const ids = cardIds(ui.day);
@@ -689,7 +787,7 @@
       });
     },
     addBench() { Store.update(s => { s.bench.push({ name: '', base: '', latest: '', target: '' }); }); },
-    step(v) { Store.update(s => { s.skill.cur = +v; }); },
+    step(v) { const [k, i] = v.split('|').map(Number); Store.update(s => { s.skills[k].cur = i; }); },
     async signOut() { await Store.signOut(); ui.password = ''; window.scrollTo(0, 0); }
   };
 
@@ -774,8 +872,8 @@
       case 'r': { const r = getDay().r.slice(); r[i] = +v; setDay({ r }); const lbl = root.querySelector(`[data-rv="${i}"]`); if (lbl) lbl.textContent = v; break; }
       case 'ex': { const day = ui.day; Store.update(s => { const list = (s.workouts[day] || []).slice(); list[i] = Object.assign({}, list[i], { [f]: v }); s.workouts[day] = list; }); break; }
       case 'bench': Store.update(s => { s.bench[i] = Object.assign({}, s.bench[i], { [f]: v }); }); break;
-      case 'skillName': Store.update(s => { s.skill.name = v; }); break;
-      case 'stepText': Store.update(s => { s.skill.steps[i] = v; }); break;
+      case 'skillName': Store.update(s => { s.skills[i].name = v; }); break;
+      case 'stepText': Store.update(s => { s.skills[+f].steps[i] = v; }); break;
       case 'review': { const wk = weekKey(); Store.update(s => { const r = (s.reviews[wk] || ['', '', '']).slice(); r[i] = v; s.reviews[wk] = r; }); break; }
       case 'scoreDraft': ui.scoreDraft = v; break;
       case 'topicDraft': ui.topicDraft = v; break;
@@ -790,6 +888,9 @@
   });
 
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && ui.menu) { ui.menu = false; render(); } });
+  setInterval(checkReminders, 30000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) checkReminders(); });
+  setTimeout(checkReminders, 3000);
   window.addEventListener('elijah-update', () => { ui.newVersion = true; render(); });
   Store.onData(render);
   Store.onStatus(renderSync);
