@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-14-weak-topics', date: '2026-11-14', kind: 'update',
+    title: '70 new questions on your weak spots',
+    body: 'New questions on the topics you scored 0% on: the electromagnetic spectrum, fiction reading, alkenes, alcohols and carboxylic acids, and physical training. There are also Maths questions on every topic you lost marks on in the June 2023 Paper 1. Most are AO2 (apply it), with some quick AO1 markers and a few AO3 heavy questions.'
+  },
+  {
     id: '2026-11-14-grade9', date: '2026-11-14', kind: 'update',
     title: 'Aiming for 9s',
     body: 'Maths and science questions now have grades, from 2 up to 9, with lots of new grade 6–9 questions. You start on grade 5–7 questions. Score 75% or more and you move up a level; struggle and it eases off one. Your level shows on each revision card and on the Revision screen.'
