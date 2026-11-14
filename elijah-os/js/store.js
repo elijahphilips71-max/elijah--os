@@ -74,10 +74,16 @@
       s.papers = o.scores.map((v, i) => ({ id: 'old' + i, date: '', s: 0, name: 'Past paper ' + (i + 1), got: v, of: 100, topics: [] }));
     }
     if (!Array.isArray(s.topics)) s.topics = [];
-    // English set texts: rename the generic topics (keeps your ratings and past-paper notes).
-    const RENAME = { 'Shakespeare play': 'Macbeth', '19th-century novel': 'Jekyll and Hyde', 'Modern text': 'An Inspector Calls' };
-    if (Array.isArray(s.topics[2])) s.topics[2].forEach(t => { if (RENAME[t.name]) t.name = RENAME[t.name]; });
-    (s.papers || []).forEach(p => { if (p.s === 2 && p.topics) p.topics = p.topics.map(t => RENAME[t] || t); });
+    // Keep topics in step with the syllabus in schedule.js: rename old names (keeping your ratings),
+    // add any syllabus topics you don't have yet, and keep topics you added yourself at the end.
+    const REN = DATA.topicRenames || {};
+    s.topics = DATA.subjects.map((sub, i) => {
+      const ren = REN[i] || {}, mine = (s.topics[i] || []).map(t => Object.assign({}, t, { name: ren[t.name] || t.name }));
+      const byName = {}; mine.forEach(t => { if (!byName[t.name] || t.conf) byName[t.name] = t; });
+      const syl = sub.topics || [];
+      return syl.map(n => byName[n] || { name: n, conf: 0 }).concat(mine.filter((t, j) => !syl.includes(t.name) && mine.findIndex(x => x.name === t.name) === j));
+    });
+    (s.papers || []).forEach(p => { if (p.topics) p.topics = p.topics.map(t => (REN[p.s] || {})[t] || t); });
     while (s.topics.length < DATA.subjects.length) s.topics.push(seedTopics(DATA.subjects[s.topics.length]));
     dropOldMonday(s.workouts);
     // Untouched benchmark table from the first version: switch to the new list.

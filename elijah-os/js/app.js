@@ -381,7 +381,8 @@
   function ladderRows(key, c) {
     const e = getSess(key), date = dayKey(), sj = subjOf(c), rows = [];
     let pool = allQuestions().filter(q => c.mixed ? DATA.subjects[q.s] && q.s !== 5 : q.s === sj);
-    if (!c.mixed && c.only && c.only[sj]) pool = pool.filter(q => c.only[sj].includes(q.t));
+    const only = !c.mixed && c.only && c.only[sj];
+    if (only) pool = pool.filter(q => Array.isArray(only) ? only.includes(q.t) : q.t.startsWith(only));
     const rnd = q => parseInt(qhash(date + key + q.id), 36);
     const LABEL = ['AO1 · quick marks', 'AO2 · main chunk', 'AO3 · heavy questions'];
     (c.ladder || []).forEach((n, i) => {
@@ -827,7 +828,7 @@
       ${ui.pdBounds ? `<span class="os-muted" style="font-size:12px;line-height:1.5">From the exam board’s grade boundaries document: the marks needed for each grade on this paper. Fill in the ones you have (9, 7, 5 and 4 are enough).</span>
         <div class="os-bounds">${[9, 8, 7, 6, 5, 4].map(g => `<label><span class="os-k">${g}</span><input class="input os-in os-num" inputmode="numeric" value="${esc((d.bounds || {})[g] || '')}" data-in="pdb" data-f="${g}" aria-label="Marks for grade ${g}"></label>`).join('')}</div>` : ''}
       ${ts.length ? `<span class="os-muted" style="font-size:12px">Tap the topics that lost you marks (they’ll come up more in your questions):</span>
-        <div class="os-chips">${ts.map(t => `<button type="button" class="os-chipsel ${(d.topics || []).includes(t.name) ? 'on' : ''}" data-act="pdTopic" data-v="${esc(t.name)}">${esc(t.name)}</button>`).join('')}</div>` : ''}
+        <div class="os-chips os-chips-sm os-chipbox">${ts.map((t, j) => `${topicGroup(ts, j)}<button type="button" class="os-chipsel ${(d.topics || []).includes(t.name) ? 'on' : ''}" data-act="pdTopic" data-v="${esc(t.name)}">${esc(topicShort(t.name))}</button>`).join('')}</div>` : ''}
       ${ui.pdErr ? `<span class="os-err">${esc(ui.pdErr)}</span>` : ''}
       <button class="btn btn-primary os-btn" type="submit">Save result</button></form>`;
   }
@@ -987,6 +988,11 @@
     return lines.join('\n');
   }
 
+  // Topics like "Algebra: quadratics" are grouped under "Algebra" and shown as "quadratics".
+  const topicGroupOf = n => n.includes(': ') ? n.split(': ')[0] : '';
+  const topicShort = n => { const g = topicGroupOf(n), r = g ? n.slice(g.length + 2) : n; return r.charAt(0).toUpperCase() + r.slice(1); };
+  const topicGroup = (ts, j) => { const g = topicGroupOf(ts[j].name); return g && (j === 0 || topicGroupOf(ts[j - 1].name) !== g) ? `<div class="os-topic-group os-k">${esc(g)}</div>` : ''; };
+
   function topicBlock(i) {
     const ts = st().topics[i] || [];
     const cnt = [0, 0, 0, 0]; ts.forEach(t => cnt[t.conf || 0]++);
@@ -1000,9 +1006,9 @@
         <span style="font-size:13px">Topics</span>
         <span class="os-rag">${cnt[1] ? `<span class="cred">${cnt[1]} red</span>` : ''}${cnt[2] ? `<span class="camber">${cnt[2]} amber</span>` : ''}${cnt[3] ? `<span class="cgreen">${cnt[3]} green</span>` : ''}${cnt[0] ? `<span>${cnt[0]} not rated</span>` : ''}${ts.length ? '' : '<span>none yet</span>'}</span>
         ${icon(open ? 'caret-up' : 'caret-down')}</button>
-      ${open ? `${ts.map((t, j) => `<div class="os-topic">
+      ${open ? `${ts.map((t, j) => `${topicGroup(ts, j)}<div class="os-topic">
           <button class="os-conf c${CONF_CLS[t.conf || 0]}" data-act="conf" data-v="${i}|${j}" aria-label="${esc(t.name)}: ${CONF[t.conf || 0]}. Tap to change.">${CONF[t.conf || 0]}</button>
-          <span style="flex:1;min-width:0;font-size:14px">${esc(t.name)}</span>
+          <span style="flex:1;min-width:0;font-size:14px">${esc(topicShort(t.name))}</span>
           ${(() => { const a = topicAcc(i, t.name); return a == null ? '' : `<span class="os-num ${a >= .75 ? 'cgreen' : a >= .5 ? 'camber' : 'cred'}" style="font-size:12px" title="Your marks on this topic, last 6 weeks">${Math.round(a * 100)}%</span>`; })()}
           <button class="btn btn-ghost btn-icon os-x" aria-label="Remove ${esc(t.name)}" data-act="rmTopic" data-v="${i}|${j}">${icon('x')}</button></div>`).join('')}
         <form data-form="topic" data-i="${i}" style="display:flex;gap:8px">
