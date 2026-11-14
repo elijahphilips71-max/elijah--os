@@ -64,11 +64,11 @@ window.ELIJAH_QUESTIONS = [
   [2, 'Unseen poetry', 1, 2, 'Define enjambment and caesura.', 'Enjambment: a sentence runs on past the end of a line (1). Caesura: a pause in the middle of a line, often punctuation (1)'],
   [2, 'Shakespeare play', 2, 4, 'Write one paragraph in 10 minutes: how does one quotation show the main character’s state of mind?', '1 each: clear point; embedded quotation; analysis of a specific word or technique; effect on the audience'],
   [2, 'Unseen poetry', 2, 4, 'Read any short poem. In 8 minutes, write one paragraph on how the poet uses language to present feelings.', '1 each: clear point; short quotation; named technique analysed; effect on the reader'],
-  [2, 'Language Paper 1', 2, 4, 'Take the opening of any novel. In 8 minutes: how does the writer use structure to interest the reader?', '1 each: comments on the opening focus; a shift or change; sentence or paragraph lengths; effect on the reader'],
+  [2, 'Language Paper 1', 2, 4, 'Take the opening of any 20th-century story. In 8 minutes: how does the writer create tension or interest for the reader?', '1 each: comments on the opening focus; a shift or change; sentence or paragraph lengths; effect on the reader'],
   [2, 'Language Paper 2', 2, 4, 'In 10 minutes, write the opening of an article arguing that school should start later.', '1 each: clear viewpoint and hook; persuasive devices; varied sentences; accurate spelling and punctuation'],
   [2, '19th-century novel', 3, 4, 'In 25 minutes, write an introduction and one paragraph: how does the writer present a theme of your choice?', '1 each: clear argument in the introduction; embedded quotations; analysis of the writer’s methods; context linked to the writer’s purpose'],
   [2, 'Modern text', 3, 4, 'Write a full timed answer (45 minutes) to a past-paper question on your modern text.', '1 each: answers the question throughout; well-chosen quotations; analysis of methods; relevant context. Then mark it properly with the real mark scheme'],
-  [2, 'Language Paper 1', 3, 4, 'Question 5, 45 minutes: describe a place during a storm.', '1 each: clear paragraphs with a shaped structure; ambitious, precise vocabulary; varied sentence openings and lengths; accurate punctuation, including at least one semicolon'],
+  [2, 'Language Paper 1', 3, 4, 'Creative writing (Eduqas Component 1, Section B), 45 minutes: write a story titled “The Storm”.', '1 each: clear paragraphs with a shaped structure; ambitious, precise vocabulary; varied sentence openings and lengths; accurate punctuation, including at least one semicolon'],
 
   // ---------- Biology / Chemistry ----------
   [3, 'Cells', 1, 1, 'In which organelle does aerobic respiration take place?', 'Mitochondria'],

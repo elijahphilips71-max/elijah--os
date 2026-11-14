@@ -40,6 +40,7 @@
     pd: { s: 0, topics: [] },  // past-paper form draft
     pdOpen: '', pdErr: '',
     progTab: 'grades', gradeSubj: null, gradeTable: false,
+    paperSubj: null, pdBounds: false, pdAnother: false,
     qPos: {},         // which question each ladder card is showing
     showAllNews: false,
     qAdd: -1,         // subject whose "add a question" form is open
@@ -510,7 +511,7 @@
       <button class="os-scard-head" data-act="card" data-v="${esc(id)}" aria-expanded="${open}">
         <span class="os-scard-ic">${icon(e.done ? 'check' : k[1])}</span>
         <span class="os-scard-t"><span class="os-k">${c.optional ? 'Optional · ' : ''}${esc(k[0])}${sub ? ' · ' + esc(sub.name) : ''} · <span class="os-num">${it.min} min</span></span>
-          <span class="os-scard-title">${esc(c.kind === 'hustle' && mainHustle() ? mainHustle().name : c.title)}</span>
+          <span class="os-scard-title">${esc(c.kind === 'hustle' && mainHustle() ? mainHustle().name : c.logPaper ? DATA.subjects[paperDraftFor(dayKey()).s].name + ' past paper' : c.title)}</span>
           ${it.status !== 'ok' && it.note ? `<span class="os-scard-note">${icon(skipped ? 'prohibit' : 'arrows-clockwise')} ${esc(it.note)}</span>` : ''}</span>
         <span class="os-num os-scard-pct">${it.at ? `<span class="${it.status === 'ok' ? 'os-muted' : 'camber'}">${esc(it.at)}</span><br>` : ''}${e.done ? 'Done' : p.got + '/' + p.total}</span>
         ${icon(open ? 'caret-up' : 'caret-down')}
@@ -520,10 +521,7 @@
         ${c.focus ? `<div class="os-scard-focus">${esc(c.focus)}</div>` : ''}
         ${c.ladder ? (() => { const qs = cardRows(id).filter(r => r.q && (e.q || {})[r.q.id] != null); const g = qs.reduce((a, r) => a + e.q[r.q.id], 0), o = qs.reduce((a, r) => a + r.q.m, 0);
           return qs.length ? `<div class="os-between os-q-total"><span>${qs.length} answered</span><span class="os-num">${g} / ${o} marks${o ? ' · ' + Math.round(g / o * 100) + '%' : ''}</span></div>` : ''; })() : ''}
-        ${c.ladder ? questionStepper(id, e) : `<div class="os-scard-rows">${cardRows(id).map(r => sessRow(id, r, e)).join('')}</div>`}
-        ${c.logPaper ? (() => { const done = (st().papers || []).filter(p => p.date === dayKey());
-          return done.length ? `<div class="os-q-total" style="display:flex;flex-direction:column;gap:2px"><span class="os-k">Logged</span>${paperList(99).split('</div>').filter(x => x.trim()).slice(0, done.length).map(x => x + '</div>').join('')}</div>`
-            : `<span class="os-k acc" style="padding-top:6px">Log your result</span>${paperForm('card')}`; })() : ''}
+        ${c.ladder ? questionStepper(id, e) : c.logPaper ? mockExam() : `<div class="os-scard-rows">${cardRows(id).map(r => sessRow(id, r, e)).join('')}</div>`}
         <button class="btn ${e.done ? 'btn-secondary' : 'btn-primary'} os-btn" data-act="sessDone" data-v="${esc(id)}">${e.done ? 'Undo finish' : 'Finish session'}${!e.done && sub ? ` · +${it.min} min ${esc(sub.name)}` : ''}</button>
       </div>` : ''}
     </article>`;
@@ -765,28 +763,101 @@
   }
 
   // Past-paper log form, used on the Saturday card and on the Revision screen.
+  // ----- mock exam (Saturday card) -----
+  // This week's paper subject: rotates through DATA.paperRotation, unless you picked another one.
+  function rotationSubject() {
+    const rot = DATA.paperRotation || [0], n = Math.round((monday() - new Date(2026, 10, 9, 12)) / (7 * 864e5));
+    return rot[((n % rot.length) + rot.length) % rot.length];
+  }
+  function paperDraftFor(date) {
+    const d = st().paperDraft;
+    if (d && d.date === date) return d;
+    const s = rotationSubject();
+    return { date, s, name: '', link: '', ms: '', mins: (DATA.paperMins || {})[s] || 90 };
+  }
+  const setDraft = patch => { const k = dayKey(), cur = paperDraftFor(k); Store.update(s => { s.paperDraft = Object.assign({}, cur, patch, { date: k }); }); };
+  function timeLeft(d) {
+    if (!d.startedAt) return null;
+    return Math.max(0, d.startedAt + d.mins * 6e4 - (d.endedAt || Date.now()));
+  }
+  const clock = ms => { const t = Math.ceil(ms / 1000), h = Math.floor(t / 3600), m = Math.floor(t % 3600 / 60), s = t % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(s).padStart(2, '0'); };
+  const linkBtn = (url, label, ic) => url ? `<a class="btn btn-secondary os-btn" href="${esc(url)}" target="_blank" rel="noopener">${icon(ic)}${label}</a>` : '';
+  function mockExam() {
+    const k = dayKey(), logged = (st().papers || []).filter(p => p.date === k), d = paperDraftFor(k);
+    if (logged.length && !ui.pdAnother) return `<div class="os-q-total" style="display:flex;flex-direction:column;gap:6px"><span class="os-k">Logged</span>${logged.map(paperRow).join('')}</div>
+      <button class="btn btn-ghost" style="align-self:flex-start;padding-left:0" data-act="pdAnother">${icon('plus')}Sit another paper</button>`;
+    const steps = ['Set up', 'Sit it', 'Mark it'], stage = !d.startedAt ? 0 : !d.endedAt && timeLeft(d) > 0 ? 1 : 2;
+    const head = `<div class="os-steps">${steps.map((t, i) => `<span class="${i === stage ? 'on' : i < stage ? 'done' : ''}">${i < stage ? icon('check') : i + 1} ${t}</span>`).join('')}</div>`;
+    if (stage === 0) return head + `
+      <div class="field"><label>Subject <span class="os-muted" style="font-size:12px">(this week’s rotation: ${esc(DATA.subjects[rotationSubject()].name)})</span></label>
+        <div class="os-chips">${DATA.subjects.map((x, i) => i === 5 ? '' : `<button class="os-chipsel ${d.s === i ? 'on' : ''}" data-act="pdSubj" data-v="${i}" aria-pressed="${d.s === i}">${esc(x.name)}</button>`).join('')}</div></div>
+      ${(() => { const sub = DATA.subjects[d.s], board = sub.board || '', q = t => 'https://www.google.com/search?q=' + encodeURIComponent(board.split(' (')[0] + ' GCSE ' + sub.name.split(' /')[0] + ' ' + t);
+        return board ? `<div class="os-board"><span class="os-muted" style="font-size:13px">${esc(board)}</span>
+          <a href="${q('past papers and mark schemes')}" target="_blank" rel="noopener">${icon('magnifying-glass')}Find papers</a>
+          <a href="${q('grade boundaries')}" target="_blank" rel="noopener">${icon('chart-bar')}Grade boundaries</a></div>` : ''; })()}
+      <div class="field"><label for="pd-name">Paper</label><input class="input os-in" id="pd-name" placeholder="e.g. ${esc((DATA.subjects[d.s].board || '').split(' (')[0] || 'AQA')} June 2023 Paper 1" value="${esc(d.name)}" data-in="draft" data-f="name"></div>
+      <div class="field"><label for="pd-link">Link to the paper</label><input class="input os-in" id="pd-link" type="url" placeholder="Paste the link (PDF or website)" value="${esc(d.link)}" data-in="draft" data-f="link"></div>
+      <div class="field"><label for="pd-ms">Link to the mark scheme</label><input class="input os-in" id="pd-ms" type="url" placeholder="Paste the link" value="${esc(d.ms)}" data-in="draft" data-f="ms"></div>
+      <div class="field"><label for="pd-mins">Time allowed (minutes)</label><input class="input os-in os-num" id="pd-mins" inputmode="numeric" value="${esc(d.mins)}" data-in="draft" data-f="mins"></div>
+      <button class="btn btn-primary os-btn" data-act="pdStart">${icon('timer')}Start the exam</button>`;
+    if (stage === 1) return head + `
+      <div class="os-timer"><span class="os-k">Time left</span><span class="os-num" data-timer>${clock(timeLeft(d))}</span><span class="os-muted" style="font-size:12px">${esc(d.name || DATA.subjects[d.s].name + ' paper')} · ${d.mins} min · phone away, no notes</span></div>
+      <div class="os-qnav">${linkBtn(d.link, 'Open paper', 'file-text') || '<span></span>'}<button class="btn btn-secondary os-btn" data-act="pdStop">${icon('flag-checkered')}I’ve finished</button></div>`;
+    return head + `
+      <div class="os-qnav">${linkBtn(d.ms, 'Mark scheme', 'list-checks')}${linkBtn(d.link, 'Paper', 'file-text')}</div>
+      <span class="os-muted" style="font-size:13px">${d.endedAt ? 'Finished in ' + clock(d.endedAt - d.startedAt) + '.' : 'Time’s up.'} Mark it properly against the mark scheme, then log it.</span>
+      ${paperForm('card')}`;
+  }
+
   function paperForm(where) {
-    const d = ui.pd, ts = (st().topics[d.s] || []);
+    const d = ui.pd, ts = (st().topics[d.s] || []), card = where === 'card';
     return `<form data-form="paper" data-where="${where}" class="os-myq">
-      <div class="os-evgrid" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)">
+      ${card ? '' : `<div class="os-evgrid" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)">
         <select class="input os-in" aria-label="Subject" data-in="pd" data-f="s">${DATA.subjects.map((x, i) => `<option value="${i}" ${+d.s === i ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>
-        <input class="input os-in" placeholder="Paper (e.g. June 2023 P1)" aria-label="Paper" value="${esc(d.name || '')}" data-in="pd" data-f="name">
+        <input class="input os-in" type="date" aria-label="Date you sat it" value="${esc(d.date || iso(new Date()))}" data-in="pd" data-f="date">
       </div>
+      <input class="input os-in" placeholder="Paper (e.g. AQA June 2023 Paper 1)" aria-label="Paper" value="${esc(d.name || '')}" data-in="pd" data-f="name">
+      <input class="input os-in" type="url" placeholder="Link to the paper (optional)" aria-label="Link to the paper" value="${esc(d.link || '')}" data-in="pd" data-f="link">`}
       <div class="os-evgrid" style="grid-template-columns:1fr auto 1fr;align-items:center">
         <input class="input os-in os-num" inputmode="numeric" placeholder="Marks" aria-label="Marks you got" value="${esc(d.got || '')}" data-in="pd" data-f="got">
         <span class="os-muted">out of</span>
         <input class="input os-in os-num" inputmode="numeric" placeholder="Total" aria-label="Total marks" value="${esc(d.of || '')}" data-in="pd" data-f="of">
       </div>
+      <button type="button" class="btn btn-ghost" style="align-self:flex-start;padding-left:0" data-act="pdBounds" aria-expanded="${!!ui.pdBounds}">${icon(ui.pdBounds ? 'minus' : 'plus')}Grade boundaries for this paper (optional)</button>
+      ${ui.pdBounds ? `<span class="os-muted" style="font-size:12px;line-height:1.5">From the exam board’s grade boundaries document: the marks needed for each grade on this paper. Fill in the ones you have (9, 7, 5 and 4 are enough).</span>
+        <div class="os-bounds">${[9, 8, 7, 6, 5, 4].map(g => `<label><span class="os-k">${g}</span><input class="input os-in os-num" inputmode="numeric" value="${esc((d.bounds || {})[g] || '')}" data-in="pdb" data-f="${g}" aria-label="Marks for grade ${g}"></label>`).join('')}</div>` : ''}
       ${ts.length ? `<span class="os-muted" style="font-size:12px">Tap the topics that lost you marks (they’ll come up more in your questions):</span>
         <div class="os-chips">${ts.map(t => `<button type="button" class="os-chipsel ${(d.topics || []).includes(t.name) ? 'on' : ''}" data-act="pdTopic" data-v="${esc(t.name)}">${esc(t.name)}</button>`).join('')}</div>` : ''}
       ${ui.pdErr ? `<span class="os-err">${esc(ui.pdErr)}</span>` : ''}
       <button class="btn btn-primary os-btn" type="submit">Save result</button></form>`;
   }
-  function paperList(n) {
-    const list = (st().papers || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, n);
-    return list.map(p => { const pct = p.of ? Math.round(p.got / p.of * 100) : 0;
-      return `<div class="os-between" style="font-size:14px;min-height:40px"><span style="min-width:0"><span class="os-num os-muted" style="font-size:12px">${p.date ? fmt(new Date(p.date + 'T12:00'), { day: 'numeric', month: 'short' }) : '—'}</span> · ${esc(DATA.subjects[p.s] ? DATA.subjects[p.s].name : '')} ${esc(p.name || '')}</span>
-        <span class="os-num" style="flex:none">${p.got}/${p.of} · ${pct}% · <b style="font-weight:500">${gradeOf(pct)}</b></span></div>`; }).join('');
+  // A paper's grade: from its own grade boundaries if you entered them, otherwise a rough estimate (≈).
+  function paperGrade(p) {
+    const b = p.bounds || {}, known = Object.keys(b).map(Number).filter(g => b[g] > 0).sort((x, y) => x - y);
+    if (known.length) {
+      // Fill in missing grades between the ones you entered (e.g. 6 halfway between 5 and 7).
+      const full = {};
+      for (let g = known[0]; g <= known[known.length - 1]; g++) {
+        if (b[g] > 0) { full[g] = +b[g]; continue; }
+        const lo = known.filter(k => k < g).pop(), hi = known.find(k => k > g);
+        full[g] = Math.round(b[lo] + (b[hi] - b[lo]) * (g - lo) / (hi - lo));
+      }
+      const gs = Object.keys(full).map(Number).sort((x, y) => y - x);
+      for (const g of gs) if (p.got >= full[g]) return { g, real: true };
+      return { g: '<' + gs[gs.length - 1], real: true };
+    }
+    return { g: gradeOf(p.of ? p.got / p.of * 100 : 0), real: false };
+  }
+  function paperRow(p) {
+    const pct = p.of ? Math.round(p.got / p.of * 100) : 0, g = paperGrade(p);
+    return `<div class="os-paper"><span class="os-paper-g os-num" title="${g.real ? 'From this paper’s grade boundaries' : 'Rough estimate'}">${g.real ? '' : '≈'}${g.g}</span>
+      <span class="os-paper-t"><span>${esc(DATA.subjects[p.s] ? DATA.subjects[p.s].name : '')}${p.name ? ' · ' + esc(p.name) : ''}</span>
+        <span class="os-num os-muted" style="font-size:12px">${p.date ? fmt(new Date(p.date + 'T12:00'), { weekday: 'short', day: 'numeric', month: 'short' }) : 'no date'} · ${p.got}/${p.of} · ${pct}%${p.link ? ` · <a href="${esc(p.link)}" target="_blank" rel="noopener">paper</a>` : ''}</span></span>
+      <button class="btn btn-ghost btn-icon os-x" data-act="paperRm" data-v="${esc(p.id)}" aria-label="Delete this paper">${icon('x')}</button></div>`;
+  }
+  function paperList(n, subj) {
+    const list = (st().papers || []).filter(p => subj == null || p.s === subj).sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, n);
+    return list.map(paperRow).join('');
   }
 
   // ---------- screens ----------
@@ -864,7 +935,8 @@
           <span class="os-num" style="font-size:40px;line-height:1;color:var(--color-accent-300)">${daysLeft()}<span class="os-muted" style="font-size:13px"> days</span></span></section>
         <section class="os-card">
           <div class="os-between"><span class="os-k">Past papers</span><button class="btn btn-ghost" data-act="progGrades">Grades ${icon('arrow-right')}</button></div>
-          ${paperList(4) || '<span class="os-muted" style="font-size:14px">Log your first past paper to start your grade graph.</span>'}
+          <div class="os-chips os-chips-sm">${[[null, 'All']].concat(DATA.subjects.map((x, i) => [i, x.name])).filter(([i]) => i !== 5).map(([i, n]) => `<button class="os-chipsel ${ui.paperSubj === i ? 'on' : ''}" data-act="paperSubj" data-v="${i == null ? '' : i}">${esc(n)}</button>`).join('')}</div>
+          ${paperList(5, ui.paperSubj) || `<span class="os-muted" style="font-size:14px">No ${ui.paperSubj == null ? '' : esc(DATA.subjects[ui.paperSubj].name) + ' '}papers logged yet. Saturday’s card runs one as a mock exam, or log one you did below.</span>`}
           <button class="btn btn-ghost" style="align-self:flex-start;padding-left:0" data-act="pdToggle" aria-expanded="${ui.pdOpen === 'rev'}">${icon(ui.pdOpen === 'rev' ? 'minus' : 'plus')}Log a past paper</button>
           ${ui.pdOpen === 'rev' ? paperForm('rev') : ''}
         </section>
@@ -922,7 +994,7 @@
     const ao = aoStats(i), mine = (st().myq || []).filter(q => q.s === i), d = ui.qd[i] || {};
     const hasQs = allQuestions().some(q => q.s === i);
     return `<div class="os-topics">
-      ${DATA.subjects[i].note ? `<span class="os-muted" style="font-size:12px">${esc(DATA.subjects[i].note)}</span>` : ''}
+      ${DATA.subjects[i].board || DATA.subjects[i].note ? `<span class="os-muted" style="font-size:12px">${esc([DATA.subjects[i].board, DATA.subjects[i].note].filter(Boolean).join(' · '))}</span>` : ''}
       ${hasQs ? `<div class="os-aostats" aria-label="Marks in the last 4 weeks">${ao.map((x, j) => `<span><span class="os-k">AO${j + 1}</span><span class="os-num ${x.of ? (x.got / x.of >= .7 ? 'cgreen' : x.got / x.of >= .4 ? 'camber' : 'cred') : 'os-muted'}">${x.of ? Math.round(x.got / x.of * 100) + '%' : '—'}</span><span class="os-num os-muted" style="font-size:11px">${x.of ? x.got + '/' + x.of : 'no reps'}</span></span>`).join('')}</div>` : ''}
       <button class="os-topics-head" data-act="subj" data-v="${i}" aria-expanded="${open}">
         <span style="font-size:13px">Topics</span>
@@ -1196,6 +1268,23 @@
     progGrades() { ui.tab = 'prog'; ui.progTab = 'grades'; window.scrollTo(0, 0); },
     gradeSubj(v) { ui.gradeSubj = +v; },
     gradeTable() { ui.gradeTable = !ui.gradeTable; },
+    pdSubj(v) { const s = +v; setDraft({ s, mins: (DATA.paperMins || {})[s] || 90 }); ui.pd = { s, topics: [] }; },
+    pdStart() {
+      const d = paperDraftFor(dayKey()), mins = parseInt(d.mins, 10);
+      if (!(mins > 0)) { alert('Set the time allowed first.'); return; }
+      setDraft({ mins, startedAt: Date.now(), endedAt: null });
+      Store.update(s => { const k = dayKey(), all = s.sess[k] = s.sess[k] || {}; const en = Object.assign({ c: {}, done: false, added: 0 }, all['past-paper']); en.c.i0 = 1; all['past-paper'] = en; });
+      if (d.link) window.open(d.link, '_blank', 'noopener');
+    },
+    pdStop() {
+      if (!confirm('Stop the timer and move on to marking?')) return;
+      setDraft({ endedAt: Date.now() });
+      Store.update(s => { const k = dayKey(), all = s.sess[k] = s.sess[k] || {}; const en = Object.assign({ c: {}, done: false, added: 0 }, all['past-paper']); en.c.i1 = 1; all['past-paper'] = en; });
+    },
+    pdAnother() { ui.pdAnother = true; Store.update(s => { s.paperDraft = null; }); },
+    pdBounds() { ui.pdBounds = !ui.pdBounds; },
+    paperSubj(v) { ui.paperSubj = v === '' ? null : +v; },
+    paperRm(v) { const p = (st().papers || []).find(x => x.id === v); if (!p || !confirm('Delete this past paper result?')) return; Store.update(s => { s.papers = s.papers.filter(x => x.id !== v); }); },
     pdToggle() { ui.pdOpen = ui.pdOpen === 'rev' ? '' : 'rev'; ui.pdErr = ''; },
     pdTopic(v) { const t = ui.pd.topics || []; ui.pd.topics = t.includes(v) ? t.filter(x => x !== v) : t.concat(v); },
     allNews() { ui.showAllNews = true; },
@@ -1300,9 +1389,14 @@
     } else if (f === 'paper') {
       const d = ui.pd, got = parseFloat(d.got), of = parseFloat(d.of);
       if (!(of > 0) || !(got >= 0) || got > of) { ui.pdErr = 'Enter your marks and the total (e.g. 54 out of 80).'; render(); return; }
-      const where = e.target.dataset.where, date = where === 'card' ? dayKey() : iso(new Date());
-      Store.update(s => { s.papers = (s.papers || []).concat({ id: Date.now().toString(36), date, s: +d.s, name: (d.name || '').trim(), got, of, topics: d.topics || [] }); });
-      ui.pd = { s: +d.s, topics: [] }; ui.pdErr = ''; ui.pdOpen = '';
+      const where = e.target.dataset.where, card = where === 'card', dr = paperDraftFor(dayKey());
+      const date = card ? dayKey() : (/^\d{4}-\d{2}-\d{2}$/.test(d.date || '') ? d.date : iso(new Date()));
+      const bounds = {}; Object.keys(d.bounds || {}).forEach(g => { const n = parseFloat(d.bounds[g]); if (n > 0) bounds[g] = n; });
+      const paper = card
+        ? { id: Date.now().toString(36), date, s: dr.s, name: (dr.name || '').trim(), link: dr.link || '', ms: dr.ms || '', mins: +dr.mins || 0, got, of, topics: d.topics || [], bounds }
+        : { id: Date.now().toString(36), date, s: +d.s, name: (d.name || '').trim(), link: (d.link || '').trim(), got, of, topics: d.topics || [], bounds };
+      Store.update(s => { s.papers = (s.papers || []).concat(paper); if (card) s.paperDraft = null; });
+      ui.pd = { s: paper.s, topics: [] }; ui.pdErr = ''; ui.pdOpen = ''; ui.pdBounds = false; ui.pdAnother = false;
       if (where === 'card') { const items = DATA.sessions['past-paper'].items || []; Store.update(s => { const k = dayKey(), all = s.sess[k] = s.sess[k] || {}; const en = Object.assign({ c: {}, done: false, added: 0 }, all['past-paper']); items.forEach((_, j) => { en.c['i' + j] = 1; }); all['past-paper'] = en; }); finish('past-paper', true); }
       render();
     } else if (f === 'myq') {
@@ -1359,6 +1453,8 @@
       case 'qans': { const parts = f.split('|'), qid = parts.pop(), key = parts.join('|'), k = dayKey();
         Store.update(s => { const all = s.sess[k] = s.sess[k] || {}; const en = Object.assign({ c: {}, done: false, added: 0 }, all[key]); en.ans = Object.assign({}, en.ans, { [qid]: v }); all[key] = en; }); break; }
       case 'pd': ui.pd[f] = v; if (f === 's') { ui.pd.topics = []; render(); } break;
+      case 'pdb': ui.pd.bounds = Object.assign({}, ui.pd.bounds, { [f]: v }); break;
+      case 'draft': setDraft({ [f]: f === 'mins' ? v.replace(/[^0-9]/g, '') : v }); break;
       case 'qd': ui.qd[i] = Object.assign({}, ui.qd[i], { [f]: v }); break;
       case 'ideaDraft': ui.ideaDraft[f] = v; break;
       case 'hustle': Store.update(s => { const h = s.hustles[i]; if (!h) return; h[f] = f === 'perWeek' ? Math.max(0, parseInt(v, 10) || 0) : v; }); break;
@@ -1372,6 +1468,14 @@
     const k = e.target.dataset.in;
     if (k === 'r' || k === 'goal') render();
   });
+
+  // Exam timer: update the clock every second; re-render when time runs out.
+  setInterval(() => {
+    const el = root.querySelector('[data-timer]'); if (!el) return;
+    const d = paperDraftFor(dayKey()), left = timeLeft(d);
+    if (left == null) return;
+    if (left <= 0) { render(); if ('vibrate' in navigator) navigator.vibrate(400); } else el.textContent = clock(left);
+  }, 1000);
 
   // Grade chart tooltips: hover on desktop, tap on phone.
   function chartTip(e) {

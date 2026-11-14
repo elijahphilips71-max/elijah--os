@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-14-mock', date: '2026-11-14', kind: 'update',
+    title: 'Past papers as real mock exams',
+    body: 'Saturday’s paper rotates subject each week (Maths, Physics, Biology/Chemistry, English, Spanish/PE) and you can switch it. Paste the paper and mark scheme links, start the exam timer, then mark it. Add the paper’s grade boundaries to get its real grade. On Revision, past papers can be filtered by subject.'
+  },
+  {
     id: '2026-11-14-spaced', date: '2026-11-14', kind: 'update',
     title: 'Questions that adapt to you',
     body: 'One question at a time: type your answer, check it against the mark scheme, tap your marks. Questions you nail come back in 1, 2, 4 then 8 weeks; ones you miss come back tomorrow, so weak topics get the time. On Revision, “Send my progress to Claude” copies a report so Claude can write new questions for your weak spots.'

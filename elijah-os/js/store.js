@@ -27,7 +27,9 @@
       // Exam questions: your own (myq) and every mark you've given yourself (qlog[questionId] = [{ d, got, of }])
       myq: [],
       // Past papers: { id, date, s (subject), name, got, of, topics: [topic names that lost marks] }
-      papers: [],
+      papers: [],   // also: link, ms (mark scheme link), mins, bounds { 9: marks, 8: …, 4: … }
+      // The past paper being sat right now: { date, s, name, link, ms, mins, startedAt, endedAt }
+      paperDraft: null,
       qlog: {},
       // Side hustle projects: { id, name, about, perWeek, steps[], ideasLabel, ideas[{id,text,used}], log[{key,date,idea,ideaId}], paused }
       hustles: (DATA.sideHustles || []).map(h => Object.assign({ ideas: [], log: [], paused: false }, JSON.parse(JSON.stringify(h)))),
