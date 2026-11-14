@@ -68,7 +68,7 @@ window.ELIJAH_QUESTIONS = [
   [2, 'Literature: An Inspector Calls', 1, 2, 'When was An Inspector Calls written, and when is it set?', 'Written in 1945 (1); set in 1912 (1)'],
   [2, 'Literature: An Inspector Calls', 1, 1, 'Give one example of dramatic irony in Mr Birling’s speeches in Act 1.', 'He calls the Titanic “unsinkable, absolutely unsinkable”, or says there won’t be a war'],
   [2, 'Literature: An Inspector Calls', 1, 1, 'Who says “these girls aren’t cheap labour—they’re people”?', 'Sheila'],
-  [2, 'Literature: poetry anthology', 1, 2, 'Pick two anthology poems on the same theme. Name one technique used in each.', '1 mark per poem with a correct technique'],
+  [2, 'Literature: Eduqas poetry anthology', 1, 2, 'Pick two anthology poems on the same theme. Name one technique used in each.', '1 mark per poem with a correct technique'],
   [2, 'Language: fiction reading', 1, 3, 'Name three language techniques and give an example of each.', 'e.g. metaphor, personification, sibilance: 1 mark per technique with a correct example'],
   [2, 'Language: viewpoint and transactional writing', 1, 3, 'List three features of a persuasive article.', 'Any three: rhetorical question, direct address, facts or statistics, anecdote, rule of three, counter-argument'],
   [2, 'Literature: unseen poetry', 1, 2, 'Define enjambment and caesura.', 'Enjambment: a sentence runs on past the end of a line (1). Caesura: a pause in the middle of a line, often punctuation (1)'],
