@@ -74,6 +74,10 @@
       s.papers = o.scores.map((v, i) => ({ id: 'old' + i, date: '', s: 0, name: 'Past paper ' + (i + 1), got: v, of: 100, topics: [] }));
     }
     if (!Array.isArray(s.topics)) s.topics = [];
+    // English set texts: rename the generic topics (keeps your ratings and past-paper notes).
+    const RENAME = { 'Shakespeare play': 'Macbeth', '19th-century novel': 'Jekyll and Hyde', 'Modern text': 'An Inspector Calls' };
+    if (Array.isArray(s.topics[2])) s.topics[2].forEach(t => { if (RENAME[t.name]) t.name = RENAME[t.name]; });
+    (s.papers || []).forEach(p => { if (p.s === 2 && p.topics) p.topics = p.topics.map(t => RENAME[t] || t); });
     while (s.topics.length < DATA.subjects.length) s.topics.push(seedTopics(DATA.subjects[s.topics.length]));
     dropOldMonday(s.workouts);
     // Untouched benchmark table from the first version: switch to the new list.
