@@ -543,7 +543,7 @@
         <span class="os-scard-t"><span class="os-k">${c.optional ? 'Optional · ' : ''}${esc(k[0])}${sub ? ' · ' + esc(sub.name) : ''} · <span class="os-num">${it.min} min</span></span>
           <span class="os-scard-title">${esc(c.kind === 'hustle' && mainHustle() ? mainHustle().name : c.logPaper ? DATA.subjects[paperDraftFor(dayKey()).s].name + ' past paper' : c.title)}</span>
           ${it.status !== 'ok' && it.note ? `<span class="os-scard-note">${icon(skipped ? 'prohibit' : 'arrows-clockwise')} ${esc(it.note)}</span>` : ''}</span>
-        <span class="os-num os-scard-pct">${it.at ? `<span class="${it.status === 'ok' ? 'os-muted' : 'camber'}">${esc(it.at)}</span><br>` : ''}${e.done ? 'Done' : p.got + '/' + p.total}</span>
+        <span class="os-num os-scard-pct">${it.at ? `<span class="${it.status === 'ok' ? 'os-muted' : 'camber'}">${esc(it.at)}</span><br>` : ''}${e.done ? (e.incomplete ? `<span class="camber">Incomplete ${Math.round((e.pct || 0) * 100)}%</span>` : 'Done') : p.got + '/' + p.total}</span>
         ${icon(open ? 'caret-up' : 'caret-down')}
       </button>
       <div class="os-bar os-scard-bar"><div style="width:${e.done ? 100 : pct}%"></div></div>
@@ -552,7 +552,11 @@
         ${c.ladder ? (() => { const qs = cardRows(id).filter(r => r.q && (e.q || {})[r.q.id] != null); const g = qs.reduce((a, r) => a + e.q[r.q.id], 0), o = qs.reduce((a, r) => a + r.q.m, 0);
           return qs.length ? `<div class="os-between os-q-total"><span>${qs.length} answered</span><span class="os-num">${g} / ${o} marks${o ? ' · ' + Math.round(g / o * 100) + '%' : ''}</span></div>` : ''; })() : ''}
         ${c.ladder ? questionStepper(id, e) : c.logPaper ? mockExam() : `<div class="os-scard-rows">${cardRows(id).map(r => sessRow(id, r, e)).join('')}</div>`}
-        <button class="btn ${e.done ? 'btn-secondary' : 'btn-primary'} os-btn" data-act="sessDone" data-v="${esc(id)}">${e.done ? 'Undo finish' : 'Finish session'}${!e.done && sub ? ` · +${it.min} min ${esc(sub.name)}` : ''}</button>
+        ${(() => { const full = p.total && p.got >= p.total, part = p.total ? p.got / p.total : 1;
+          if (e.done) return `<button class="btn btn-secondary os-btn" data-act="sessDone" data-v="${esc(id)}">${e.incomplete ? 'Undo submit' : 'Undo finish'}</button>`;
+          return full || !p.total
+            ? `<button class="btn btn-primary os-btn" data-act="sessDone" data-v="${esc(id)}">Finish session${sub ? ` · +${it.min} min ${esc(sub.name)}` : ''}</button>`
+            : `<button class="btn os-btn os-submit-part" data-act="sessDone" data-v="${esc(id)}">Submit incomplete · ${Math.round(part * 100)}%${sub ? ` · +${Math.round(it.min * part)} min` : ''}</button>`; })()}
       </div>` : ''}
     </article>`;
   }
@@ -574,13 +578,34 @@
   }
 
   // Finishing a card ticks the matching daily checklist item, and revision cards add their minutes.
+  // Submitting an unfinished card is allowed, but it costs you: it's logged as incomplete with its %,
+  // unanswered questions count as 0 marks (so they come back as missed), and revision only credits
+  // the share of minutes you actually did. Undo puts everything back.
   function finish(id, on) {
-    const c = DATA.sessions[sid(id)], mins = itemOf(id).min || c.minutes, k = dayKey(), wk = curWeekKey(), day = getDay();
+    const c = DATA.sessions[sid(id)], k = dayKey(), wk = curWeekKey(), day = getDay();
+    const p = cardProgress(id), pct = on ? (p.total ? p.got / p.total : 1) : 0;
+    const before = getSess(id), skipped = on && pct < 1 ? cardRows(id).filter(r => r.q && (before.q || {})[r.q.id] == null).map(r => r.q) : [];
+    const mins = Math.round((itemOf(id).min || c.minutes) * (on ? pct : 1));
     Store.update(s => {
       const all = s.sess[k] = s.sess[k] || {};
       const e = Object.assign({ c: {}, done: false, added: 0 }, all[id]);
       if (!!e.done === on) return;
       e.done = on;
+      s.qlog = s.qlog || {};
+      if (on) {
+        e.pct = pct; e.incomplete = pct < 1; e.submittedAt = Date.now();
+        e.skipped = skipped.map(q => q.id);
+        skipped.forEach(q => {
+          e.q = Object.assign({}, e.q, { [q.id]: 0 });
+          s.qlog[q.id] = (s.qlog[q.id] || []).filter(x => !(x.d === k && x.k === id)).concat({ d: k, k: id, got: 0, of: q.m, skip: true });
+        });
+      } else {
+        (e.skipped || []).forEach(qid => {
+          if (e.q) delete e.q[qid];
+          s.qlog[qid] = (s.qlog[qid] || []).filter(x => !(x.d === k && x.k === id && x.skip));
+        });
+        delete e.pct; delete e.incomplete; delete e.skipped; delete e.submittedAt;
+      }
       const sj = subjOf(c);
       if (c.kind === 'revision' && sj != null && ui.week === 0) {
         if (s.minsWeek !== wk) { s.mins = s.mins.map(() => 0); s.minsWeek = wk; }
@@ -603,6 +628,40 @@
       const ci = checkFor(c);
       if (on && ci >= 0) { const chk = day.chk.slice(); chk[ci] = true; s.daily[k] = Object.assign({}, day, { chk }); }
     });
+  }
+
+  // ---------- completion score ----------
+  // Every planned (non-optional) session counts: finished = 100%, submitted incomplete = its %,
+  // not submitted by the end of its day = missed (0%). Today's unsubmitted sessions don't count yet.
+  function completionFor(k) {
+    const today = iso(new Date()), start = st().startedOn || today, out = [];
+    if (k < start || k > today) return out;
+    Planner.planDay(DATA, k, eventsOn, false, planOpts).items.filter(Planner.shown).forEach(it => {
+      const c = DATA.sessions[it.id]; if (!c || c.optional) return;
+      const e = (st().sess[k] || {})[it.key] || {};
+      const title = c.kind === 'hustle' && mainHustle() ? mainHustle().name : c.title;
+      if (e.done) out.push({ k, title, pct: e.incomplete ? (e.pct || 0) : 1, status: e.incomplete ? 'incomplete' : 'done' });
+      else if (k < today) out.push({ k, title, pct: 0, status: 'missed' });
+    });
+    return out;
+  }
+  function completionCard() {
+    const today = iso(new Date()), days = [];
+    for (let n = 6; n >= 0; n--) days.push(Cal.addDays(today, -n));
+    const all = days.map(k => ({ k, items: completionFor(k) }));
+    const flat = all.flatMap(d => d.items), score = flat.length ? Math.round(flat.reduce((a, x) => a + x.pct, 0) / flat.length * 100) : null;
+    const bad = flat.filter(x => x.status !== 'done').reverse().slice(0, 6);
+    const cls = p => p >= 85 ? 'cgreen' : p >= 60 ? 'camber' : 'cred';
+    return `<section class="os-card" id="completion"><div class="os-between"><span class="os-k">Completion · last 7 days</span>
+        <span class="os-num ${score == null ? 'os-muted' : cls(score)}" style="font-size:22px">${score == null ? '—' : score + '%'}</span></div>
+      <div class="os-compl">${all.map(d => { const n = d.items.length, p = n ? Math.round(d.items.reduce((a, x) => a + x.pct, 0) / n * 100) : null;
+        return `<div><span class="os-compl-bar"><span class="${p == null ? '' : cls(p)}" style="height:${p == null ? 0 : Math.max(4, p)}%"></span></span>
+          <span class="os-num os-muted" style="font-size:10px">${fmt(new Date(d.k + 'T12:00'), { weekday: 'narrow' })}</span></div>`; }).join('')}</div>
+      ${bad.length ? `<span class="os-k" style="padding-top:4px">Incomplete and missed</span>${bad.map(x => `<div class="os-between" style="font-size:14px;min-height:34px"><span style="min-width:0">${esc(x.title)} <span class="os-num os-muted" style="font-size:11px">${fmt(new Date(x.k + 'T12:00'), { weekday: 'short', day: 'numeric' })}</span></span>
+          <span class="os-num ${x.status === 'missed' ? 'cred' : 'camber'}" style="font-size:12px;flex:none">${x.status === 'missed' ? 'Missed · 0%' : 'Incomplete · ' + Math.round(x.pct * 100) + '%'}</span></div>`).join('')}`
+        : '<span class="os-muted" style="font-size:13px">Every session finished. Keep it that way.</span>'}
+      <span class="os-muted" style="font-size:12px;line-height:1.5">Finished = 100%. Submitted early = the % you did, and unanswered questions score 0. Not submitted by the end of the day = missed.</span>
+    </section>`;
   }
 
   // ---------- updates and notices ----------
@@ -1107,6 +1166,7 @@
     const recent = Object.keys(s.logs).sort().reverse().filter(k => s.logs[k].win || s.logs[k].fix).slice(0, 4);
     return `
     <header class="os-head"><span class="os-k acc">Log</span><h3>${FULL[ui.day]}</h3></header>
+    ${completionCard()}
     <div class="os-grid g3">
       <section class="os-card os-hero"><span class="os-k">Quick entry</span>
         <button class="os-row ${log.done ? 'on' : ''}" data-act="toggleDone" aria-pressed="${!!log.done}"><span class="os-box">${icon('check')}</span><span>Session done</span></button>
@@ -1281,7 +1341,17 @@
       const p = cardProgress(id);
       if (!cur.done && p.total && p.got >= p.total) { finish(id, true); ui.openCard = null; }
     },
-    sessDone(v) { const on = !getSess(v).done; finish(v, on); if (on) ui.openCard = null; },
+    sessDone(v) {
+      const on = !getSess(v).done;
+      if (on) {
+        const p = cardProgress(v), e = getSess(v);
+        if (p.total && p.got < p.total) {
+          const left = cardRows(v).filter(r => r.q && (e.q || {})[r.q.id] == null).length;
+          if (!confirm('Submit incomplete? This logs ' + Math.round(p.got / p.total * 100) + '% for this session' + (left ? ', and the ' + left + ' unanswered question' + (left > 1 ? 's count' : ' counts') + ' as 0 marks' : '') + '.')) return;
+        }
+      }
+      finish(v, on); if (on) ui.openCard = null;
+    },
     hOpen(v) { const cur = ui.hOpen == null ? (hustles()[0] || {}).id : ui.hOpen; ui.hOpen = cur === v ? '' : v; },
     hAdd() {
       const id = 'p' + Date.now().toString(36);

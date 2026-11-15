@@ -24,6 +24,7 @@
       sess: {},
       // ids of updates/notices already dismissed
       seen: [],
+      startedOn: '',   // first day the completion score counts from
       // Exam questions: your own (myq) and every mark you've given yourself (qlog[questionId] = [{ d, got, of }])
       myq: [],
       // Past papers: { id, date, s (subject), name, got, of, topics: [topic names that lost marks] }
@@ -69,6 +70,8 @@
     if ([150, 120, 90, 90, 60].every((g, i) => s.goals[i] === g)) s.goals = DATA.subjects.map(x => x.goal);
     if (!Array.isArray(s.hustles)) s.hustles = defaults().hustles;
     delete s.studio;
+    // Completion score counts from the first day you used the app (or today).
+    if (!s.startedOn) { const t = new Date(), ks = Object.keys(s.sess || {}).sort(); s.startedOn = ks[0] || (t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0')); }
     // Old single past-paper % scores become undated Maths papers out of 100.
     if (Array.isArray(o && o.scores) && o.scores.length && !(o.papers || []).length) {
       s.papers = o.scores.map((v, i) => ({ id: 'old' + i, date: '', s: 0, name: 'Past paper ' + (i + 1), got: v, of: 100, topics: [] }));
