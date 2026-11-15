@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-15-incomplete', date: '2026-11-15', kind: 'notice',
+    title: 'Unfinished sessions now cost you',
+    body: 'You can submit a session before it’s finished, but it’s logged as incomplete with its %, unanswered questions score 0 (and come back as missed), and revision only counts the minutes you did. Sessions not submitted by the end of the day count as missed. See your completion score on the Log screen.'
+  },
+  {
     id: '2026-11-14-weak-topics', date: '2026-11-14', kind: 'update',
     title: '70 new questions on your weak spots',
     body: 'New questions on the topics you scored 0% on: the electromagnetic spectrum, fiction reading, alkenes, alcohols and carboxylic acids, and physical training. There are also Maths questions on every topic you lost marks on in the June 2023 Paper 1. Most are AO2 (apply it), with some quick AO1 markers and a few AO3 heavy questions.'
