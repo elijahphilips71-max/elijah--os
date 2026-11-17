@@ -30,10 +30,18 @@
     opts = opts || {};
     const wd = weekdayOf(date), events = eventsOn(date);
     const win = (wd < 5 ? WINDOW.weekday : WINDOW.weekend).map(toMin);
-    const items = Cal.refs(DATA.schedule[wd], DATA.daily).filter(r => DATA.sessions[r.id] && !(opts.hide && opts.hide(r.id))).map(r => {
+    let items = Cal.refs(DATA.schedule[wd], DATA.daily).filter(r => DATA.sessions[r.id] && !(opts.hide && opts.hide(r.id))).map(r => {
       const c = DATA.sessions[r.id];
       return { key: r.id, id: r.id, at: r.at, orig: r.at, min: c.minutes || 30, status: 'ok', note: '' };
     });
+    // Your own moves (drag and drop): sessions moved to another day, and new start times for this day.
+    // Moved sessions are pinned: the planner never moves or drops them, it only warns about clashes.
+    const mv = opts.moves ? opts.moves(date) : null;
+    if (mv) {
+      items = items.filter(it => !mv.out.includes(it.key));
+      mv.in.forEach(x => { if (DATA.sessions[x.id]) items.push({ key: x.key, id: x.id, at: x.at, orig: x.at, min: DATA.sessions[x.id].minutes || 30, status: 'ok', note: 'Moved here from ' + dayName(x.from), pinned: true }); });
+      items.forEach(it => { const t = mv.times[it.key]; if (t && t !== it.at) { it.note = 'Moved by you · was ' + (it.at || 'no set time'); it.at = t; it.pinned = true; } });
+    }
     const changes = [], warnings = [];
 
     // "Clear the whole day" events: skip everything except the daily routine cards.
@@ -52,6 +60,8 @@
       const s = toMin(e.start), en = e.end && e.end > e.start ? toMin(e.end) : s + 90;
       return { s: s - b[0], e: en + b[1], title: e.title, real: [s, en] };
     });
+    // Sessions you placed yourself also block time, so other flexible sessions move around them.
+    items.forEach(it => { if (it.pinned && it.at && it.status === 'ok') busy.push({ s: toMin(it.at), e: toMin(it.at) + it.min, title: DATA.sessions[it.id].title, key: it.key }); });
     const phys = events.find(e => PHYSICAL_EVENT[e.kind]);
     const overlaps = (a, b) => a.s < b.e && b.s < a.e;
     const span = it => ({ s: toMin(it.at), e: toMin(it.at) + it.min });
@@ -59,7 +69,7 @@
     // 1. Game / training day: drop extra physical sessions.
     items.forEach(it => {
       const c = DATA.sessions[it.id];
-      if (phys && isPhysical(c) && !c.fixed && !c.keep) {
+      if (phys && isPhysical(c) && !c.fixed && !c.keep && !it.pinned) {
         it.status = 'skipped'; it.note = 'No extra training on a ' + PHYSICAL_EVENT[phys.kind];
         if (!c.optional) changes.push(c.title + ' skipped (' + PHYSICAL_EVENT[phys.kind] + ').');
       }
@@ -70,10 +80,12 @@
     items.forEach(it => {
       if (it.status !== 'ok' || !it.at) return;
       const c = DATA.sessions[it.id], sp = span(it);
-      const hit = busy.find(b => overlaps(sp, b));
+      const hit = busy.find(b => b.key !== it.key && overlaps(sp, b));
       if (!hit) return;
-      const fixed = c.fixed || c.kind === 'routine' || toMin(it.at) < win[0];
+      const fixed = c.fixed || it.pinned || c.kind === 'routine' || toMin(it.at) < win[0];
       if (fixed) {
+        if (hit.key) { warnings.push(hit.title + ' (moved by you) overlaps ' + c.title + '.'); return; }
+        if (it.pinned) { if (hit.real && overlaps(sp, { s: hit.real[0], e: hit.real[1] })) warnings.push('You moved ' + c.title + ' into ' + hit.title + '.'); return; }
         if (hit.real && overlaps(sp, { s: hit.real[0], e: hit.real[1] })) warnings.push(hit.title + ' clashes with ' + c.title + '. You can’t do both; let your coach know.');
         else if (c.fixed) warnings.push(c.title + ' is close to ' + hit.title + '. Tight on time, and a heavy day for your legs.');
         return;

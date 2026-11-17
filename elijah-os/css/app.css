@@ -445,6 +445,22 @@ button { -webkit-user-select: none; user-select: none; }
 .os-gtopic { display: flex; flex-direction: column; gap: 6px; }
 .os-gtopic select { font-size: 15px; }
 
+/* Moving sessions */
+.os-scard { position: relative; }
+.os-scard.movable .os-scard-head { padding-left: 34px; }
+.os-drag {
+  position: absolute; left: 0; top: 0; width: 32px; height: 64px; display: grid; place-items: center; z-index: 1;
+  color: var(--color-neutral-600); font-size: 18px; cursor: grab; touch-action: none; -webkit-user-select: none; user-select: none;
+}
+.os-drag:hover { color: var(--color-accent-300); }
+.os-dragging { opacity: .35; }
+.os-ghost { position: fixed; z-index: 20; pointer-events: none; transform: scale(1.02) rotate(-1deg); box-shadow: 0 16px 40px rgba(0, 0, 0, .55), 0 0 0 1px var(--color-accent); border-radius: var(--radius-lg); }
+.os-dropmark { height: 4px; border-radius: 2px; background: var(--color-accent); box-shadow: 0 0 8px var(--color-accent); margin: -2px 0; }
+.os-day.os-droptarget { border-color: var(--color-accent); background: color-mix(in srgb, var(--color-accent) 20%, transparent); }
+.os-movebar { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.os-movebar .btn { padding-left: 0; display: inline-flex; align-items: center; gap: 6px; }
+.os-moveform { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border-radius: var(--radius-md); background: color-mix(in srgb, var(--color-text) 5%, transparent); }
+
 /* Mock exam */
 .os-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .os-steps span { display: flex; align-items: center; justify-content: center; gap: 4px; min-height: 32px; border-radius: 999px; font-size: 12px; color: var(--color-neutral-400); border: 1px solid var(--color-neutral-800); }

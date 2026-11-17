@@ -24,6 +24,9 @@
       sess: {},
       // ids of updates/notices already dismissed
       seen: [],
+      // Your own moves: moves[date][cardKey] = { at } (new time that day); shifts = [{ id, key, from, to, at }] (to another day)
+      moves: {},
+      shifts: [],
       startedOn: '',   // first day the completion score counts from
       // Exam questions: your own (myq) and every mark you've given yourself (qlog[questionId] = [{ d, got, of }])
       myq: [],
