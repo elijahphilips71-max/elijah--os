@@ -29,11 +29,11 @@ BEGIN:VEVENT
 UID:plan-0-rev-maths@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261109T173000
-DTEND:20261109T184500
+DTEND:20261109T181000
 RRULE:FREQ=WEEKLY
 SUMMARY:Maths revision
-DESCRIPTION:AO1 reps to warm up\, AO2 as the main chunk\, then the heavy A
- O3 questions.
+DESCRIPTION:Revision guide\, pen and paper. Full working on every question
+ .
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Maths revision
@@ -113,11 +113,10 @@ BEGIN:VEVENT
 UID:plan-1-rev-physics@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261110T180000
-DTEND:20261110T191500
+DTEND:20261110T184000
 RRULE:FREQ=WEEKLY
 SUMMARY:Physics revision
-DESCRIPTION:AO1 reps to warm up\, AO2 as the main chunk\, then the heavy A
- O3 questions.
+DESCRIPTION:Revision guide\, pen and paper. Equations from memory first.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Physics revision
@@ -176,11 +175,11 @@ BEGIN:VEVENT
 UID:plan-2-rev-lang@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261111T163000
-DTEND:20261111T171500
+DTEND:20261111T171000
 RRULE:FREQ=WEEKLY
 SUMMARY:Spanish + PE revision
-DESCRIPTION:Exam questions: say Spanish answers out loud\, then write them
- .
+DESCRIPTION:Revision guide\, pen and paper. Say Spanish answers out loud b
+ efore you write them.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Spanish + PE revision
@@ -239,11 +238,11 @@ BEGIN:VEVENT
 UID:plan-3-rev-eng-bio@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261112T163000
-DTEND:20261112T171500
+DTEND:20261112T171000
 RRULE:FREQ=WEEKLY
 SUMMARY:English / Biology revision
-DESCRIPTION:English and Biology swap each week. AO1 reps\, AO2 main chunk\
- , one AO3.
+DESCRIPTION:English and Biology swap each week. Revision guide\, pen and p
+ aper.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:English / Biology revision
@@ -305,11 +304,11 @@ BEGIN:VEVENT
 UID:plan-4-rev-chem-maths@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261113T173000
-DTEND:20261113T183000
+DTEND:20261113T181000
 RRULE:FREQ=WEEKLY
 SUMMARY:Chemistry / Maths revision
-DESCRIPTION:Chemistry\, with Maths questions on alternate weeks. AO1 reps\
- , AO2 main chunk\, one AO3.
+DESCRIPTION:Chemistry\, with Maths on alternate weeks. Revision guide\, pe
+ n and paper.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Chemistry / Maths revision

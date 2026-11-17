@@ -15,6 +15,39 @@ window.ELIJAH_DATA = {
       steps: ['Pick a story', 'Trim the script, write the hook', 'AI voiceover', 'Background gameplay + captions', 'Title, hashtags, upload'] }
   ],
 
+  // Revision-guide sessions (40 min): the steps for each style. {t} becomes today's topic.
+  // style: maths (subject 0), english (2), spanish (Spanish topics), science (everything else).
+  guideSteps: {
+    science: [
+      { name: 'Recall', mins: 5, detail: 'Book closed. Write everything you know about {t}: key words, equations, diagrams.' },
+      { name: 'Check the guide', mins: 5, detail: 'Open your revision guide at {t}. Add what you missed in a different colour.' },
+      { name: 'Written exam questions', mins: 20, detail: 'The guide’s exam-style questions on {t}: “explain”, “describe” and “compare”. Full sentences, one point per mark.' },
+      { name: 'Mark and correct', mins: 7, detail: 'Mark with the answers in the back. Rewrite one answer so it would get full marks.' },
+      { name: 'Rate the topic', mins: 3, detail: 'Red, amber or green, and write the one thing to fix next time.', rate: true }
+    ],
+    maths: [
+      { name: 'Recall', mins: 5, detail: 'Book closed. Write the methods and formulas for {t}, with one example of each.' },
+      { name: 'Check the guide', mins: 5, detail: 'Read the guide’s worked examples on {t}. Fix anything you got wrong.' },
+      { name: 'Exam questions', mins: 20, detail: 'The guide’s practice questions on {t}, hardest ones too. Show full working; “show that” and “explain” answers in words.' },
+      { name: 'Mark and correct', mins: 7, detail: 'Mark with the answers. Redo every wrong one from scratch.' },
+      { name: 'Rate the topic', mins: 3, detail: 'Red, amber or green, and note the mistake you made most.', rate: true }
+    ],
+    english: [
+      { name: 'Recall', mins: 5, detail: 'Book closed. Write 5 quotations or key points for {t}, and one piece of context.' },
+      { name: 'Check the guide', mins: 5, detail: 'Check them in the guide. Add themes, techniques and context you missed.' },
+      { name: 'Timed writing', mins: 20, detail: 'Answer an exam-style “how does the writer…” question on {t}: an introduction and two analytical paragraphs.' },
+      { name: 'Mark and improve', mins: 7, detail: 'Compare with the guide’s model answer or mark scheme. Improve one paragraph.' },
+      { name: 'Rate the topic', mins: 3, detail: 'Red, amber or green, and the one thing to fix next time.', rate: true }
+    ],
+    spanish: [
+      { name: 'Recall', mins: 5, detail: 'Book closed. Write 15 words and phrases for {t}, in Spanish and English.' },
+      { name: 'Check the guide', mins: 5, detail: 'Check the vocab and grammar pages for {t}. Add what you missed.' },
+      { name: 'Writing and speaking', mins: 20, detail: 'Answer the guide’s questions on {t} in Spanish: say each answer out loud, then write it. Use three tenses and opinions with reasons.' },
+      { name: 'Mark and correct', mins: 7, detail: 'Check against the answers. Correct verb endings and accents.' },
+      { name: 'Rate the topic', mins: 3, detail: 'Red, amber or green, and the one thing to fix next time.', rate: true }
+    ]
+  },
+
   // Saturday past papers rotate through these subjects, one per week (positions in `subjects`).
   // You can always switch subject on the card. paperMins = default time allowed.
   paperRotation: [0, 1, 3, 2, 4],
@@ -29,12 +62,12 @@ window.ELIJAH_DATA = {
   // Leave the time out (just the id) for an all-day item. Times feed the calendar (calendar.ics).
   schedule: [
     { day: 'Mon', title: 'Recovery + upper body', load: 'Medium',
-      time: 'After school · Maths 75 min', sub: 'Leave 08:20 · school 08:50–15:25',
-      mission: 'Upper body with 2 reps in reserve, then 75 minutes of Maths. Review Sunday’s match.',
+      time: 'After school · Maths 40 min', sub: 'Leave 08:20 · school 08:50–15:25',
+      mission: 'Upper body with 2 reps in reserve, then 40 minutes of Maths from the revision guide. Review Sunday’s match.',
       sessions: [['upper-cali', '16:15'], ['rev-maths', '17:30'], ['match-review', '19:00'], ['wall', '19:10']] },
     { day: 'Tue', title: 'Astro skills + lower body', load: 'Medium',
-      time: '15:45 · Physics 75 min', sub: 'Leave 08:20 · school 08:50–15:25',
-      mission: 'Skill sequences at 75% pace, light legs, then 75 minutes of Physics.',
+      time: '15:45 · Physics 40 min', sub: 'Leave 08:20 · school 08:50–15:25',
+      mission: 'Skill sequences at 75% pace, light legs, then 40 minutes of Physics from the revision guide.',
       sessions: [['astro-skill', '15:45'], ['lower-body', '17:00'], ['rev-physics', '18:00'], ['wall', '19:20'], ['hustle', '20:00']] },
     { day: 'Wed', title: 'Academy training', load: 'High',
       time: '18:15 · leave 18:00', sub: 'Leave 08:20 · school 08:50–15:25',
@@ -69,6 +102,8 @@ window.ELIJAH_DATA = {
   //   ladder: [AO1, AO2, AO3] = how many exam questions of each kind the card gives you, from js/questions.js
   //     (weak topics and questions you got wrong come first). `mixed: true` draws from every subject.
   //     `only: { subject: 'Chemistry:' }` limits a subject to topics starting with that text (or give a list of topic names).
+  //   guide: true = a 40-minute revision-guide session on paper, in timed steps (see guideSteps below),
+  //     on the subject's weakest topic (rotating). The app's own questions are in the morning AO1 reps.
   //   keep: true = never dropped, even on a game day; if something clashes it moves (wall session).
   //   For kind 'revision', `subject` is the subject's position in `subjects` (0 = first),
   //   or `subjects: [a, b]` to alternate between two subjects week by week.
@@ -174,9 +209,9 @@ window.ELIJAH_DATA = {
       items: [{ name: 'Picture your first touch' }, { name: 'Picture the finish' }]
     },
     'rev-chem-maths': {
-      kind: 'revision', subjects: [3, 0], title: 'Chemistry / Maths revision', minutes: 60, ladder: [5, 3, 1],
+      kind: 'revision', subjects: [3, 0], title: 'Chemistry / Maths revision', minutes: 40, guide: true,
       only: { 3: 'Chemistry:' },
-      focus: 'Chemistry, with Maths questions on alternate weeks. AO1 reps, AO2 main chunk, one AO3.'
+      focus: 'Chemistry, with Maths on alternate weeks. Revision guide, pen and paper.'
     },
     'academy': {
       kind: 'football', fixed: true, title: 'Academy training', minutes: 90, remind: 30,
@@ -210,22 +245,22 @@ window.ELIJAH_DATA = {
       ]
     },
     'rev-maths': {
-      kind: 'revision', subject: 0, title: 'Maths revision', minutes: 75, ladder: [6, 5, 2],
+      kind: 'revision', subject: 0, title: 'Maths revision', minutes: 40, guide: true,
       onClash: 'skip', clashNote: 'Maths stays at its time; dropped today because of a clash',
-      focus: 'AO1 reps to warm up, AO2 as the main chunk, then the heavy AO3 questions.'
+      focus: 'Revision guide, pen and paper. Full working on every question.'
     },
     'rev-physics': {
-      kind: 'revision', subject: 1, title: 'Physics revision', minutes: 75, ladder: [6, 5, 2],
-      focus: 'AO1 reps to warm up, AO2 as the main chunk, then the heavy AO3 questions.'
+      kind: 'revision', subject: 1, title: 'Physics revision', minutes: 40, guide: true,
+      focus: 'Revision guide, pen and paper. Equations from memory first.'
     },
     'rev-lang': {
-      kind: 'revision', subject: 4, title: 'Spanish + PE revision', minutes: 45, ladder: [5, 3, 1],
-      focus: 'Exam questions: say Spanish answers out loud, then write them.'
+      kind: 'revision', subject: 4, title: 'Spanish + PE revision', minutes: 40, guide: true,
+      focus: 'Revision guide, pen and paper. Say Spanish answers out loud before you write them.'
     },
     'rev-eng-bio': {
-      kind: 'revision', subjects: [2, 3], title: 'English / Biology revision', minutes: 45, ladder: [4, 3, 1],
+      kind: 'revision', subjects: [2, 3], title: 'English / Biology revision', minutes: 40, guide: true,
       only: { 3: 'Biology:' },
-      focus: 'English and Biology swap each week. AO1 reps, AO2 main chunk, one AO3.'
+      focus: 'English and Biology swap each week. Revision guide, pen and paper.'
     },
     'past-paper': {
       kind: 'paper', title: 'Timed past paper', minutes: 150,
@@ -244,7 +279,7 @@ window.ELIJAH_DATA = {
   // Revision subjects in priority order. goal = default weekly minutes (you can also edit goals in the app).
   // topics = the starting topic list. You can add, remove and rate topics in the app too.
   subjects: [
-    { name: 'Maths', board: 'AQA (Higher)', target: 9, startLevel: 6, goal: 75, topics: [
+    { name: 'Maths', board: 'AQA (Higher)', target: 9, startLevel: 6, goal: 60, topics: [
       'Number: fractions, decimals and percentages', 'Number: indices, roots and standard form', 'Number: surds',
       'Number: factors, multiples and primes', 'Number: rounding, estimation and bounds', 'Number: recurring decimals',
       'Algebra: expanding and factorising', 'Algebra: linear equations and inequalities', 'Algebra: quadratics',
@@ -259,7 +294,7 @@ window.ELIJAH_DATA = {
       'Probability: basics and expected outcomes', 'Probability: tree diagrams and conditional probability', 'Probability: Venn diagrams and sets',
       'Statistics: averages and spread', 'Statistics: charts, scatter graphs and correlation',
       'Statistics: cumulative frequency and box plots', 'Statistics: histograms', 'Statistics: sampling'] },
-    { name: 'Physics', board: 'AQA (triple science)', target: 9, startLevel: 6, goal: 75, topics: [
+    { name: 'Physics', board: 'AQA (triple science)', target: 9, startLevel: 6, goal: 40, topics: [
       'Energy: stores and transfers', 'Energy: specific heat capacity', 'Energy: power and efficiency', 'Energy: energy resources',
       'Electricity: current, potential difference and resistance', 'Electricity: series and parallel circuits',
       'Electricity: mains electricity and power', 'Electricity: the National Grid', 'Electricity: static electricity',
@@ -273,13 +308,13 @@ window.ELIJAH_DATA = {
       'Waves: lenses and visible light', 'Waves: black body radiation',
       'Magnetism: magnets and fields', 'Magnetism: the motor effect', 'Magnetism: generators and transformers',
       'Space: the solar system and life cycle of stars', 'Space: orbits', 'Space: red-shift and the Big Bang'] },
-    { name: 'English', board: 'WJEC Eduqas', goal: 45,
+    { name: 'English', board: 'WJEC Eduqas', goal: 20,
       note: 'Literature: Component 1 (Macbeth, poetry anthology) 2h · Component 2 (An Inspector Calls, Jekyll and Hyde, unseen poetry) 2h30. Language: Component 1 1h45 · Component 2 2h.', topics: [
       'Literature: Macbeth', 'Literature: Jekyll and Hyde', 'Literature: An Inspector Calls',
       'Literature: Eduqas poetry anthology', 'Literature: unseen poetry',
       'Language: fiction reading', 'Language: non-fiction reading', 'Language: creative writing',
       'Language: viewpoint and transactional writing', 'Language: spelling, punctuation and grammar'] },
-    { name: 'Biology / Chemistry', board: 'AQA (triple science)', target: 9, startLevel: 6, goal: 45, topics: [
+    { name: 'Biology / Chemistry', board: 'AQA (triple science)', target: 9, startLevel: 6, goal: 40, topics: [
       'Biology: cell structure and microscopy', 'Biology: cell division and stem cells', 'Biology: transport in cells',
       'Biology: digestion and enzymes', 'Biology: heart, blood and circulation', 'Biology: non-communicable disease',
       'Biology: plant tissues and transport', 'Biology: communicable disease', 'Biology: defence, vaccination and drugs',
@@ -299,7 +334,7 @@ window.ELIJAH_DATA = {
       'Chemistry: alkenes, alcohols and carboxylic acids', 'Chemistry: polymers', 'Chemistry: purity, chromatography and gas tests',
       'Chemistry: identifying ions and instrumental analysis', 'Chemistry: the atmosphere and climate change', 'Chemistry: pollutants',
       'Chemistry: water treatment and life cycle assessment', 'Chemistry: materials and corrosion', 'Chemistry: Haber process and fertilisers'] },
-    { name: 'Spanish / PE', board: 'Pearson Edexcel (Spanish) · AQA (PE)', goal: 45, topics: [
+    { name: 'Spanish / PE', board: 'Pearson Edexcel (Spanish) · AQA (PE)', goal: 40, topics: [
       'Spanish: my personal world', 'Spanish: lifestyle and wellbeing', 'Spanish: my neighbourhood', 'Spanish: media and technology',
       'Spanish: studying and my future', 'Spanish: travel and tourism',
       'Spanish: present tense', 'Spanish: past tenses', 'Spanish: future and conditional', 'Spanish: translation',

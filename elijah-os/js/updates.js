@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-17-guide', date: '2026-11-17', kind: 'update',
+    title: '40-minute revision-guide sessions',
+    body: 'Revision blocks are now 40 minutes with your revision guide, pen and paper: recall 5 min, check the guide 5, written exam questions (explain, describe) 20, mark and correct 7, rate the topic 3. Each step has a timer. The app picks your weakest topic and rotates them; change it if you like. The app’s own questions are now your morning AO1 reps.'
+  },
+  {
     id: '2026-11-17-plyo', date: '2026-11-17', kind: 'update',
     title: 'Plyometrics',
     body: 'Tuesday lower body starts with low, springy plyos (pogo hops, lateral bounds). Friday speed adds broad jumps and single-leg bounds before the sprints. They drop off automatically if your leg freshness is 2 or lower, or you have a game the next day.'
