@@ -585,17 +585,20 @@
     const p = cardProgress(id);
     const pct = p.total ? Math.round(p.got / p.total * 100) : 0;
     const sj = subjOf(c), sub = c.kind === 'revision' && sj != null ? DATA.subjects[sj] : null;
-    return `<article class="os-scard ${e.done ? 'done' : ''} ${open ? 'open' : ''} ${skipped ? 'skipped' : ''}" data-kind="${esc(c.kind)}">
+    const canMove = !skipped && !e.done && !String(id).endsWith('@carry');
+    return `<article class="os-scard ${e.done ? 'done' : ''} ${open ? 'open' : ''} ${skipped ? 'skipped' : ''} ${canMove ? 'movable' : ''}" data-kind="${esc(c.kind)}" data-key="${esc(id)}">
+      ${canMove ? `<span class="os-drag" data-drag="${esc(id)}" role="button" aria-label="Drag to move ${esc(c.title)}" title="Drag to reorder, or onto a day to move it">${icon('dots-six-vertical')}</span>` : ''}
       <button class="os-scard-head" data-act="card" data-v="${esc(id)}" aria-expanded="${open}">
         <span class="os-scard-ic">${icon(e.done ? 'check' : k[1])}</span>
         <span class="os-scard-t"><span class="os-k">${c.optional ? 'Optional · ' : ''}${esc(k[0])}${sub ? ' · ' + esc(sub.name) : ''} · <span class="os-num">${it.min} min</span></span>
           <span class="os-scard-title">${esc(c.kind === 'hustle' && mainHustle() ? mainHustle().name : c.logPaper ? DATA.subjects[paperDraftFor(dayKey()).s].name + ' past paper' : c.title)}</span>
-          ${it.status !== 'ok' && it.note ? `<span class="os-scard-note">${icon(skipped ? 'prohibit' : 'arrows-clockwise')} ${esc(it.note)}</span>` : ''}</span>
+          ${(it.status !== 'ok' || it.pinned) && it.note ? `<span class="os-scard-note">${icon(skipped ? 'prohibit' : 'arrows-clockwise')} ${esc(it.note)}</span>` : ''}</span>
         <span class="os-num os-scard-pct">${it.at ? `<span class="${it.status === 'ok' ? 'os-muted' : 'camber'}">${esc(it.at)}</span><br>` : ''}${e.done ? (e.incomplete ? `<span class="camber">Incomplete ${Math.round((e.pct || 0) * 100)}%</span>` : 'Done') : p.got + '/' + p.total}</span>
         ${icon(open ? 'caret-up' : 'caret-down')}
       </button>
       <div class="os-bar os-scard-bar"><div style="width:${e.done ? 100 : pct}%"></div></div>
       ${open ? `<div class="os-scard-body">
+        ${canMove ? moveControls(id, it) : ''}
         ${c.focus ? `<div class="os-scard-focus">${esc(c.focus)}</div>` : ''}
         ${c.ladder ? (() => { const qs = cardRows(id).filter(r => r.q && (e.q || {})[r.q.id] != null); const g = qs.reduce((a, r) => a + e.q[r.q.id], 0), o = qs.reduce((a, r) => a + r.q.m, 0);
           return qs.length ? `<div class="os-between os-q-total"><span>${qs.length} answered</span><span class="os-num">${g} / ${o} marks${o ? ' · ' + Math.round(g / o * 100) + '%' : ''}</span></div>` : ''; })() : ''}
@@ -607,6 +610,19 @@
             : `<button class="btn os-btn os-submit-part" data-act="sessDone" data-v="${esc(id)}">Submit incomplete · ${Math.round(part * 100)}%${sub ? ` · +${Math.round(it.min * part)} min` : ''}</button>`; })()}
       </div>` : ''}
     </article>`;
+  }
+
+  function moveControls(key, it) {
+    const moved = it.pinned;
+    if (ui.moveOpen !== key) return `<div class="os-movebar"><button class="btn btn-ghost" data-act="moveOpen" data-v="${esc(key)}">${icon('arrows-out-cardinal')}Change time or day</button>
+      ${moved ? `<button class="btn btn-ghost" data-act="moveReset" data-v="${esc(key)}">${icon('arrow-counter-clockwise')}Undo move</button>` : ''}</div>`;
+    return `<div class="os-moveform">
+      <div class="os-evgrid" style="grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)">
+        <div class="field"><label for="mv-at">Start</label><input class="input os-in" type="time" id="mv-at" value="${esc(it.at || '')}" data-in="mvAt" data-f="${esc(key)}"></div>
+        <div class="field"><label for="mv-day">Day</label><select class="input os-in" id="mv-day" data-in="mvDay" data-f="${esc(key)}">${DATA.schedule.map((d, i) => `<option value="${iso(dt(i))}" ${i === ui.day ? 'selected' : ''}>${FULL[i]} ${dt(i).getDate()}</option>`).join('')}</select></div>
+      </div>
+      <div class="os-movebar"><button class="btn btn-ghost" data-act="moveOpen" data-v="">Done</button>${moved ? `<button class="btn btn-ghost" data-act="moveReset" data-v="${esc(key)}">${icon('arrow-counter-clockwise')}Undo move</button>` : ''}</div>
+    </div>`;
   }
 
   function sessRow(id, r, e) {
@@ -745,7 +761,47 @@
   // ---------- side hustles ----------
   const hustles = () => st().hustles || [];
   const mainHustle = () => hustles().find(h => !h.paused) || null;
-  const planOpts = { hide: id => DATA.sessions[id] && DATA.sessions[id].kind === 'hustle' && !mainHustle() };
+  const planOpts = {
+    hide: id => DATA.sessions[id] && DATA.sessions[id].kind === 'hustle' && !mainHustle(),
+    moves: date => {
+      const m = (st().moves || {})[date] || {}, sh = st().shifts || [], times = {};
+      Object.keys(m).forEach(k => { if (m[k] && m[k].at) times[k] = m[k].at; });
+      return { times, out: sh.filter(x => x.from === date).map(x => x.key), in: sh.filter(x => x.to === date).map(x => ({ key: x.id + '@' + x.from, id: x.id, at: x.at, from: x.from })) };
+    }
+  };
+  // ----- moving sessions (drag and drop, or "Change time or day") -----
+  const hmToMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+  const minToHm = n => { n = Math.max(6 * 60, Math.min(22 * 60 + 30, Math.round(n / 5) * 5)); return String(Math.floor(n / 60)).padStart(2, '0') + ':' + String(n % 60).padStart(2, '0'); };
+  function moveTime(key, at) {
+    const k = dayKey(); Store.update(s => { s.moves = s.moves || {}; s.moves[k] = Object.assign({}, s.moves[k], { [key]: { at } }); });
+  }
+  // Move a card to another date (same time). A card already moved here from another day just changes destination.
+  function moveDay(key, to) {
+    const from = dayKey(); if (to === from) return;
+    const it = itemOf(key), id = sid(key);
+    Store.update(s => {
+      s.shifts = s.shifts || [];
+      const back = key.includes('@') ? s.shifts.find(x => x.id + '@' + x.from === key && x.to === from) : null;
+      if (back) { if (back.from === to) s.shifts = s.shifts.filter(x => x !== back); else { back.to = to; } }
+      else s.shifts.push({ id, key, from, to, at: it.at || '' });
+      if (s.moves && s.moves[from]) delete s.moves[from][key];
+    });
+  }
+  function resetMove(key) {
+    const k = dayKey();
+    Store.update(s => {
+      if (s.moves && s.moves[k]) delete s.moves[k][key];
+      if (key.includes('@')) s.shifts = (s.shifts || []).filter(x => !(x.id + '@' + x.from === key && x.to === k));
+    });
+  }
+  // New start time when a card is dropped at position i among the other cards of the day.
+  function dropTime(others, i, min) {
+    const prev = others.slice(0, i).reverse().find(x => x.at), next = others.slice(i).find(x => x.at);
+    const start = hmToMin(ui.day < 5 ? '15:45' : '08:00');   // after school on weekdays
+    if (prev) return minToHm(Math.max(hmToMin(prev.at) + prev.min, next ? Math.min(start, hmToMin(next.at)) : start));
+    if (next) return minToHm(hmToMin(next.at) - min);
+    return '16:00';
+  }
   // The idea a hustle card uses: the one it was finished with, otherwise the main project's next unused idea.
   function ideaFor(key) {
     const h = mainHustle(); if (!h) return null;
@@ -1318,6 +1374,8 @@
     },
     shiftWeek(v) { ui.week += +v; ui.openCard = null; ui.showPlanned = false; },
     goToday() { ui.week = 0; ui.day = todayIdx(); ui.openCard = null; ui.showPlanned = false; },
+    moveOpen(v) { ui.moveOpen = v || null; },
+    moveReset(v) { resetMove(v); ui.moveOpen = null; },
     showPlanned() { ui.showPlanned = !ui.showPlanned; },
     evNew() { ui.evForm = true; ui.evErr = ''; ui.ev = { title: '', kind: 'game', date: dayKey(), start: '16:00', end: '17:30', note: '', replace: false };
       setTimeout(() => { const el = root.querySelector('#ev-title'); if (el) { el.focus(); el.scrollIntoView({ block: 'center' }); } }); },
@@ -1637,6 +1695,8 @@
       case 'pdb': ui.pd.bounds = Object.assign({}, ui.pd.bounds, { [f]: v }); break;
       case 'draft': setDraft({ [f]: f === 'mins' ? v.replace(/[^0-9]/g, '') : v }); break;
       case 'gtopic': { const k = dayKey(); Store.update(s => { const all = s.sess[k] = s.sess[k] || {}; all[f] = Object.assign({ c: {}, done: false, added: 0 }, all[f], { topic: v }); }); render(); break; }
+      case 'mvAt': if (/^\d{2}:\d{2}$/.test(v)) { moveTime(f, v); } break;
+      case 'mvDay': moveDay(f, v); ui.moveOpen = null; ui.openCard = null; render(); break;
       case 'qd': ui.qd[i] = Object.assign({}, ui.qd[i], { [f]: v }); break;
       case 'ideaDraft': ui.ideaDraft[f] = v; break;
       case 'hustle': Store.update(s => { const h = s.hustles[i]; if (!h) return; h[f] = f === 'perWeek' ? Math.max(0, parseInt(v, 10) || 0) : v; }); break;
@@ -1650,6 +1710,56 @@
     const k = e.target.dataset.in;
     if (k === 'r' || k === 'goal') render();
   });
+
+  // ----- drag and drop -----
+  // Grab the handle, drag up or down to reorder (the start time follows), or onto a day in the strip to move it there.
+  let drag = null;
+  root.addEventListener('pointerdown', ev => {
+    const h = ev.target.closest('.os-drag'); if (!h) return;
+    ev.preventDefault();
+    const card = h.closest('.os-scard'), list = card.closest('.os-cards'), r = card.getBoundingClientRect();
+    const ghost = card.cloneNode(true); ghost.classList.add('os-ghost'); ghost.style.width = r.width + 'px'; ghost.style.left = r.left + 'px'; ghost.style.top = r.top + 'px';
+    document.body.appendChild(ghost);
+    const mark = document.createElement('div'); mark.className = 'os-dropmark';
+    card.classList.add('os-dragging');
+    drag = { key: h.dataset.drag, card, list, ghost, mark, dy: ev.clientY - r.top, x: ev.clientX, y: ev.clientY, target: null, day: null };
+    try { h.setPointerCapture(ev.pointerId); } catch (e) {}
+  });
+  root.addEventListener('pointermove', ev => {
+    if (!drag) return;
+    drag.ghost.style.top = (ev.clientY - drag.dy) + 'px';
+    root.querySelectorAll('.os-day.os-droptarget').forEach(d => d.classList.remove('os-droptarget'));
+    drag.ghost.style.display = 'none';
+    const under = document.elementFromPoint(ev.clientX, ev.clientY);
+    drag.ghost.style.display = '';
+    const day = under && under.closest('.os-day');
+    drag.day = day ? +day.dataset.v : null;
+    if (day) { day.classList.add('os-droptarget'); drag.mark.remove(); drag.target = null; return; }
+    const cards = [...drag.list.querySelectorAll('.os-scard[data-key]:not(.skipped)')].filter(c => c !== drag.card);
+    let i = cards.findIndex(c => { const b = c.getBoundingClientRect(); return ev.clientY < b.top + b.height / 2; });
+    if (i < 0) i = cards.length;
+    drag.target = i;
+    if (i < cards.length) cards[i].before(drag.mark); else if (cards.length) cards[cards.length - 1].after(drag.mark);
+    if (ev.clientY < 70) window.scrollBy(0, -12); else if (ev.clientY > innerHeight - 110) window.scrollBy(0, 12);
+  });
+  function endDrag(apply) {
+    if (!drag) return;
+    const d = drag; drag = null;
+    d.ghost.remove(); d.mark.remove(); d.card.classList.remove('os-dragging');
+    root.querySelectorAll('.os-day.os-droptarget').forEach(x => x.classList.remove('os-droptarget'));
+    if (!apply) return;
+    if (d.day != null && d.day !== ui.day) { moveDay(d.key, iso(dt(d.day))); render(); return; }
+    if (d.target == null) return;
+    const shown = shownItems(ui.day), me = shown.find(x => x.key === d.key); if (!me) return;
+    const all = [...d.list.querySelectorAll('.os-scard[data-key]:not(.skipped)')].map(c => c.dataset.key);
+    if (d.target === all.indexOf(d.key)) return;   // dropped back where it was
+    const others = all.filter(k => k !== d.key).map(k => shown.find(x => x.key === k)).filter(Boolean);
+    const at = dropTime(others, d.target, me.min);
+    if (at !== me.at) { moveTime(d.key, at); render(); }
+  }
+  root.addEventListener('pointerup', () => endDrag(true));
+  root.addEventListener('pointercancel', () => endDrag(false));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && drag) endDrag(false); });
 
   // Revision-guide step timer.
   setInterval(() => {

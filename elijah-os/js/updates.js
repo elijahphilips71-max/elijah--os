@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-17-drag', date: '2026-11-17', kind: 'update',
+    title: 'Drag sessions around',
+    body: 'Hold the dots on the left of a session card and drag it up or down to change when you do it; the start time follows. Drop it on a day in the day strip to move it to that day. Or open a card and tap “Change time or day”. Moves only change that one day, and “Undo move” puts it back.'
+  },
+  {
     id: '2026-11-17-guide', date: '2026-11-17', kind: 'update',
     title: '40-minute revision-guide sessions',
     body: 'Revision blocks are now 40 minutes with your revision guide, pen and paper: recall 5 min, check the guide 5, written exam questions (explain, describe) 20, mark and correct 7, rate the topic 3. Each step has a timer. The app picks your weakest topic and rotates them; change it if you like. The app’s own questions are now your morning AO1 reps.'
