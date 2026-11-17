@@ -67,7 +67,7 @@
     while (s.mins.length < DATA.subjects.length) s.mins.push(0);
     while (s.goals.length < DATA.subjects.length) s.goals.push(DATA.subjects[s.goals.length].goal);
     // Goals never edited from the first version's defaults follow the new plan's defaults.
-    if ([150, 120, 90, 90, 60].every((g, i) => s.goals[i] === g)) s.goals = DATA.subjects.map(x => x.goal);
+    if ([150, 120, 90, 90, 60].every((g, i) => s.goals[i] === g) || [75, 75, 45, 45, 45].every((g, i) => s.goals[i] === g)) s.goals = DATA.subjects.map(x => x.goal);
     if (!Array.isArray(s.hustles)) s.hustles = defaults().hustles;
     delete s.studio;
     // Completion score counts from the first day you used the app (or today).

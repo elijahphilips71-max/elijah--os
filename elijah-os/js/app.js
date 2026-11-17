@@ -359,6 +359,43 @@
   const levelRange = L => (L - 1) + '–' + Math.min(9, L + 1);
   const allQuestions = () => QBANK.concat((st().myq || []).map(x => Object.assign({ own: true }, x)));
   const qById = id => allQuestions().find(q => q.id === id);
+  // ----- revision-guide sessions -----
+  // Topics this card can cover today (a subject, or part of one, e.g. just the Chemistry topics).
+  function guideTopics(c) {
+    const sj = subjOf(c); if (sj == null) return [];
+    const only = c.only && c.only[sj];
+    return (st().topics[sj] || []).map(t => t.name).filter(n => !only || (Array.isArray(only) ? only.includes(n) : n.startsWith(only)));
+  }
+  // Today's topic: the one you picked, else the weakest, skipping ones done in the last week.
+  function guideTopic(key, c) {
+    const e = getSess(key); if (e.topic) return e.topic;
+    const sj = subjOf(c), ts = guideTopics(c); if (!ts.length) return null;
+    const date = dayKey(), last = (st().guideLog || {})[sj] || {};
+    const score = n => topicWeak(sj, n, date) + (last[n] && last[n] > Cal.addDays(date, -7) ? 2 : 0);
+    return ts.slice().sort((a, b) => score(a) - score(b) || (last[a] || '').localeCompare(last[b] || ''))[0];
+  }
+  function guideStyle(c, topic) {
+    const sj = subjOf(c);
+    return sj === 0 ? 'maths' : sj === 2 ? 'english' : /^Spanish/.test(topic || '') ? 'spanish' : 'science';
+  }
+  function guideRows(key, c) {
+    const topic = guideTopic(key, c), steps = (DATA.guideSteps || {})[guideStyle(c, topic)] || [];
+    const t = topic ? topicShort(topic) : 'today’s topic';
+    return steps.map((x, i) => ({ key: 'g' + i, name: x.name + ' · ' + x.mins + ' min', sets: 1, detail: x.detail.replace(/\{t\}/g, t), rate: !!x.rate, mins: x.mins }));
+  }
+  function guideBody(key, e) {
+    const c = DATA.sessions[sid(key)], sj = subjOf(c), topic = guideTopic(key, c), rows = guideRows(key, c);
+    const conf = topic ? (((st().topics[sj] || []).find(x => x.name === topic) || {}).conf || 0) : 0;
+    const next = rows.findIndex(r => !e.c[r.key]), tm = e.timer, left = tm ? tm.until - Date.now() : 0;
+    return `<div class="os-gtopic"><span class="os-k">Today’s topic</span>
+        <select class="input os-in" aria-label="Today’s topic" data-in="gtopic" data-f="${esc(key)}">${guideTopics(c).map(n => `<option value="${esc(n)}" ${n === topic ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select></div>
+      ${tm && left > 0 ? `<div class="os-timer"><span class="os-k">${esc(rows[tm.step] ? rows[tm.step].name : '')}</span><span class="os-num" data-gtimer="${esc(key)}">${clock(left)}</span>
+        <button class="btn btn-ghost" data-act="gStop" data-v="${esc(key)}">Stop timer</button></div>`
+      : next >= 0 && !e.done ? `<button class="btn btn-secondary os-btn" data-act="gStart" data-v="${esc(key)}|${next}">${icon('timer')}Start ${rows[next].mins}:00 for “${esc(rows[next].name.split(' · ')[0])}”</button>` : ''}
+      <div class="os-scard-rows">${rows.map(r => sessRow(key, r, e) + (r.rate ? `<div class="os-chips" role="group" aria-label="Rate the topic">${[1, 2, 3].map(n => `<button class="os-chipsel os-conf c${CONF_CLS[n]} ${conf === n && e.c[r.key] ? 'on' : ''}" data-act="gRate" data-v="${esc(key)}|${n}">${CONF[n]}</button>`).join('')}</div>` : '')).join('')}</div>`;
+  }
+  const guideStamp = (key, c) => { if (!getSess(key).topic) { const t = guideTopic(key, c), k = dayKey(); Store.update(s => { const all = s.sess[k] = s.sess[k] || {}; all[key] = Object.assign({ c: {}, done: false, added: 0 }, all[key], { topic: t }); }); } };
+
   // ----- spaced repetition -----
   // After an attempt, a question comes back: missed (under half marks) next day, part marks in 3 days,
   // full marks in 7 days, then 14, 28 and 56 days for each full-marks answer in a row.
@@ -482,6 +519,7 @@
   function cardRows(id) {
     const c = DATA.sessions[sid(id)], e = getSess(id), rows = [];
     if (c.ladder) return ladderRows(id, c);
+    if (c.guide) return guideRows(id, c);
     const sj = subjOf(c);
     if (c.kind === 'revision' && sj != null) {
       const ts = st().topics[sj] || [];
@@ -561,7 +599,7 @@
         ${c.focus ? `<div class="os-scard-focus">${esc(c.focus)}</div>` : ''}
         ${c.ladder ? (() => { const qs = cardRows(id).filter(r => r.q && (e.q || {})[r.q.id] != null); const g = qs.reduce((a, r) => a + e.q[r.q.id], 0), o = qs.reduce((a, r) => a + r.q.m, 0);
           return qs.length ? `<div class="os-between os-q-total"><span>${qs.length} answered</span><span class="os-num">${g} / ${o} marks${o ? ' · ' + Math.round(g / o * 100) + '%' : ''}</span></div>` : ''; })() : ''}
-        ${c.ladder ? questionStepper(id, e) : c.logPaper ? mockExam() : `<div class="os-scard-rows">${cardRows(id).map(r => sessRow(id, r, e)).join('')}</div>`}
+        ${c.ladder ? questionStepper(id, e) : c.guide ? guideBody(id, e) : c.logPaper ? mockExam() : `<div class="os-scard-rows">${cardRows(id).map(r => sessRow(id, r, e)).join('')}</div>`}
         ${(() => { const full = p.total && p.got >= p.total, part = p.total ? p.got / p.total : 1;
           if (e.done) return `<button class="btn btn-secondary os-btn" data-act="sessDone" data-v="${esc(id)}">${e.incomplete ? 'Undo submit' : 'Undo finish'}</button>`;
           return full || !p.total
@@ -623,6 +661,11 @@
         else { const was = e.subj != null ? e.subj : sj; s.mins[was] = Math.max(0, s.mins[was] - (e.added || 0)); e.added = 0; }
       }
       all[id] = e;
+      if (c.guide && on) {
+        const gsj = subjOf(c), gt = e.topic || guideTopic(id, c);
+        if (gsj != null && gt) { s.guideLog = s.guideLog || {}; s.guideLog[gsj] = Object.assign({}, s.guideLog[gsj], { [gt]: k }); }
+        delete e.timer;
+      }
       if (c.kind === 'hustle') {
         const ukey = k + '|' + id, h = on ? s.hustles.find(x => !x.paused) : s.hustles.find(x => x.log.some(u => u.key === ukey));
         if (h && on) {
@@ -1308,6 +1351,25 @@
       ui.openCard = open === v ? '' : v;
     },
     rmMyq(v) { if (!confirm('Delete this question?')) return; Store.update(s => { s.myq = (s.myq || []).filter(q => q.id !== v); }); },
+    gStart(v) {
+      const cut = v.lastIndexOf('|'), key = v.slice(0, cut), i = +v.slice(cut + 1), c = DATA.sessions[sid(key)];
+      guideStamp(key, c);
+      const r = guideRows(key, c)[i]; if (!r) return;
+      const k = dayKey(); Store.update(s => { const all = s.sess[k] = s.sess[k] || {}; all[key] = Object.assign({ c: {}, done: false, added: 0 }, all[key], { timer: { step: i, until: Date.now() + r.mins * 6e4 } }); });
+    },
+    gStop(v) { const k = dayKey(); Store.update(s => { const all = s.sess[k] = s.sess[k] || {}; if (all[v]) delete all[v].timer; }); },
+    gRate(v) {
+      const cut = v.lastIndexOf('|'), key = v.slice(0, cut), n = +v.slice(cut + 1), c = DATA.sessions[sid(key)], sj = subjOf(c);
+      guideStamp(key, c);
+      const topic = getSess(key).topic, rows = guideRows(key, c), r = rows.find(x => x.rate), k = dayKey();
+      Store.update(s => {
+        const t = (s.topics[sj] || []).find(x => x.name === topic); if (t) t.conf = n;
+        const all = s.sess[k] = s.sess[k] || {}; const e = Object.assign({ c: {}, done: false, added: 0 }, all[key]);
+        e.c = Object.assign({}, e.c, { [r.key]: 1 }); all[key] = e;
+      });
+      const p = cardProgress(key);
+      if (!getSess(key).done && p.total && p.got >= p.total) { finish(key, true); ui.openCard = null; }
+    },
     qshow(v) { ui.qShown[v] = true; },
     qmark(v) {
       levelCache = {};
@@ -1337,6 +1399,7 @@
       const cut = v.indexOf('|'), id = v.slice(0, cut), key = v.slice(cut + 1);
       const row = cardRows(id).find(r => r.key === key);
       if (!row) return;
+      if (DATA.sessions[sid(id)].guide) guideStamp(id, DATA.sessions[sid(id)]);
       const k = dayKey();
       const cur = getSess(id);
       const n = Math.min(row.sets, cur.c[key] || 0);
@@ -1573,6 +1636,7 @@
       case 'pd': ui.pd[f] = v; if (f === 's') { ui.pd.topics = []; render(); } break;
       case 'pdb': ui.pd.bounds = Object.assign({}, ui.pd.bounds, { [f]: v }); break;
       case 'draft': setDraft({ [f]: f === 'mins' ? v.replace(/[^0-9]/g, '') : v }); break;
+      case 'gtopic': { const k = dayKey(); Store.update(s => { const all = s.sess[k] = s.sess[k] || {}; all[f] = Object.assign({ c: {}, done: false, added: 0 }, all[f], { topic: v }); }); render(); break; }
       case 'qd': ui.qd[i] = Object.assign({}, ui.qd[i], { [f]: v }); break;
       case 'ideaDraft': ui.ideaDraft[f] = v; break;
       case 'hustle': Store.update(s => { const h = s.hustles[i]; if (!h) return; h[f] = f === 'perWeek' ? Math.max(0, parseInt(v, 10) || 0) : v; }); break;
@@ -1586,6 +1650,17 @@
     const k = e.target.dataset.in;
     if (k === 'r' || k === 'goal') render();
   });
+
+  // Revision-guide step timer.
+  setInterval(() => {
+    root.querySelectorAll('[data-gtimer]').forEach(el => {
+      const e = getSess(el.dataset.gtimer), left = e.timer ? e.timer.until - Date.now() : 0;
+      if (left > 0) { el.textContent = clock(left); return; }
+      if ('vibrate' in navigator) navigator.vibrate([300, 150, 300]);
+      if (canNotify() && Notification.permission === 'granted') notify('Time’s up', 'Move on to the next step.', 'gtimer').catch(() => {});
+      render();
+    });
+  }, 1000);
 
   // Exam timer: update the clock every second; re-render when time runs out.
   setInterval(() => {
