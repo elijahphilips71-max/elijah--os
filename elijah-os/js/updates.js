@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-17-plyo', date: '2026-11-17', kind: 'update',
+    title: 'Plyometrics',
+    body: 'Tuesday lower body starts with low, springy plyos (pogo hops, lateral bounds). Friday speed adds broad jumps and single-leg bounds before the sprints. They drop off automatically if your leg freshness is 2 or lower, or you have a game the next day.'
+  },
+  {
     id: '2026-11-15-incomplete', date: '2026-11-15', kind: 'notice',
     title: 'Unfinished sessions now cost you',
     body: 'You can submit a session before it’s finished, but it’s logged as incomplete with its %, unanswered questions score 0 (and come back as missed), and revision only counts the minutes you did. Sessions not submitted by the end of the day count as missed. See your completion score on the Log screen.'

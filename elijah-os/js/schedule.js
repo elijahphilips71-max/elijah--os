@@ -61,6 +61,8 @@ window.ELIJAH_DATA = {
   // Session cards. Each one shows on Today and Week for the days that list it.
   //   kind: 'gym' | 'football' | 'recovery' | 'revision' | 'paper' | 'mental' | 'routine' | 'hustle'
   //   items: one row each. sets = how many ticks the row has (leave it out for a single tick).
+  //     plyo: true = plyometrics. Only on fresh, lower-body/speed days (Tue, Fri). Dropped automatically
+  //     when leg freshness in the morning check-in is 2 or lower, or there's a game or match tomorrow.
   //   fixed: true = the planner never moves or drops it (academy, match).
   //   onClash: 'skip' = if an event clashes, skip it instead of moving it (clashNote says why).
   //   remind: minutes before the start to remind you (default 10). Optional cards have no reminder.
@@ -118,9 +120,11 @@ window.ELIJAH_DATA = {
       ]
     },
     'lower-body': {
-      kind: 'gym', title: 'Lower body at home (light)', minutes: 30,
-      focus: 'Light. Stop 2–3 reps short on every set.',
+      kind: 'gym', title: 'Lower body at home (light)', minutes: 35,
+      focus: 'Plyos first while you’re fresh, low and springy (academy is tomorrow). Then strength: stop 2–3 reps short on every set.',
       items: [
+        { name: 'Plyometrics: pogo hops (quick, stiff ankles)', sets: 2, reps: '15', rest: '60s', plyo: true },
+        { name: 'Plyometrics: lateral bounds (stick each landing)', sets: 2, reps: '5 each side', rest: '60s', plyo: true },
         { name: 'Split squats', sets: 2, reps: '8 each leg' },
         { name: 'Single-leg RDL', sets: 2, reps: '8 each leg' },
         { name: 'Single-leg glute bridge', sets: 2, reps: '12' },
@@ -138,6 +142,8 @@ window.ELIJAH_DATA = {
       focus: 'Full recovery between sprints. Stop after 2 slow reps.',
       items: [
         { name: 'Warm-up: A-skips, strides', reps: '10 min' },
+        { name: 'Plyometrics: broad jumps (max effort, stick the landing)', sets: 3, reps: '3', rest: 'full recovery', plyo: true },
+        { name: 'Plyometrics: single-leg bounds', sets: 2, reps: '4 each leg', rest: 'full recovery', plyo: true },
         { name: '10m sprints', sets: 3, reps: '1', rest: 'full recovery' },
         { name: '20m sprints', sets: 2, reps: '1', rest: 'full recovery' },
         { name: 'Runs in behind', reps: '6–8 reps' },

@@ -492,7 +492,17 @@
         rows.push({ key: 't:' + t.name, name: t.name, sets: 1, detail: CONF[t.conf || 0], conf: t.conf || 0 }));
       if (!ts.length) rows.push({ key: 'none', name: 'Add topics on the Revision screen', sets: 0, detail: '' });
     }
+    // Plyometrics are dropped when legs are low today or there's a game or match tomorrow.
+    const plyoStop = (c.items || []).some(x => x.plyo) ? (() => {
+      const k = dayKey(), tmr = Cal.addDays(k, 1), legs = (st().daily[k] || {}).r;
+      if (legs && legs[2] <= 2) return 'leg freshness is low today';
+      if (eventsOn(tmr).some(e => e.kind === 'game')) return 'game tomorrow';
+      if (Cal.refs(DATA.schedule[(new Date(tmr + 'T12:00').getDay() + 6) % 7], []).some(r => r.id === 'match')) return 'match tomorrow';
+      return '';
+    })() : '';
+    if (plyoStop) rows.push({ key: 'plyo-off', name: 'Plyometrics skipped today: ' + plyoStop, sets: 0, detail: '' });
     (c.items || []).forEach((x, i) => {
+      if (x.plyo && plyoStop) return;
       let detail = [x.sets ? x.sets + ' × ' + (x.reps || '') : x.reps, x.rest ? 'rest ' + x.rest : ''].filter(Boolean).join(' · ');
       rows.push({ key: 'i' + i, name: x.name, sets: x.sets || 1, detail });
     });
