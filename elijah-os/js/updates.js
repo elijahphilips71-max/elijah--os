@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-19-wall', date: '2026-11-19', kind: 'update',
+    title: 'No wall sessions on academy nights',
+    body: 'The wall session is off on Wednesdays and Thursdays, so your legs are fresh for academy training. It stays on the other five days.'
+  },
+  {
     id: '2026-11-17-drag', date: '2026-11-17', kind: 'update',
     title: 'Drag sessions around',
     body: 'Hold the dots on the left of a session card and drag it up or down to change when you do it; the start time follows. Drop it on a day in the day strip to move it to that day. Or open a card and tap “Change time or day”. Moves only change that one day, and “Undo move” puts it back.'
