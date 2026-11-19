@@ -62,10 +62,10 @@ DTSTART:20261109T191000
 DTEND:20261109T194000
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session
-DESCRIPTION:Non-negotiable\, every day. Reps over perfection. Second half 
- weak foot only.\n• Two-touch passing\, both feet — 8 min\n• One-touch pas
- sing — 7 min\n• Receiving across body and turning — 7 min\n• Weak foot on
- ly — 8 min
+DESCRIPTION:Non-negotiable\, every day except academy nights (Wednesday an
+ d Thursday). Reps over perfection. Second half weak foot only.\n• Two-tou
+ ch passing\, both feet — 8 min\n• One-touch passing — 7 min\n• Receiving 
+ across body and turning — 7 min\n• Weak foot only — 8 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session
@@ -130,10 +130,10 @@ DTSTART:20261110T192000
 DTEND:20261110T195000
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session
-DESCRIPTION:Non-negotiable\, every day. Reps over perfection. Second half 
- weak foot only.\n• Two-touch passing\, both feet — 8 min\n• One-touch pas
- sing — 7 min\n• Receiving across body and turning — 7 min\n• Weak foot on
- ly — 8 min
+DESCRIPTION:Non-negotiable\, every day except academy nights (Wednesday an
+ d Thursday). Reps over perfection. Second half weak foot only.\n• Two-tou
+ ch passing\, both feet — 8 min\n• One-touch passing — 7 min\n• Receiving 
+ across body and turning — 7 min\n• Weak foot only — 8 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session
@@ -151,23 +151,6 @@ DESCRIPTION:Thirty focused minutes on your main side hustle.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Side hustle
-TRIGGER:-PT10M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-UID:plan-2-wall@elijah-os
-DTSTAMP:20261109T000000Z
-DTSTART:20261111T154500
-DTEND:20261111T161500
-RRULE:FREQ=WEEKLY
-SUMMARY:Wall session
-DESCRIPTION:Non-negotiable\, every day. Reps over perfection. Second half 
- weak foot only.\n• Two-touch passing\, both feet — 8 min\n• One-touch pas
- sing — 7 min\n• Receiving across body and turning — 7 min\n• Weak foot on
- ly — 8 min
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Wall session
 TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
@@ -215,23 +198,6 @@ BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Academy training
 TRIGGER:-PT30M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-UID:plan-3-wall@elijah-os
-DTSTAMP:20261109T000000Z
-DTSTART:20261112T154500
-DTEND:20261112T161500
-RRULE:FREQ=WEEKLY
-SUMMARY:Wall session
-DESCRIPTION:Non-negotiable\, every day. Reps over perfection. Second half 
- weak foot only.\n• Two-touch passing\, both feet — 8 min\n• One-touch pas
- sing — 7 min\n• Receiving across body and turning — 7 min\n• Weak foot on
- ly — 8 min
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Wall session
-TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
@@ -336,10 +302,10 @@ DTSTART:20261113T193000
 DTEND:20261113T200000
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session
-DESCRIPTION:Non-negotiable\, every day. Reps over perfection. Second half 
- weak foot only.\n• Two-touch passing\, both feet — 8 min\n• One-touch pas
- sing — 7 min\n• Receiving across body and turning — 7 min\n• Weak foot on
- ly — 8 min
+DESCRIPTION:Non-negotiable\, every day except academy nights (Wednesday an
+ d Thursday). Reps over perfection. Second half weak foot only.\n• Two-tou
+ ch passing\, both feet — 8 min\n• One-touch passing — 7 min\n• Receiving 
+ across body and turning — 7 min\n• Weak foot only — 8 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session
@@ -369,10 +335,10 @@ DTSTART:20261114T130000
 DTEND:20261114T133000
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session
-DESCRIPTION:Non-negotiable\, every day. Reps over perfection. Second half 
- weak foot only.\n• Two-touch passing\, both feet — 8 min\n• One-touch pas
- sing — 7 min\n• Receiving across body and turning — 7 min\n• Weak foot on
- ly — 8 min
+DESCRIPTION:Non-negotiable\, every day except academy nights (Wednesday an
+ d Thursday). Reps over perfection. Second half weak foot only.\n• Two-tou
+ ch passing\, both feet — 8 min\n• One-touch passing — 7 min\n• Receiving 
+ across body and turning — 7 min\n• Weak foot only — 8 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session
@@ -423,10 +389,10 @@ DTSTART:20261115T170000
 DTEND:20261115T173000
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session
-DESCRIPTION:Non-negotiable\, every day. Reps over perfection. Second half 
- weak foot only.\n• Two-touch passing\, both feet — 8 min\n• One-touch pas
- sing — 7 min\n• Receiving across body and turning — 7 min\n• Weak foot on
- ly — 8 min
+DESCRIPTION:Non-negotiable\, every day except academy nights (Wednesday an
+ d Thursday). Reps over perfection. Second half weak foot only.\n• Two-tou
+ ch passing\, both feet — 8 min\n• One-touch passing — 7 min\n• Receiving 
+ across body and turning — 7 min\n• Weak foot only — 8 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session

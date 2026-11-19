@@ -72,11 +72,11 @@ window.ELIJAH_DATA = {
     { day: 'Wed', title: 'Academy training', load: 'High',
       time: '18:15 · leave 18:00', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Pick one cue and bring it to academy.',
-      sessions: [['wall', '15:45'], ['rev-lang', '16:30'], ['cue', '17:50'], ['academy', '18:15']] },
+      sessions: [['rev-lang', '16:30'], ['cue', '17:50'], ['academy', '18:15']] },
     { day: 'Thu', title: 'Academy training', load: 'High',
       time: '18:15 · leave 18:00', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Second academy night. One cue, quality over volume.',
-      sessions: [['wall', '15:45'], ['rev-eng-bio', '16:30'], ['cue', '17:50'], ['academy', '18:15']] },
+      sessions: [['rev-eng-bio', '16:30'], ['cue', '17:50'], ['academy', '18:15']] },
     { day: 'Fri', title: 'Astro speed + match reps', load: 'Medium-High',
       time: '15:45–16:30 · revision 60 min', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Short, sharp speed reps. Stop after 2 slow reps.',
@@ -190,7 +190,7 @@ window.ELIJAH_DATA = {
     },
     'wall': {
       kind: 'football', keep: true, title: 'Wall session', minutes: 30,
-      focus: 'Non-negotiable, every day. Reps over perfection. Second half weak foot only.',
+      focus: 'Non-negotiable, every day except academy nights (Wednesday and Thursday). Reps over perfection. Second half weak foot only.',
       items: [
         { name: 'Two-touch passing, both feet', reps: '8 min' },
         { name: 'One-touch passing', reps: '7 min' },
