@@ -79,10 +79,12 @@ DTSTART:20261110T154500
 DTEND:20261110T162000
 RRULE:FREQ=WEEKLY
 SUMMARY:Astro: skill sequences
-DESCRIPTION:About 75% pace. Half speed first\, then full speed.\n• Warm-up
- : jog\, dynamic stretches\, 3 build-ups — 8 min\n• Check away\, receive o
- n half-turn\, drive\, shoot — 4 × 5 reps\n• Weak foot: first touch and fi
- nishing — 10 min
+DESCRIPTION:Solo. Bring 3+ balls and 4–6 cones\; use the kickboard or fenc
+ e (or a rebounder). About 75% pace: half speed first\, then full speed.\n
+ • Warm-up: jog\, dynamic stretches\, 3 build-ups — 8 min\n• Pass into the
+  kickboard\, check away\, take the rebound on the half-turn\, drive past 
+ a cone\, shoot — 4 × 5 reps\n• Weak foot: first touches off the kickboard
+ \, then weak-foot finishes — 10 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Astro: skill sequences
@@ -253,13 +255,17 @@ DTSTART:20261113T154500
 DTEND:20261113T163000
 RRULE:FREQ=WEEKLY
 SUMMARY:Astro: speed + match reps
-DESCRIPTION:Full recovery between sprints. Stop after 2 slow reps.\n• Warm
- -up: A-skips\, strides — 10 min\n• Plyometrics: broad jumps (max effort\,
-  stick the landing) — 3 × 3\n• Plyometrics: single-leg bounds — 2 × 4 eac
- h leg\n• 10m sprints — 3 × 1\n• 20m sprints — 2 × 1\n• Runs in behind — 6
- –8 reps\n• Near-post darts — 6–8 reps\n• 1v1 into shot — 6–8 reps\n• Fini
- shing\, at least half weak foot — 10 min\n• Skill snack: handstand kick-u
- ps — 10 min
+DESCRIPTION:Solo. Bring 3+ balls and 6 cones so you’re not chasing balls. 
+ Full recovery between sprints\; stop after 2 slow reps.\n• Warm-up: A-ski
+ ps\, strides — 10 min\n• Plyometrics: broad jumps (max effort\, stick the
+  landing) — 3 × 3\n• Plyometrics: single-leg bounds — 2 × 4 each leg\n• 1
+ 0m sprints — 3 × 1\n• 20m sprints — 2 × 1\n• Runs in behind: knock the ba
+ ll past a cone into space\, sprint onto it\, one touch\, shoot — 6–8 reps
+ \n• Near-post darts: set the ball out wide\, dart to the near post\, fini
+ sh first time — 6–8 reps\, half weak foot\n• 1v1 into shot: run at a cone
+  “defender” at speed\, do a move\, burst past\, shoot — 6–8 reps\n• Finis
+ hing from self-set balls\, at least half weak foot — 10 min\n• Skill snac
+ k: handstand kick-ups — 10 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Astro: speed + match reps
