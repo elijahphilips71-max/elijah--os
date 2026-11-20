@@ -147,11 +147,11 @@ window.ELIJAH_DATA = {
     },
     'astro-skill': {
       kind: 'football', title: 'Astro: skill sequences', minutes: 35,
-      focus: 'About 75% pace. Half speed first, then full speed.',
+      focus: 'Solo. Bring 3+ balls and 4–6 cones; use the kickboard or fence (or a rebounder). About 75% pace: half speed first, then full speed.',
       items: [
         { name: 'Warm-up: jog, dynamic stretches, 3 build-ups', reps: '8 min' },
-        { name: 'Check away, receive on half-turn, drive, shoot', sets: 4, reps: '5 reps', rest: 'half then full speed' },
-        { name: 'Weak foot: first touch and finishing', reps: '10 min' }
+        { name: 'Pass into the kickboard, check away, take the rebound on the half-turn, drive past a cone, shoot', sets: 4, reps: '5 reps', rest: 'half then full speed' },
+        { name: 'Weak foot: first touches off the kickboard, then weak-foot finishes', reps: '10 min' }
       ]
     },
     'lower-body': {
@@ -174,17 +174,17 @@ window.ELIJAH_DATA = {
     },
     'astro-speed': {
       kind: 'football', title: 'Astro: speed + match reps', minutes: 45,
-      focus: 'Full recovery between sprints. Stop after 2 slow reps.',
+      focus: 'Solo. Bring 3+ balls and 6 cones so you’re not chasing balls. Full recovery between sprints; stop after 2 slow reps.',
       items: [
         { name: 'Warm-up: A-skips, strides', reps: '10 min' },
         { name: 'Plyometrics: broad jumps (max effort, stick the landing)', sets: 3, reps: '3', rest: 'full recovery', plyo: true },
         { name: 'Plyometrics: single-leg bounds', sets: 2, reps: '4 each leg', rest: 'full recovery', plyo: true },
         { name: '10m sprints', sets: 3, reps: '1', rest: 'full recovery' },
         { name: '20m sprints', sets: 2, reps: '1', rest: 'full recovery' },
-        { name: 'Runs in behind', reps: '6–8 reps' },
-        { name: 'Near-post darts', reps: '6–8 reps' },
-        { name: '1v1 into shot', reps: '6–8 reps' },
-        { name: 'Finishing, at least half weak foot', reps: '10 min' },
+        { name: 'Runs in behind: knock the ball past a cone into space, sprint onto it, one touch, shoot', reps: '6–8 reps' },
+        { name: 'Near-post darts: set the ball out wide, dart to the near post, finish first time', reps: '6–8 reps, half weak foot' },
+        { name: '1v1 into shot: run at a cone “defender” at speed, do a move, burst past, shoot', reps: '6–8 reps' },
+        { name: 'Finishing from self-set balls, at least half weak foot', reps: '10 min' },
         { name: 'Skill snack: handstand kick-ups', reps: '10 min' }
       ]
     },

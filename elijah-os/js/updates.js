@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-20-solo-astro', date: '2026-11-20', kind: 'update',
+    title: 'Astro sessions you can do alone',
+    body: 'Every astro drill now works solo: passes off the kickboard or fence instead of a passer, knock-ons and self-set balls instead of a crosser, and a cone instead of a defender. Bring 3 or more balls and 4–6 cones.'
+  },
+  {
     id: '2026-11-19-wall', date: '2026-11-19', kind: 'update',
     title: 'No wall sessions on academy nights',
     body: 'The wall session is off on Wednesdays and Thursdays, so your legs are fresh for academy training. It stays on the other five days.'
