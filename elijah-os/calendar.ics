@@ -79,12 +79,12 @@ DTSTART:20261110T154500
 DTEND:20261110T162000
 RRULE:FREQ=WEEKLY
 SUMMARY:Astro: skill sequences
-DESCRIPTION:Solo. Bring 3+ balls and 4–6 cones\; use the kickboard or fenc
- e (or a rebounder). About 75% pace: half speed first\, then full speed.\n
- • Warm-up: jog\, dynamic stretches\, 3 build-ups — 8 min\n• Pass into the
-  kickboard\, check away\, take the rebound on the half-turn\, drive past 
- a cone\, shoot — 4 × 5 reps\n• Weak foot: first touches off the kickboard
- \, then weak-foot finishes — 10 min
+DESCRIPTION:Solo: just balls and cones. Bring 3+ balls and 4–6 cones. Abou
+ t 75% pace: half speed first\, then full speed.\n• Warm-up: jog\, dynamic
+  stretches\, 3 build-ups — 8 min\n• Back to goal\, roll the ball past you
+ r side\, open up and take it on the half-turn\, drive past a cone\, shoot
+  — 4 × 5 reps\n• Weak foot: throw the ball up and control it with your we
+ ak foot (or thigh or chest first)\, then weak-foot finishes — 10 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Astro: skill sequences
