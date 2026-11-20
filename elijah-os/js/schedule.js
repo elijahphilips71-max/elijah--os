@@ -147,11 +147,11 @@ window.ELIJAH_DATA = {
     },
     'astro-skill': {
       kind: 'football', title: 'Astro: skill sequences', minutes: 35,
-      focus: 'Solo. Bring 3+ balls and 4–6 cones; use the kickboard or fence (or a rebounder). About 75% pace: half speed first, then full speed.',
+      focus: 'Solo: just balls and cones. Bring 3+ balls and 4–6 cones. About 75% pace: half speed first, then full speed.',
       items: [
         { name: 'Warm-up: jog, dynamic stretches, 3 build-ups', reps: '8 min' },
-        { name: 'Pass into the kickboard, check away, take the rebound on the half-turn, drive past a cone, shoot', sets: 4, reps: '5 reps', rest: 'half then full speed' },
-        { name: 'Weak foot: first touches off the kickboard, then weak-foot finishes', reps: '10 min' }
+        { name: 'Back to goal, roll the ball past your side, open up and take it on the half-turn, drive past a cone, shoot', sets: 4, reps: '5 reps', rest: 'half then full speed' },
+        { name: 'Weak foot: throw the ball up and control it with your weak foot (or thigh or chest first), then weak-foot finishes', reps: '10 min' }
       ]
     },
     'lower-body': {
