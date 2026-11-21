@@ -9,6 +9,16 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-21-upper-b', date: '2026-11-21', kind: 'update',
+    title: 'Upper body twice a week',
+    body: 'A second calisthenics session on Saturday at 16:00, with a push and skill focus (handstands, pike push-ups, chin-ups, archer push-ups, rows, core) to go with Monday’s pull and dip session. Upper body only, so your legs stay fresh for Sunday.'
+  },
+  {
+    id: '2026-11-21-wall-tech', date: '2026-11-21', kind: 'update',
+    title: 'Wall sessions with technical drills',
+    body: 'Still 30 minutes, but each day now mixes wall passing with a different technical focus: ball mastery (Mon), first touch (Tue), dribbling at speed (Fri), juggling and close control (Sat) and a light touch session on match day (Sun). Every one ends with weak-foot wall passes.'
+  },
+  {
     id: '2026-11-20-solo-astro', date: '2026-11-20', kind: 'update',
     title: 'Astro sessions you can do alone',
     body: 'Every astro drill now works solo with just balls and cones: you feed yourself instead of a passer or crosser, and a cone stands in for a defender. Bring 3 or more balls and 4–6 cones.'
