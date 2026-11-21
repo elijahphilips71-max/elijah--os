@@ -50,8 +50,10 @@ window.ELIJAH_DATA = {
 
   // Football moves explained on any card that names them ("What the moves mean").
   glossary: {
-    'bells': 'Tap the ball quickly between the insides of both feet, left-right-left-right, on your toes. The ball barely moves.',
-    'toe taps': 'Tap the top of the ball with the soles of your feet, alternating, as fast as you can stay clean.',
+    'Matthews feint': 'Lean and take a small touch inside with the inside of your foot to fake, then cut out with the outside of the same foot and burst away.',
+    'roll-cut': 'Roll the ball across your body with the sole, then cut it back the other way with the inside of the other foot.',
+    'pull-push': 'Pull the ball back with the sole, then push it forward with the laces of the same foot, in a quick rhythm. Swap feet.',
+    'outside cut': 'Cut the ball sharply sideways with the outside of your foot to change direction, then accelerate.',
     'sole rolls': 'Roll the ball sideways across your body with the sole, then back with the other foot.',
     'V-pulls': 'Pull the ball back with the sole, then push it forward at an angle with the inside of the same foot: a V shape.',
     'L-turns': 'Pull the ball back with the sole, then push it across behind your standing leg with the inside of the same foot: an L shape.',
@@ -238,7 +240,7 @@ window.ELIJAH_DATA = {
         { name: 'Warm-up: leg swings, hip openers, high knees', reps: '2 min', warmup: true },
         { name: 'Two-touch wall passing, both feet', reps: '6 min', cue: 'First touch out of your feet, pass on the second. Alternate inside foot and laces' },
         { name: 'One-touch wall passing', reps: '4 min', cue: 'Lock your ankle, follow through to the target' },
-        { name: 'Ball mastery circuit: bells, toe taps, sole rolls, V-pulls, L-turns, croquetas, Ronaldo chops, inside-outside', sets: 8, reps: '40s on, 20s off (8 min)', cue: 'One move per set, both feet' },
+        { name: 'Ball mastery circuit: sole rolls, V-pulls, L-turns, croquetas, Ronaldo chops, inside-outside, Matthews feint, roll-cut', sets: 8, reps: '40s on, 20s off (8 min)', cue: 'One move per set, both feet' },
         { name: 'Tight-box combos: 4 cones 2 m apart', reps: '7 min', cue: 'Croqueta through each gate, chop at each corner. Level up: eyes on a fixed point, not the ball' },
         { name: 'Weak foot only wall passing', reps: '5 min', cue: 'Same quality as your strong foot, slower if you need to' }
       ]
@@ -277,7 +279,7 @@ window.ELIJAH_DATA = {
         { name: 'Warm-up: leg swings, hip openers, high knees', reps: '2 min', warmup: true },
         { name: 'Two-touch wall passing, both feet', reps: '6 min', cue: 'Cushion the first touch, ball under control before passing' },
         { name: 'Juggling progressions', reps: '8 min', cue: 'Level 1: 20 alternate feet. Level 2: foot, thigh, foot, head. Level 3: 20 weak foot only. Level 4: low juggles below the knee' },
-        { name: 'Close-control circuit: bells, toe taps, sole roll to inside, inside-outside, croqueta', sets: 5, reps: '45s on, 15s off (5 min)', cue: 'One move per set, as fast as you can stay clean' },
+        { name: 'Close-control circuit: roll-cut, inside-outside, croqueta, pull-push, outside cut', sets: 5, reps: '45s on, 15s off (5 min)', cue: 'One move per set, as fast as you can stay clean' },
         { name: 'Receive on the back foot off the wall and turn', reps: '5 min', cue: 'Shoulder check, open up, first touch past your standing leg, then pass back' },
         { name: 'Weak foot only wall passing', reps: '6 min', cue: 'Weak foot only' }
       ]
@@ -290,7 +292,7 @@ window.ELIJAH_DATA = {
         { name: 'Warm-up: leg swings, hip openers', reps: '2 min', warmup: true },
         { name: 'Easy one- and two-touch wall passing', reps: '10 min', cue: 'Relaxed, crisp passes' },
         { name: 'Juggling, relaxed', reps: '8 min', cue: 'Alternate feet, no pressure' },
-        { name: 'Gentle ball mastery: bells, toe taps, sole rolls', reps: '6 min', cue: 'Light and quick, not tiring' },
+        { name: 'Gentle ball mastery: sole rolls, inside-outside', reps: '6 min', cue: 'Light and quick, not tiring' },
         { name: 'Weak foot only wall passing', reps: '6 min', cue: 'Weak foot only, easy pace' }
       ]
     },
