@@ -10,15 +10,16 @@ BEGIN:VEVENT
 UID:plan-0-upper-cali@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261109T161500
-DTEND:20261109T165500
+DTEND:20261109T170000
 RRULE:FREQ=WEEKLY
 SUMMARY:Upper-body calisthenics
 DESCRIPTION:Stop 2 reps short on every set. Quality over fatigue.\n• Warm-
- up: wrist circles\, shoulder dislocates\, scap pull-ups — 5 min\n• Chest-
- to-wall handstand — 5 × 15–20s\n• Pull-ups — 3 × ~8–10\, stop 2 short\n• 
- Dips\, elbows to ~90° — 3 × stop 2 short\n• Inverted rows — 3 × 10–12\n• 
- Hollow hold — 4 × 10–15s\n• Tuck L-sit on dip bars — 3 × 10s\n• Mobility:
-  hips\, hamstrings\, groin — 10 min
+ up: skipping rope — 3 min\n• Warm-up: arm circles\, inchworms ×5 — 2 min\
+ n• Warm-up: wrist circles\, shoulder dislocates\, scap pull-ups — 5 min\n
+ • Chest-to-wall handstand — 5 × 15–20s\n• Pull-ups — 3 × ~8–10\, stop 2 s
+ hort\n• Dips\, elbows to ~90° — 3 × stop 2 short\n• Inverted rows — 3 × 1
+ 0–12\n• Hollow hold — 4 × 10–15s\n• Tuck L-sit on dip bars — 3 × 10s\n• M
+ obility: hips\, hamstrings\, groin — 10 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Upper-body calisthenics
@@ -59,15 +60,16 @@ BEGIN:VEVENT
 UID:plan-0-wall-mastery@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261109T191000
-DTEND:20261109T194000
+DTEND:20261109T194500
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session: ball mastery
 DESCRIPTION:Non-negotiable. Wall passing plus ball mastery. Quick feet\, h
- ead up as much as you can.\n• Two-touch wall passing\, both feet — 8 min\
- n• One-touch wall passing — 5 min\n• Ball mastery: sole rolls\, inside-ou
- tside\, V-pulls\, croquetas — 4 × 60s on\, 30s off (6 min)\n• Tight-box d
- ribbling: 4 cones 2 m apart\, every surface of both feet — 6 min\n• Weak 
- foot only wall passing — 5 min
+ ead up as much as you can.\n• Warm-up: skipping rope — 3 min\n• Warm-up: 
+ leg swings\, hip openers\, high knees — 2 min\n• Two-touch wall passing\,
+  both feet — 8 min\n• One-touch wall passing — 5 min\n• Ball mastery: sol
+ e rolls\, inside-outside\, V-pulls\, croquetas — 4 × 60s on\, 30s off (6 
+ min)\n• Tight-box dribbling: 4 cones 2 m apart\, every surface of both fe
+ et — 6 min\n• Weak foot only wall passing — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session: ball mastery
@@ -97,16 +99,17 @@ BEGIN:VEVENT
 UID:plan-1-lower-body@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261110T170000
-DTEND:20261110T173500
+DTEND:20261110T174000
 RRULE:FREQ=WEEKLY
 SUMMARY:Lower body at home (light)
 DESCRIPTION:Plyos first while you’re fresh\, low and springy (academy is t
- omorrow). Then strength: stop 2–3 reps short on every set.\n• Plyometrics
- : pogo hops (quick\, stiff ankles) — 2 × 15\n• Plyometrics: lateral bound
- s (stick each landing) — 2 × 5 each side\n• Split squats — 2 × 8 each leg
- \n• Single-leg RDL — 2 × 8 each leg\n• Single-leg glute bridge — 2 × 12\n
- • Nordic curl negatives — 2 × 3–5\n• Skill snack: tuck L-sit holds — 10 m
- in
+ omorrow). Then strength: stop 2–3 reps short on every set.\n• Warm-up: ea
+ sy bike — 3 min\n• Warm-up: leg swings\, walking lunges\, glute bridges ×
+ 10 — 2 min\n• Plyometrics: pogo hops (quick\, stiff ankles) — 2 × 15\n• P
+ lyometrics: lateral bounds (stick each landing) — 2 × 5 each side\n• Spli
+ t squats — 2 × 8 each leg\n• Single-leg RDL — 2 × 8 each leg\n• Single-le
+ g glute bridge — 2 × 12\n• Nordic curl negatives — 2 × 3–5\n• Skill snack
+ : tuck L-sit holds — 10 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Lower body at home (light)
@@ -131,14 +134,16 @@ BEGIN:VEVENT
 UID:plan-1-wall-touch@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261110T192000
-DTEND:20261110T195000
+DTEND:20261110T195500
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session: first touch
 DESCRIPTION:Non-negotiable. Wall passing plus first touch. Every touch set
- s up the next action.\n• Two-touch wall passing\, both feet — 7 min\n• Re
- ceive across your body off the wall\, turn\, pass back — 8 min\n• Jugglin
- g: alternate feet\, beat your record — 6 min\n• Throw-ups: cushion with t
- high\, chest\, then foot — 4 min\n• Weak foot only wall passing — 5 min
+ s up the next action.\n• Warm-up: easy bike — 3 min\n• Warm-up: leg swing
+ s\, hip openers\, high knees — 2 min\n• Two-touch wall passing\, both fee
+ t — 7 min\n• Receive across your body off the wall\, turn\, pass back — 8
+  min\n• Juggling: alternate feet\, beat your record — 6 min\n• Throw-ups:
+  cushion with thigh\, chest\, then foot — 4 min\n• Weak foot only wall pa
+ ssing — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session: first touch
@@ -308,15 +313,16 @@ BEGIN:VEVENT
 UID:plan-4-wall-dribble@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261113T193000
-DTEND:20261113T200000
+DTEND:20261113T200500
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session: dribbling at speed
 DESCRIPTION:Non-negotiable. Wall passing plus dribbling. Sharp changes of 
- direction\, then accelerate.\n• One-touch wall passing — 6 min\n• Cone sl
- alom: 6 cones\, both feet\, out and back — 6 min\n• Skill moves at a cone
- : drag-back\, step-over\, Cruyff\, then burst 5 m — 8 min\n• Wall pass\, 
- take a touch out of your feet\, burst 5 m — 5 min\n• Weak foot only wall 
- passing — 5 min
+ direction\, then accelerate.\n• Warm-up: skipping rope — 3 min\n• Warm-up
+ : leg swings\, hip openers\, high knees — 2 min\n• One-touch wall passing
+  — 6 min\n• Cone slalom: 6 cones\, both feet\, out and back — 6 min\n• Sk
+ ill moves at a cone: drag-back\, step-over\, Cruyff\, then burst 5 m — 8 
+ min\n• Wall pass\, take a touch out of your feet\, burst 5 m — 5 min\n• W
+ eak foot only wall passing — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session: dribbling at speed
@@ -343,14 +349,15 @@ BEGIN:VEVENT
 UID:plan-5-wall-juggle@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261114T130000
-DTEND:20261114T133000
+DTEND:20261114T133500
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session: juggling and close control
 DESCRIPTION:Non-negotiable. Wall passing plus close control. Soft touches\
- , ball close.\n• Two-touch wall passing\, both feet — 8 min\n• Juggling: 
- feet only\, then weak foot only — 8 min\n• Toe taps\, bells and sole roll
- s — 4 × 45s on\, 30s off (5 min)\n• Receive off the wall on your back foo
- t and turn — 4 min\n• Weak foot only wall passing — 5 min
+ , ball close.\n• Warm-up: easy bike — 3 min\n• Warm-up: leg swings\, hip 
+ openers\, high knees — 2 min\n• Two-touch wall passing\, both feet — 8 mi
+ n\n• Juggling: feet only\, then weak foot only — 8 min\n• Toe taps\, bell
+ s and sole rolls — 4 × 45s on\, 30s off (5 min)\n• Receive off the wall o
+ n your back foot and turn — 4 min\n• Weak foot only wall passing — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session: juggling and close control
@@ -361,28 +368,30 @@ BEGIN:VEVENT
 UID:plan-5-recovery@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261114T150000
-DTEND:20261114T152000
+DTEND:20261114T152500
 RRULE:FREQ=WEEKLY
 SUMMARY:Rest\, or 20 min mobility
-DESCRIPTION:Rest is fine. If you move\, keep it easy.\n• Foam roll: calves
- \, quads\, glutes — 6 min\n• Hip flexor stretch — 2 × 45s each side\n• Ha
- mstring stretch — 2 × 45s each side\n• Ankle mobility — 2 × 10 each side
+DESCRIPTION:Rest is fine. If you move\, keep it easy.\n• Warm-up: easy bik
+ e — 5 min\n• Foam roll: calves\, quads\, glutes — 6 min\n• Hip flexor str
+ etch — 2 × 45s each side\n• Hamstring stretch — 2 × 45s each side\n• Ankl
+ e mobility — 2 × 10 each side
 END:VEVENT
 BEGIN:VEVENT
 UID:plan-5-upper-cali-b@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261114T160000
-DTEND:20261114T164000
+DTEND:20261114T164500
 RRULE:FREQ=WEEKLY
 SUMMARY:Upper-body calisthenics B (push + skill)
 DESCRIPTION:Second upper-body day: push and skill focus\, legs rest for Su
- nday. Stop 2 reps short on every set.\n• Warm-up: wrist circles\, shoulde
- r dislocates\, scap push-ups — 5 min\n• Handstand practice: chest-to-wall
-  holds or kick-ups — 5 × 15–20s\n• Pike push-ups (feet on a step when the
- y get easy) — 3 × 8–10\, stop 2 short\n• Chin-ups (palms facing you) — 3 
- × stop 2 short\n• Archer or diamond push-ups — 3 × 6–10\n• Feet-up invert
- ed rows — 3 × 8–12\n• Hollow body rocks — 3 × 15–20s\n• Mobility: shoulde
- rs and upper back — 5 min
+ nday. Stop 2 reps short on every set.\n• Warm-up: easy bike — 3 min\n• Wa
+ rm-up: arm circles\, inchworms ×5 — 2 min\n• Warm-up: wrist circles\, sho
+ ulder dislocates\, scap push-ups — 5 min\n• Handstand practice: chest-to-
+ wall holds or kick-ups — 5 × 15–20s\n• Pike push-ups (feet on a step when
+  they get easy) — 3 × 8–10\, stop 2 short\n• Chin-ups (palms facing you) 
+ — 3 × stop 2 short\n• Archer or diamond push-ups — 3 × 6–10\n• Feet-up in
+ verted rows — 3 × 8–12\n• Hollow body rocks — 3 × 15–20s\n• Mobility: sho
+ ulders and upper back — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Upper-body calisthenics B (push + skill)
@@ -419,13 +428,14 @@ BEGIN:VEVENT
 UID:plan-6-wall-light@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261115T170000
-DTEND:20261115T173000
+DTEND:20261115T173500
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session: light touch
 DESCRIPTION:Match day: easy pace\, just touches. Stop if your legs feel he
- avy.\n• Easy one- and two-touch wall passing — 10 min\n• Juggling\, relax
- ed — 8 min\n• Gentle ball mastery: sole rolls\, inside-outside — 6 min\n•
-  Weak foot only wall passing — 6 min
+ avy.\n• Warm-up: skipping rope\, easy pace — 3 min\n• Warm-up: leg swings
+ \, hip openers — 2 min\n• Easy one- and two-touch wall passing — 10 min\n
+ • Juggling\, relaxed — 8 min\n• Gentle ball mastery: sole rolls\, inside-
+ outside — 6 min\n• Weak foot only wall passing — 6 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session: light touch

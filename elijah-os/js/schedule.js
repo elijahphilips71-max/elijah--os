@@ -98,6 +98,7 @@ window.ELIJAH_DATA = {
   //     when leg freshness in the morning check-in is 2 or lower, or there's a game or match tomorrow.
   //   fixed: true = the planner never moves or drops it (academy, match).
   //   onClash: 'skip' = if an event clashes, skip it instead of moving it (clashNote says why).
+  //   warmup: true on an item marks the 5-minute warm-up (3 min skipping rope or bike + 2 min dynamic moves).
   //   remind: minutes before the start to remind you (default 10). Optional cards have no reminder.
   //   ladder: [AO1, AO2, AO3] = how many exam questions of each kind the card gives you, from js/questions.js
   //     (weak topics and questions you got wrong come first). `mixed: true` draws from every subject.
@@ -127,9 +128,11 @@ window.ELIJAH_DATA = {
       ]
     },
     'upper-cali-b': {
-      kind: 'gym', title: 'Upper-body calisthenics B (push + skill)', minutes: 40,
+      kind: 'gym', title: 'Upper-body calisthenics B (push + skill)', minutes: 45,
       focus: 'Second upper-body day: push and skill focus, legs rest for Sunday. Stop 2 reps short on every set.',
       items: [
+        { name: 'Warm-up: easy bike', reps: '3 min', warmup: true },
+        { name: 'Warm-up: arm circles, inchworms ×5', reps: '2 min', warmup: true },
         { name: 'Warm-up: wrist circles, shoulder dislocates, scap push-ups', reps: '5 min' },
         { name: 'Handstand practice: chest-to-wall holds or kick-ups', sets: 5, reps: '15–20s' },
         { name: 'Pike push-ups (feet on a step when they get easy)', sets: 3, reps: '8–10, stop 2 short' },
@@ -141,9 +144,11 @@ window.ELIJAH_DATA = {
       ]
     },
     'upper-cali': {
-      kind: 'gym', title: 'Upper-body calisthenics', minutes: 40,
+      kind: 'gym', title: 'Upper-body calisthenics', minutes: 45,
       focus: 'Stop 2 reps short on every set. Quality over fatigue.',
       items: [
+        { name: 'Warm-up: skipping rope', reps: '3 min', warmup: true },
+        { name: 'Warm-up: arm circles, inchworms ×5', reps: '2 min', warmup: true },
         { name: 'Warm-up: wrist circles, shoulder dislocates, scap pull-ups', reps: '5 min' },
         { name: 'Chest-to-wall handstand', sets: 5, reps: '15–20s' },
         { name: 'Pull-ups', sets: 3, reps: '~8–10, stop 2 short' },
@@ -169,9 +174,11 @@ window.ELIJAH_DATA = {
       ]
     },
     'lower-body': {
-      kind: 'gym', title: 'Lower body at home (light)', minutes: 35,
+      kind: 'gym', title: 'Lower body at home (light)', minutes: 40,
       focus: 'Plyos first while you’re fresh, low and springy (academy is tomorrow). Then strength: stop 2–3 reps short on every set.',
       items: [
+        { name: 'Warm-up: easy bike', reps: '3 min', warmup: true },
+        { name: 'Warm-up: leg swings, walking lunges, glute bridges ×10', reps: '2 min', warmup: true },
         { name: 'Plyometrics: pogo hops (quick, stiff ankles)', sets: 2, reps: '15', rest: '60s', plyo: true },
         { name: 'Plyometrics: lateral bounds (stick each landing)', sets: 2, reps: '5 each side', rest: '60s', plyo: true },
         { name: 'Split squats', sets: 2, reps: '8 each leg' },
@@ -205,9 +212,11 @@ window.ELIJAH_DATA = {
     // Wall sessions: 30 minutes every day except academy nights, a different technical focus each day.
     // Every one mixes wall passing with technical work and ends with weak-foot wall passes.
     'wall-mastery': {
-      kind: 'football', keep: true, title: 'Wall session: ball mastery', minutes: 30,
+      kind: 'football', keep: true, title: 'Wall session: ball mastery', minutes: 35,
       focus: 'Non-negotiable. Wall passing plus ball mastery. Quick feet, head up as much as you can.',
       items: [
+        { name: 'Warm-up: skipping rope', reps: '3 min', warmup: true },
+        { name: 'Warm-up: leg swings, hip openers, high knees', reps: '2 min', warmup: true },
         { name: 'Two-touch wall passing, both feet', reps: '8 min' },
         { name: 'One-touch wall passing', reps: '5 min' },
         { name: 'Ball mastery: sole rolls, inside-outside, V-pulls, croquetas', sets: 4, reps: '60s on, 30s off (6 min)' },
@@ -216,9 +225,11 @@ window.ELIJAH_DATA = {
       ]
     },
     'wall-touch': {
-      kind: 'football', keep: true, title: 'Wall session: first touch', minutes: 30,
+      kind: 'football', keep: true, title: 'Wall session: first touch', minutes: 35,
       focus: 'Non-negotiable. Wall passing plus first touch. Every touch sets up the next action.',
       items: [
+        { name: 'Warm-up: easy bike', reps: '3 min', warmup: true },
+        { name: 'Warm-up: leg swings, hip openers, high knees', reps: '2 min', warmup: true },
         { name: 'Two-touch wall passing, both feet', reps: '7 min' },
         { name: 'Receive across your body off the wall, turn, pass back', reps: '8 min' },
         { name: 'Juggling: alternate feet, beat your record', reps: '6 min' },
@@ -227,9 +238,11 @@ window.ELIJAH_DATA = {
       ]
     },
     'wall-dribble': {
-      kind: 'football', keep: true, title: 'Wall session: dribbling at speed', minutes: 30,
+      kind: 'football', keep: true, title: 'Wall session: dribbling at speed', minutes: 35,
       focus: 'Non-negotiable. Wall passing plus dribbling. Sharp changes of direction, then accelerate.',
       items: [
+        { name: 'Warm-up: skipping rope', reps: '3 min', warmup: true },
+        { name: 'Warm-up: leg swings, hip openers, high knees', reps: '2 min', warmup: true },
         { name: 'One-touch wall passing', reps: '6 min' },
         { name: 'Cone slalom: 6 cones, both feet, out and back', reps: '6 min' },
         { name: 'Skill moves at a cone: drag-back, step-over, Cruyff, then burst 5 m', reps: '8 min' },
@@ -238,9 +251,11 @@ window.ELIJAH_DATA = {
       ]
     },
     'wall-juggle': {
-      kind: 'football', keep: true, title: 'Wall session: juggling and close control', minutes: 30,
+      kind: 'football', keep: true, title: 'Wall session: juggling and close control', minutes: 35,
       focus: 'Non-negotiable. Wall passing plus close control. Soft touches, ball close.',
       items: [
+        { name: 'Warm-up: easy bike', reps: '3 min', warmup: true },
+        { name: 'Warm-up: leg swings, hip openers, high knees', reps: '2 min', warmup: true },
         { name: 'Two-touch wall passing, both feet', reps: '8 min' },
         { name: 'Juggling: feet only, then weak foot only', reps: '8 min' },
         { name: 'Toe taps, bells and sole rolls', sets: 4, reps: '45s on, 30s off (5 min)' },
@@ -249,9 +264,11 @@ window.ELIJAH_DATA = {
       ]
     },
     'wall-light': {
-      kind: 'football', keep: true, title: 'Wall session: light touch', minutes: 30,
+      kind: 'football', keep: true, title: 'Wall session: light touch', minutes: 35,
       focus: 'Match day: easy pace, just touches. Stop if your legs feel heavy.',
       items: [
+        { name: 'Warm-up: skipping rope, easy pace', reps: '3 min', warmup: true },
+        { name: 'Warm-up: leg swings, hip openers', reps: '2 min', warmup: true },
         { name: 'Easy one- and two-touch wall passing', reps: '10 min' },
         { name: 'Juggling, relaxed', reps: '8 min' },
         { name: 'Gentle ball mastery: sole rolls, inside-outside', reps: '6 min' },
@@ -295,9 +312,10 @@ window.ELIJAH_DATA = {
       ]
     },
     'recovery': {
-      kind: 'recovery', optional: true, title: 'Rest, or 20 min mobility', minutes: 20,
+      kind: 'recovery', optional: true, title: 'Rest, or 20 min mobility', minutes: 25,
       focus: 'Rest is fine. If you move, keep it easy.',
       items: [
+        { name: 'Warm-up: easy bike', reps: '5 min', warmup: true },
         { name: 'Foam roll: calves, quads, glutes', reps: '6 min' },
         { name: 'Hip flexor stretch', sets: 2, reps: '45s each side' },
         { name: 'Hamstring stretch', sets: 2, reps: '45s each side' },
