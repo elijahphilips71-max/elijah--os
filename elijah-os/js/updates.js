@@ -9,9 +9,9 @@
 
 window.ELIJAH_UPDATES = [
   {
-    id: '2026-11-21-no-bells', date: '2026-11-21', kind: 'update',
-    title: 'Bells and toe taps are out',
-    body: 'Replaced with better moves: the Matthews feint and roll-cut on Monday, pull-pushes and outside cuts on Saturday. Sole rolls stay. Tap “What the moves mean” on a card to see how to do them.'
+    id: '2026-11-21-better-moves', date: '2026-11-21', kind: 'update',
+    title: 'Better ball mastery moves',
+    body: 'New moves: the Matthews feint and roll-cut on Monday, pull-pushes and outside cuts on Saturday. Sole rolls stay. Tap “What the moves mean” on a card to see how to do them.'
   },
   {
     id: '2026-11-21-tech-upgrade', date: '2026-11-21', kind: 'update',

@@ -63,13 +63,14 @@ DTSTART:20261109T191000
 DTEND:20261109T194500
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session: ball mastery
-DESCRIPTION:Non-negotiable. Wall passing plus ball mastery. Quick feet\, h
- ead up as much as you can.\n• Warm-up: skipping rope — 3 min\n• Warm-up: 
- leg swings\, hip openers\, high knees — 2 min\n• Two-touch wall passing\,
-  both feet — 8 min\n• One-touch wall passing — 5 min\n• Ball mastery: sol
- e rolls\, inside-outside\, V-pulls\, croquetas — 4 × 60s on\, 30s off (6 
- min)\n• Tight-box dribbling: 4 cones 2 m apart\, every surface of both fe
- et — 6 min\n• Weak foot only wall passing — 5 min
+DESCRIPTION:Non-negotiable. Quick\, soft touches on the balls of your feet
+ \; head up between moves. Level up: go faster\, then do it all eyes-up.\n
+ • Warm-up: skipping rope — 3 min\n• Warm-up: leg swings\, hip openers\, h
+ igh knees — 2 min\n• Two-touch wall passing\, both feet — 6 min\n• One-to
+ uch wall passing — 4 min\n• Ball mastery circuit: sole rolls\, V-pulls\, 
+ L-turns\, croquetas\, Ronaldo chops\, inside-outside\, Matthews feint\, r
+ oll-cut — 8 × 40s on\, 20s off (8 min)\n• Tight-box combos: 4 cones 2 m a
+ part — 7 min\n• Weak foot only wall passing — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session: ball mastery
@@ -137,13 +138,12 @@ DTSTART:20261110T192000
 DTEND:20261110T195500
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session: first touch
-DESCRIPTION:Non-negotiable. Wall passing plus first touch. Every touch set
- s up the next action.\n• Warm-up: easy bike — 3 min\n• Warm-up: leg swing
- s\, hip openers\, high knees — 2 min\n• Two-touch wall passing\, both fee
- t — 7 min\n• Receive across your body off the wall\, turn\, pass back — 8
-  min\n• Juggling: alternate feet\, beat your record — 6 min\n• Throw-ups:
-  cushion with thigh\, chest\, then foot — 4 min\n• Weak foot only wall pa
- ssing — 5 min
+DESCRIPTION:Non-negotiable. Every first touch sets up the next action: che
+ ck your shoulder before the ball arrives.\n• Warm-up: easy bike — 3 min\n
+ • Warm-up: leg swings\, hip openers\, high knees — 2 min\n• Two-touch wal
+ l passing\, both feet — 6 min\n• Half-turn receive off the wall — 8 min\n
+ • Directional first touch — 5 min\n• Aerial control: throw it high — 5 mi
+ n\n• Weak foot only wall passing — 6 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session: first touch
@@ -316,13 +316,12 @@ DTSTART:20261113T193000
 DTEND:20261113T200500
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session: dribbling at speed
-DESCRIPTION:Non-negotiable. Wall passing plus dribbling. Sharp changes of 
- direction\, then accelerate.\n• Warm-up: skipping rope — 3 min\n• Warm-up
- : leg swings\, hip openers\, high knees — 2 min\n• One-touch wall passing
-  — 6 min\n• Cone slalom: 6 cones\, both feet\, out and back — 6 min\n• Sk
- ill moves at a cone: drag-back\, step-over\, Cruyff\, then burst 5 m — 8 
- min\n• Wall pass\, take a touch out of your feet\, burst 5 m — 5 min\n• W
- eak foot only wall passing — 5 min
+DESCRIPTION:Non-negotiable. Sell the fake\, then explode out of it. Ball c
+ lose until the burst.\n• Warm-up: skipping rope — 3 min\n• Warm-up: leg s
+ wings\, hip openers\, high knees — 2 min\n• One-touch wall passing — 5 mi
+ n\n• Cone slalom: 6 cones 1 m apart — 5 min\n• Skill moves at a cone\, th
+ en burst 5 m — 10 min\n• Match combos at speed — 5 min\n• Weak foot only 
+ wall passing — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session: dribbling at speed
@@ -352,12 +351,13 @@ DTSTART:20261114T130000
 DTEND:20261114T133500
 RRULE:FREQ=WEEKLY
 SUMMARY:Wall session: juggling and close control
-DESCRIPTION:Non-negotiable. Wall passing plus close control. Soft touches\
- , ball close.\n• Warm-up: easy bike — 3 min\n• Warm-up: leg swings\, hip 
- openers\, high knees — 2 min\n• Two-touch wall passing\, both feet — 8 mi
- n\n• Juggling: feet only\, then weak foot only — 8 min\n• Toe taps\, bell
- s and sole rolls — 4 × 45s on\, 30s off (5 min)\n• Receive off the wall o
- n your back foot and turn — 4 min\n• Weak foot only wall passing — 5 min
+DESCRIPTION:Non-negotiable. Soft touches\, ball close. Beat your record ev
+ ery week.\n• Warm-up: easy bike — 3 min\n• Warm-up: leg swings\, hip open
+ ers\, high knees — 2 min\n• Two-touch wall passing\, both feet — 6 min\n•
+  Juggling progressions — 8 min\n• Close-control circuit: roll-cut\, insid
+ e-outside\, croqueta\, pull-push\, outside cut — 5 × 45s on\, 15s off (5 
+ min)\n• Receive on the back foot off the wall and turn — 5 min\n• Weak fo
+ ot only wall passing — 6 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Wall session: juggling and close control
