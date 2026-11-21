@@ -1,12 +1,14 @@
-# Publishes the elijah-os folder to GitHub Pages every time main changes.
-# One-time setup: repo Settings → Pages → Source: "GitHub Actions".
-# The link stays the same forever: https://elijahphilips71-max.github.io/elijah--os/
+# Publishes Elijah OS to GitHub Pages every time main changes.
+# It publishes the same layout as "Deploy from a branch" (the app in elijah-os/, a redirect at the top),
+# so whichever Pages source is set, both links work:
+#   https://elijahphilips71-max.github.io/elijah--os/elijah-os/   (the app)
+#   https://elijahphilips71-max.github.io/elijah--os/             (redirects to the app)
 name: Deploy Elijah OS
 
 on:
   push:
     branches: [main]
-    paths: ['elijah-os/**', 'tools/**', '.github/workflows/deploy.yml']
+    paths: ['elijah-os/**', 'tools/**', 'index.html', '.github/workflows/deploy.yml']
   workflow_dispatch:
 
 permissions:
@@ -28,9 +30,14 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build calendar feed from the schedule
         run: node tools/make-calendar.js
+      - name: Lay out the site like the repo (app in elijah-os/, redirect at the top)
+        run: |
+          mkdir -p _site
+          cp -r elijah-os _site/elijah-os
+          cp index.html _site/index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: elijah-os
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4

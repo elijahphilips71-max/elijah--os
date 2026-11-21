@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-21-link-fix', date: '2026-11-21', kind: 'notice',
+    title: 'Link fixed',
+    body: 'Elijah OS lives at elijahphilips71-max.github.io/elijah--os/elijah-os/ and the shorter …/elijah--os/ now redirects there, so both always work. It also opens properly offline now.'
+  },
+  {
     id: '2026-11-21-upper-b', date: '2026-11-21', kind: 'update',
     title: 'Upper body twice a week',
     body: 'A second calisthenics session on Saturday at 16:00, with a push and skill focus (handstands, pike push-ups, chin-ups, archer push-ups, rows, core) to go with Monday’s pull and dip session. Upper body only, so your legs stay fresh for Sunday.'
