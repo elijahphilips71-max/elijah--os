@@ -461,10 +461,16 @@ button { -webkit-user-select: none; user-select: none; }
 .os-movebar .btn { padding-left: 0; display: inline-flex; align-items: center; gap: 6px; }
 .os-moveform { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border-radius: var(--radius-md); background: color-mix(in srgb, var(--color-text) 5%, transparent); }
 
-.os-gloss .btn { padding-left: 0; display: inline-flex; align-items: center; gap: 6px; }
-.os-gloss dl { margin: 4px 0 0; display: grid; gap: 8px; }
-.os-gloss dt { font-weight: 500; font-size: 14px; color: var(--color-accent-300); }
-.os-gloss dd { margin: 0; font-size: 14px; line-height: 1.45; color: var(--color-neutral-200); }
+.os-movelink { align-self: flex-start; padding-left: 0; display: inline-flex; align-items: center; gap: 6px; }
+.os-moves { gap: 0; }
+.os-move { border-top: 1px solid var(--color-divider); }
+.os-move:first-of-type { border-top: 0; }
+.os-move .os-topics-head { min-height: 48px; gap: 10px; }
+.os-move-n { font-size: 15px; flex: 1; text-align: left; }
+.os-move ol { margin: 0 0 8px; padding-left: 22px; display: grid; gap: 6px; font-size: 14px; line-height: 1.45; color: var(--color-neutral-200); }
+.os-move-tip { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; line-height: 1.45; margin: 0 0 8px; color: var(--color-accent-300); }
+.os-move-tip.warn { color: var(--os-amber); }
+.os-move-tip i { font-size: 16px; flex: none; margin-top: 1px; }
 
 /* Mock exam */
 .os-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }

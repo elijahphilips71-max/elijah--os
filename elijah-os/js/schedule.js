@@ -48,26 +48,33 @@ window.ELIJAH_DATA = {
     ]
   },
 
-  // Football moves explained on any card that names them ("What the moves mean").
-  glossary: {
-    'Matthews feint': 'Lean and take a small touch inside with the inside of your foot to fake, then cut out with the outside of the same foot and burst away.',
-    'roll-cut': 'Roll the ball across your body with the sole, then cut it back the other way with the inside of the other foot.',
-    'pull-push': 'Pull the ball back with the sole, then push it forward with the laces of the same foot, in a quick rhythm. Swap feet.',
-    'outside cut': 'Cut the ball sharply sideways with the outside of your foot to change direction, then accelerate.',
-    'sole rolls': 'Roll the ball sideways across your body with the sole, then back with the other foot.',
-    'V-pulls': 'Pull the ball back with the sole, then push it forward at an angle with the inside of the same foot: a V shape.',
-    'L-turns': 'Pull the ball back with the sole, then push it across behind your standing leg with the inside of the same foot: an L shape.',
-    'croqueta': 'Shift the ball quickly from the inside of one foot to the inside of the other, sideways, to slip past a defender.',
-    'Ronaldo chop': 'Cut the ball behind your standing leg with the inside of your foot to change direction sharply.',
-    'inside-outside': 'Touch the ball with the inside of the foot, then straight away with the outside of the same foot. The base of the elastico.',
-    'step-over': 'Swing your foot around the front of the ball without touching it, then go the other way.',
-    'Cruyff turn': 'Fake a pass or cross, then drag the ball behind your standing leg with the inside of the foot and go the opposite way.',
-    'elastico': 'Push the ball out with the outside of the foot, then snap it back with the inside of the same foot in one quick movement.',
-    'roulette': 'The Maradona turn: drag the ball back with one sole, spin, then drag it on with the other sole, turning a full circle away from a defender.',
-    'drag-back': 'Roll the ball back towards you with the sole to stop or change direction.',
-    'half-turn': 'Receive side-on with your body open, so your first touch can go forward instead of back.',
-    'shoulder check': 'A quick look over your shoulder before the ball arrives, to see space and pressure.'
-  },
+  // The Moves library (menu → Moves). Each card links to the moves it names.
+  //   name: as written on the cards (matched case-insensitively). also: other spellings to match.
+  moves: [
+    // Ball mastery
+    { name: 'sole rolls', group: 'Ball mastery', steps: ['Stand over the ball, on your toes.', 'Put your sole on top and roll the ball sideways across your body.', 'Stop it with the sole of your other foot and roll it back.'], cue: 'Light touch: the ball stays under you.', mistake: 'Pressing down too hard so the ball sticks.' },
+    { name: 'V-pulls', also: ['V-pull'], group: 'Ball mastery', steps: ['Put your sole on the ball and pull it back towards you.', 'As it rolls back, turn your foot and push it forward at an angle with the inside of the same foot.', 'That makes a V. Repeat, then swap feet.'], cue: 'Pull and push in one smooth movement.', mistake: 'Pulling the ball too far behind you.' },
+    { name: 'L-turns', also: ['L-turn'], group: 'Ball mastery', steps: ['Pull the ball back with your sole.', 'Push it across behind your standing leg with the inside of the same foot.', 'Follow the ball and go: that makes an L.'], cue: 'Pull, then push, in one rhythm.', mistake: 'The ball hits your standing leg: pull it far enough back first.' },
+    { name: 'inside-outside', group: 'Ball mastery', steps: ['Touch the ball sideways with the inside of your foot.', 'Straight away, touch it back with the outside of the same foot.', 'Keep going, then swap feet.'], cue: 'Small, quick touches on your toes. This is the base of the elastico.', mistake: 'Big touches that let the ball run away.' },
+    { name: 'pull-push', group: 'Ball mastery', steps: ['Pull the ball back with your sole.', 'Push it forward with the laces of the same foot.', 'Keep a quick rhythm, then swap feet.'], cue: 'The ball never leaves your foot’s reach.', mistake: 'Looking down the whole time: glance up between touches.' },
+    { name: 'roll-cut', group: 'Ball mastery', steps: ['Put the sole of one foot on top of the ball and roll it sideways across your body.', 'As it reaches your other foot, cut it back the other way with the inside of that foot.', 'Burst off in the new direction.'], cue: 'Roll slowly, cut sharply: the change of speed beats the defender.', mistake: 'Rolling it too far so it gets away from you.' },
+    // Turns
+    { name: 'drag-back', group: 'Turns', steps: ['Put your sole on top of the ball.', 'Roll it back towards you.', 'Turn your body and go the other way.'], cue: 'Shield the ball with your body as you turn.', mistake: 'Stopping still: keep your feet moving.' },
+    { name: 'Cruyff turn', group: 'Turns', steps: ['Shape up as if you’re going to pass or cross with your right foot.', 'Instead, drag the ball behind your standing (left) leg with the inside of your right foot.', 'Turn and go the opposite way.'], cue: 'Sell the pass: arms out, head up, as if you mean it.', mistake: 'Dragging it too far so it runs past you.' },
+    { name: 'roulette', also: ['Maradona turn'], group: 'Turns', steps: ['Put your right sole on the ball and drag it back as you start to spin.', 'Keep spinning, plant your right foot, then put your left sole on the ball.', 'Drag it on with the left sole as you finish the full circle, facing forward.'], cue: 'Keep your back between the defender and the ball.', mistake: 'Losing the ball under your feet: go slowly until it’s smooth.' },
+    // Skill moves
+    { name: 'croqueta', also: ['croquetas'], group: 'Skill moves', steps: ['Have the ball on the inside of one foot.', 'Shift it quickly sideways to the inside of your other foot, in one step.', 'Go past the defender on that side.'], cue: 'Low, quick and close: one sharp shift.', mistake: 'Shifting it too far so a defender can reach it.' },
+    { name: 'Ronaldo chop', also: ['Ronaldo chops', 'chop'], group: 'Skill moves', steps: ['Dribble forward.', 'Plant your standing foot just past the ball.', 'With the inside of your other foot, cut the ball behind your standing leg to the other side, then accelerate.'], cue: 'Do it at speed: the faster you are, the better it works.', mistake: 'Slowing right down before the chop, which gives it away.' },
+    { name: 'step-over', also: ['step-overs'], group: 'Skill moves', steps: ['Run at the ball.', 'Swing your right foot around the front of the ball, from inside to outside, without touching it.', 'Push the ball the other way with the outside of your left foot and accelerate.'], cue: 'Dip your shoulder with the step-over to sell it.', mistake: 'Doing it too far from the defender: get close first.' },
+    { name: 'elastico', group: 'Skill moves', steps: ['Push the ball out to the side with the outside of your foot.', 'In the same movement, snap it back across with the inside of that foot.', 'Burst past on the inside.'], cue: 'Start slowly with inside-outside, then speed it up.', mistake: 'Two separate touches: it has to be one movement.' },
+    { name: 'Matthews feint', group: 'Skill moves', steps: ['Dribble slowly at the defender.', 'Lean in and take a small touch inside with the inside of your foot to fake.', 'Quickly cut it out with the outside of the same foot and burst away.'], cue: 'Sell the lean: shoulders and eyes go inside first.', mistake: 'Not changing speed after the cut.' },
+    { name: 'outside cut', group: 'Skill moves', steps: ['Dribble forward.', 'Cut the ball sharply sideways with the outside of your foot.', 'Accelerate into the space.'], cue: 'Cut away from where the defender is leaning.', mistake: 'A soft cut that the defender can follow.' },
+    // First touch
+    { name: 'shoulder check', group: 'First touch', steps: ['Before the ball arrives, take a quick look over your shoulder.', 'See where the space and the pressure are.', 'Decide your first touch before the ball reaches you.'], cue: 'Look just before the pass is played, and again as it travels.', mistake: 'Looking only at the ball.' },
+    { name: 'half-turn', group: 'First touch', steps: ['Stand side-on with your body open, not square to the passer.', 'Receive the ball on your back foot (the one further from the passer).', 'Take your first touch forward into space.'], cue: 'Open hips mean you can see forward and play forward.', mistake: 'Receiving square, so your first touch goes backwards.' },
+    { name: 'directional first touch', group: 'First touch', steps: ['Check where the space is.', 'Take the ball away with the outside of your foot (or stop it with the sole).', 'Go straight into your next action.'], cue: 'Your first touch moves the ball out of your feet, into space.', mistake: 'Stopping the ball dead under you every time.' },
+    { name: 'kill it dead', group: 'First touch', steps: ['Watch the falling ball all the way down.', 'Lift your foot and meet it with your laces, relaxing your ankle.', 'Pull your foot down with the ball so it drops dead at your feet.'], cue: 'Soft ankle, like catching an egg.', mistake: 'A stiff foot that makes the ball bounce away.' }
+  ],
 
   // Saturday past papers rotate through these subjects, one per week (positions in `subjects`).
   // You can always switch subject on the card. paperMins = default time allowed.
