@@ -49,12 +49,11 @@ The anon key is safe to put in a public website. The row-level security rules in
 
 ## Put it online (GitHub Pages, updates itself)
 
-The repository has a workflow (`.github/workflows/deploy.yml`) that publishes this folder every time `main` changes.
+The app is at **https://elijahphilips71-max.github.io/elijah--os/elijah-os/**. The shorter `https://elijahphilips71-max.github.io/elijah--os/` redirects there.
 
-1. One time only: in the repository, go to **Settings → Pages**, and under "Build and deployment" set **Source** to **GitHub Actions**.
-2. The app is at `https://elijahphilips71-max.github.io/elijah--os/`. That link never changes, so the home-screen app and bookmarks keep working.
+Every push to `main` publishes it. Both GitHub Pages sources give the same result: "Deploy from a branch" (main, root) serves the repo as it is, and the workflow in `.github/workflows/deploy.yml` publishes the same layout (the app in `elijah-os/`, the redirect `index.html` at the top). So the link never changes, whichever source is set.
 
-To ship an update: change the files, change `VERSION` at the top of `sw.js` (for example `elijah-os-v5`), add a line to `js/updates.js` saying what changed, and merge into `main`. About a minute later the site is live. An open app shows **"A new version of Elijah OS is ready · Reload"**, and the update appears under **New for you** on Today. Your data is not touched: it lives in the browser and in Supabase, not in the files.
+To ship an update: change the files, change `VERSION` at the top of `sw.js`, add a line to `js/updates.js` saying what changed, and merge into `main`. About a minute later it's live. An open app shows **"A new version of Elijah OS is ready · Reload"**, and the update appears under **New for you** on Today. Your data is not touched: it lives in the browser and in Supabase, not in the files.
 
 ## Install it as an app
 

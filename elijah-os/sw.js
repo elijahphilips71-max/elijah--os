@@ -1,6 +1,6 @@
 // Elijah OS service worker: lets the app open offline.
 // Bump VERSION whenever you change files, so phones pick up the new version.
-const VERSION = 'elijah-os-v26';
+const VERSION = 'elijah-os-v27';
 const SHELL = [
   './',
   './index.html',
@@ -54,6 +54,8 @@ self.addEventListener('fetch', e => {
         caches.open(VERSION).then(c => c.put(req, copy));
       }
       return res;
-    }).catch(() => caches.match(req, { ignoreSearch: url.origin === location.origin }).then(r => r || caches.match('./index.html')))
+    }).catch(() => caches.match(req, { ignoreSearch: url.origin === location.origin })
+      // Only page loads fall back to the app shell; a missing script or file must fail, not turn into HTML.
+      .then(r => r || (req.mode === 'navigate' ? caches.match('./index.html') : Response.error())))
   );
 });

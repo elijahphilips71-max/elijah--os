@@ -214,6 +214,10 @@
       setAuth('signedin');
       return;
     }
+    if (!window.supabase || !window.supabase.createClient) {
+      // The sync library didn't load properly: carry on with the copy saved on this device.
+      Store.user = null; setSync('offline'); setAuth('signedin'); return;
+    }
     sb = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
     sb.auth.onAuthStateChange((_event, session) => {
       const was = Store.user && Store.user.id;
