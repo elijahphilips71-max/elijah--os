@@ -135,6 +135,7 @@
       <span class="os-k os-menu-k">More</span>
       <button class="os-nav" data-act="goNews">${icon('megaphone')}<span>What's new</span>${unread ? `<span class="os-badge os-num">${unread}</span>` : ''}</button>
       <button class="os-nav" data-act="goTopics">${icon('list-checks')}<span>Revision topics</span></button>
+      <button class="os-nav ${ui.tab === 'moves' ? 'on' : ''}" data-act="goMoves" data-v="">${icon('soccer-ball')}<span>Moves library</span></button>
       <button class="os-nav" data-act="evNewMenu">${icon('calendar-plus')}<span>Add event</span></button>
       <button class="os-nav" data-act="goCal">${icon('calendar-check')}<span>Calendar</span></button>
       <button class="os-nav" data-act="goRemind">${icon('bell')}<span>Reminders</span>${remindCfg().on ? '' : '<span class="os-badge os-num" style="background:var(--color-neutral-700);color:var(--color-text)">off</span>'}</button>
@@ -613,14 +614,38 @@
     </article>`;
   }
 
-  // "What the moves mean": the moves a card names, explained, behind a tap.
+  // ----- Moves library -----
+  // Which moves a card names (matched on the move's name or other spellings).
+  const moveNames = m => [m.name].concat(m.also || []).map(x => x.toLowerCase());
+  function movesIn(c) {
+    const text = ((c.focus || '') + ' ' + (c.items || []).map(x => x.name + ' ' + (x.cue || '')).join(' ')).toLowerCase();
+    return (DATA.moves || []).filter(m => moveNames(m).some(n => text.includes(n)));
+  }
+  // Days each move turns up on, from the weekly schedule.
+  function moveDays(m) {
+    const days = [];
+    DATA.schedule.forEach((d, i) => { if (Cal.refs(d, DATA.daily).some(r => DATA.sessions[r.id] && movesIn(DATA.sessions[r.id]).includes(m))) days.push(d.day); });
+    return days;
+  }
   function glossaryFor(key, c) {
-    const text = (c.focus || '') + ' ' + (c.items || []).map(x => x.name + ' ' + (x.cue || '')).join(' ');
-    const terms = Object.keys(DATA.glossary || {}).filter(t => text.toLowerCase().includes(t.toLowerCase()));
-    if (!terms.length) return '';
-    const open = ui.glossOpen === key;
-    return `<div class="os-gloss"><button class="btn btn-ghost" data-act="gloss" data-v="${esc(key)}" aria-expanded="${open}">${icon(open ? 'minus' : 'question')}What the moves mean</button>
-      ${open ? `<dl>${terms.map(t => `<dt>${esc(t.charAt(0).toUpperCase() + t.slice(1))}</dt><dd>${esc(DATA.glossary[t])}</dd>`).join('')}</dl>` : ''}</div>`;
+    const n = movesIn(c).length;
+    return n ? `<button class="btn btn-ghost os-movelink" data-act="goMoves" data-v="${esc(sid(key))}">${icon('book-open')}How to do these moves (${n})</button>` : '';
+  }
+  function movesScreen() {
+    const forCard = ui.movesFor && DATA.sessions[ui.movesFor] ? ui.movesFor : null;
+    const list = forCard ? movesIn(DATA.sessions[forCard]) : (DATA.moves || []);
+    const groups = [...new Set(list.map(m => m.group))];
+    return `<header class="os-head"><span class="os-k acc">Moves</span><h3>${forCard ? esc(DATA.sessions[forCard].title) : 'Moves library'}</h3>
+        <span class="os-muted" style="font-size:13px">${list.length} move${list.length === 1 ? '' : 's'}. Tap one for how to do it.</span></header>
+      ${forCard ? `<button class="btn btn-secondary os-btn" data-act="goMoves" data-v="">${icon('list')}Show all moves</button>` : ''}
+      ${groups.map(g => `<section class="os-card os-moves"><span class="os-k">${esc(g)}</span>
+        ${list.filter(m => m.group === g).map(m => { const open = ui.moveShow === m.name;
+          return `<div class="os-move ${open ? 'open' : ''}"><button class="os-topics-head" data-act="moveShow" data-v="${esc(m.name)}" aria-expanded="${open}">
+            <span class="os-move-n">${esc(m.name.charAt(0).toUpperCase() + m.name.slice(1))}</span><span class="os-num os-muted" style="font-size:11px">${moveDays(m).join(' · ')}</span>${icon(open ? 'caret-up' : 'caret-down')}</button>
+            ${open ? `<ol>${m.steps.map(x => `<li>${esc(x)}</li>`).join('')}</ol>
+              ${m.cue ? `<div class="os-move-tip">${icon('lightbulb')}<span>${esc(m.cue)}</span></div>` : ''}
+              ${m.mistake ? `<div class="os-move-tip warn">${icon('warning')}<span>${esc(m.mistake)}</span></div>` : ''}` : ''}</div>`; }).join('')}
+      </section>`).join('')}`;
   }
 
   function moveControls(key, it) {
@@ -1354,7 +1379,7 @@
     if (Store.auth === 'signedout') {
       root.innerHTML = `<div class="os">${authScreen()}</div>`;
     } else {
-      const screen = { today, week, rev: revision, prog: progress, log: logScreen, hustle: hustleScreen }[ui.tab]();
+      const screen = { today, week, rev: revision, prog: progress, log: logScreen, hustle: hustleScreen, moves: movesScreen }[ui.tab]();
       root.innerHTML = `<div class="os">
         <nav class="os-rail" aria-label="Main">${menuBody()}</nav>
         <main class="os-main">${topBar()}${screen}</main>
@@ -1385,7 +1410,8 @@
     },
     shiftWeek(v) { ui.week += +v; ui.openCard = null; ui.showPlanned = false; },
     goToday() { ui.week = 0; ui.day = todayIdx(); ui.openCard = null; ui.showPlanned = false; },
-    gloss(v) { ui.glossOpen = ui.glossOpen === v ? null : v; },
+    goMoves(v) { ui.tab = 'moves'; ui.movesFor = v || null; ui.moveShow = null; ui.menu = false; window.scrollTo(0, 0); },
+    moveShow(v) { ui.moveShow = ui.moveShow === v ? null : v; },
     moveOpen(v) { ui.moveOpen = v || null; },
     moveReset(v) { resetMove(v); ui.moveOpen = null; },
     showPlanned() { ui.showPlanned = !ui.showPlanned; },

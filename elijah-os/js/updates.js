@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-21-moves-library', date: '2026-11-21', kind: 'update',
+    title: 'Moves library',
+    body: 'Every move in your sessions now has step-by-step instructions, a key tip and the common mistake, in its own Moves library (menu → Moves library). Cards just show one link, “How to do these moves”, that opens the moves for that card.'
+  },
+  {
     id: '2026-11-21-better-moves', date: '2026-11-21', kind: 'update',
     title: 'Better ball mastery moves',
     body: 'New moves: the Matthews feint and roll-cut on Monday, pull-pushes and outside cuts on Saturday. Sole rolls stay. Tap “What the moves mean” on a card to see how to do them.'
