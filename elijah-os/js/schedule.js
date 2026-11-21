@@ -64,11 +64,11 @@ window.ELIJAH_DATA = {
     { day: 'Mon', title: 'Recovery + upper body', load: 'Medium',
       time: 'After school · Maths 40 min', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Upper body with 2 reps in reserve, then 40 minutes of Maths from the revision guide. Review Sunday’s match.',
-      sessions: [['upper-cali', '16:15'], ['rev-maths', '17:30'], ['match-review', '19:00'], ['wall', '19:10']] },
+      sessions: [['upper-cali', '16:15'], ['rev-maths', '17:30'], ['match-review', '19:00'], ['wall-mastery', '19:10']] },
     { day: 'Tue', title: 'Astro skills + lower body', load: 'Medium',
       time: '15:45 · Physics 40 min', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Skill sequences at 75% pace, light legs, then 40 minutes of Physics from the revision guide.',
-      sessions: [['astro-skill', '15:45'], ['lower-body', '17:00'], ['rev-physics', '18:00'], ['wall', '19:20'], ['hustle', '20:00']] },
+      sessions: [['astro-skill', '15:45'], ['lower-body', '17:00'], ['rev-physics', '18:00'], ['wall-touch', '19:20'], ['hustle', '20:00']] },
     { day: 'Wed', title: 'Academy training', load: 'High',
       time: '18:15 · leave 18:00', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Pick one cue and bring it to academy.',
@@ -80,15 +80,15 @@ window.ELIJAH_DATA = {
     { day: 'Fri', title: 'Astro speed + match reps', load: 'Medium-High',
       time: '15:45–16:30 · revision 60 min', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Short, sharp speed reps. Stop after 2 slow reps.',
-      sessions: [['astro-speed', '15:45'], ['rev-chem-maths', '17:30'], ['hustle', '18:45'], ['wall', '19:30']] },
-    { day: 'Sat', title: 'Past paper + rest', load: 'Low',
-      time: 'Morning · 2–3 hr paper', sub: 'Rest in the afternoon',
-      mission: 'Timed past paper, mark it properly, then rest.',
-      sessions: [['past-paper', '09:00'], ['wall', '13:00'], ['recovery', '15:00'], ['visualise', '20:00']] },
+      sessions: [['astro-speed', '15:45'], ['rev-chem-maths', '17:30'], ['hustle', '18:45'], ['wall-dribble', '19:30']] },
+    { day: 'Sat', title: 'Past paper + upper body', load: 'Low',
+      time: 'Morning · 2–3 hr paper', sub: 'Upper body at 16:00, legs rest for Sunday',
+      mission: 'Timed past paper, mark it properly. Upper body later, legs rest for the match.',
+      sessions: [['past-paper', '09:00'], ['wall-juggle', '13:00'], ['recovery', '15:00'], ['upper-cali-b', '16:00'], ['visualise', '20:00']] },
     { day: 'Sun', title: 'Match day', load: 'High',
       time: 'Match day · no revision', sub: '',
       mission: 'Match day. Play simple, play fast.',
-      sessions: ['match', ['wall', '17:00'], ['hustle', '18:00']] }
+      sessions: ['match', ['wall-light', '17:00'], ['hustle', '18:00']] }
   ],
 
   // Session cards. Each one shows on Today and Week for the days that list it.
@@ -124,6 +124,20 @@ window.ELIJAH_DATA = {
         { name: 'Journal' },
         { name: 'Reading' },
         { name: 'Bed before 23:00' }
+      ]
+    },
+    'upper-cali-b': {
+      kind: 'gym', title: 'Upper-body calisthenics B (push + skill)', minutes: 40,
+      focus: 'Second upper-body day: push and skill focus, legs rest for Sunday. Stop 2 reps short on every set.',
+      items: [
+        { name: 'Warm-up: wrist circles, shoulder dislocates, scap push-ups', reps: '5 min' },
+        { name: 'Handstand practice: chest-to-wall holds or kick-ups', sets: 5, reps: '15–20s' },
+        { name: 'Pike push-ups (feet on a step when they get easy)', sets: 3, reps: '8–10, stop 2 short' },
+        { name: 'Chin-ups (palms facing you)', sets: 3, reps: 'stop 2 short' },
+        { name: 'Archer or diamond push-ups', sets: 3, reps: '6–10' },
+        { name: 'Feet-up inverted rows', sets: 3, reps: '8–12' },
+        { name: 'Hollow body rocks', sets: 3, reps: '15–20s' },
+        { name: 'Mobility: shoulders and upper back', reps: '5 min' }
       ]
     },
     'upper-cali': {
@@ -188,14 +202,60 @@ window.ELIJAH_DATA = {
         { name: 'Skill snack: handstand kick-ups', reps: '10 min' }
       ]
     },
-    'wall': {
-      kind: 'football', keep: true, title: 'Wall session', minutes: 30,
-      focus: 'Non-negotiable, every day except academy nights (Wednesday and Thursday). Reps over perfection. Second half weak foot only.',
+    // Wall sessions: 30 minutes every day except academy nights, a different technical focus each day.
+    // Every one mixes wall passing with technical work and ends with weak-foot wall passes.
+    'wall-mastery': {
+      kind: 'football', keep: true, title: 'Wall session: ball mastery', minutes: 30,
+      focus: 'Non-negotiable. Wall passing plus ball mastery. Quick feet, head up as much as you can.',
       items: [
-        { name: 'Two-touch passing, both feet', reps: '8 min' },
-        { name: 'One-touch passing', reps: '7 min' },
-        { name: 'Receiving across body and turning', reps: '7 min' },
-        { name: 'Weak foot only', reps: '8 min' }
+        { name: 'Two-touch wall passing, both feet', reps: '8 min' },
+        { name: 'One-touch wall passing', reps: '5 min' },
+        { name: 'Ball mastery: sole rolls, inside-outside, V-pulls, croquetas', sets: 4, reps: '60s on, 30s off (6 min)' },
+        { name: 'Tight-box dribbling: 4 cones 2 m apart, every surface of both feet', reps: '6 min' },
+        { name: 'Weak foot only wall passing', reps: '5 min' }
+      ]
+    },
+    'wall-touch': {
+      kind: 'football', keep: true, title: 'Wall session: first touch', minutes: 30,
+      focus: 'Non-negotiable. Wall passing plus first touch. Every touch sets up the next action.',
+      items: [
+        { name: 'Two-touch wall passing, both feet', reps: '7 min' },
+        { name: 'Receive across your body off the wall, turn, pass back', reps: '8 min' },
+        { name: 'Juggling: alternate feet, beat your record', reps: '6 min' },
+        { name: 'Throw-ups: cushion with thigh, chest, then foot', reps: '4 min' },
+        { name: 'Weak foot only wall passing', reps: '5 min' }
+      ]
+    },
+    'wall-dribble': {
+      kind: 'football', keep: true, title: 'Wall session: dribbling at speed', minutes: 30,
+      focus: 'Non-negotiable. Wall passing plus dribbling. Sharp changes of direction, then accelerate.',
+      items: [
+        { name: 'One-touch wall passing', reps: '6 min' },
+        { name: 'Cone slalom: 6 cones, both feet, out and back', reps: '6 min' },
+        { name: 'Skill moves at a cone: drag-back, step-over, Cruyff, then burst 5 m', reps: '8 min' },
+        { name: 'Wall pass, take a touch out of your feet, burst 5 m', reps: '5 min' },
+        { name: 'Weak foot only wall passing', reps: '5 min' }
+      ]
+    },
+    'wall-juggle': {
+      kind: 'football', keep: true, title: 'Wall session: juggling and close control', minutes: 30,
+      focus: 'Non-negotiable. Wall passing plus close control. Soft touches, ball close.',
+      items: [
+        { name: 'Two-touch wall passing, both feet', reps: '8 min' },
+        { name: 'Juggling: feet only, then weak foot only', reps: '8 min' },
+        { name: 'Toe taps, bells and sole rolls', sets: 4, reps: '45s on, 30s off (5 min)' },
+        { name: 'Receive off the wall on your back foot and turn', reps: '4 min' },
+        { name: 'Weak foot only wall passing', reps: '5 min' }
+      ]
+    },
+    'wall-light': {
+      kind: 'football', keep: true, title: 'Wall session: light touch', minutes: 30,
+      focus: 'Match day: easy pace, just touches. Stop if your legs feel heavy.',
+      items: [
+        { name: 'Easy one- and two-touch wall passing', reps: '10 min' },
+        { name: 'Juggling, relaxed', reps: '8 min' },
+        { name: 'Gentle ball mastery: sole rolls, inside-outside', reps: '6 min' },
+        { name: 'Weak foot only wall passing', reps: '6 min' }
       ]
     },
     'hustle': {

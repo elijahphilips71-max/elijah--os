@@ -56,19 +56,21 @@ TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:plan-0-wall@elijah-os
+UID:plan-0-wall-mastery@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261109T191000
 DTEND:20261109T194000
 RRULE:FREQ=WEEKLY
-SUMMARY:Wall session
-DESCRIPTION:Non-negotiable\, every day except academy nights (Wednesday an
- d Thursday). Reps over perfection. Second half weak foot only.\n• Two-tou
- ch passing\, both feet — 8 min\n• One-touch passing — 7 min\n• Receiving 
- across body and turning — 7 min\n• Weak foot only — 8 min
+SUMMARY:Wall session: ball mastery
+DESCRIPTION:Non-negotiable. Wall passing plus ball mastery. Quick feet\, h
+ ead up as much as you can.\n• Two-touch wall passing\, both feet — 8 min\
+ n• One-touch wall passing — 5 min\n• Ball mastery: sole rolls\, inside-ou
+ tside\, V-pulls\, croquetas — 4 × 60s on\, 30s off (6 min)\n• Tight-box d
+ ribbling: 4 cones 2 m apart\, every surface of both feet — 6 min\n• Weak 
+ foot only wall passing — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Wall session
+DESCRIPTION:Wall session: ball mastery
 TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
@@ -126,19 +128,20 @@ TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:plan-1-wall@elijah-os
+UID:plan-1-wall-touch@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261110T192000
 DTEND:20261110T195000
 RRULE:FREQ=WEEKLY
-SUMMARY:Wall session
-DESCRIPTION:Non-negotiable\, every day except academy nights (Wednesday an
- d Thursday). Reps over perfection. Second half weak foot only.\n• Two-tou
- ch passing\, both feet — 8 min\n• One-touch passing — 7 min\n• Receiving 
- across body and turning — 7 min\n• Weak foot only — 8 min
+SUMMARY:Wall session: first touch
+DESCRIPTION:Non-negotiable. Wall passing plus first touch. Every touch set
+ s up the next action.\n• Two-touch wall passing\, both feet — 7 min\n• Re
+ ceive across your body off the wall\, turn\, pass back — 8 min\n• Jugglin
+ g: alternate feet\, beat your record — 6 min\n• Throw-ups: cushion with t
+ high\, chest\, then foot — 4 min\n• Weak foot only wall passing — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Wall session
+DESCRIPTION:Wall session: first touch
 TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
@@ -302,19 +305,21 @@ TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:plan-4-wall@elijah-os
+UID:plan-4-wall-dribble@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261113T193000
 DTEND:20261113T200000
 RRULE:FREQ=WEEKLY
-SUMMARY:Wall session
-DESCRIPTION:Non-negotiable\, every day except academy nights (Wednesday an
- d Thursday). Reps over perfection. Second half weak foot only.\n• Two-tou
- ch passing\, both feet — 8 min\n• One-touch passing — 7 min\n• Receiving 
- across body and turning — 7 min\n• Weak foot only — 8 min
+SUMMARY:Wall session: dribbling at speed
+DESCRIPTION:Non-negotiable. Wall passing plus dribbling. Sharp changes of 
+ direction\, then accelerate.\n• One-touch wall passing — 6 min\n• Cone sl
+ alom: 6 cones\, both feet\, out and back — 6 min\n• Skill moves at a cone
+ : drag-back\, step-over\, Cruyff\, then burst 5 m — 8 min\n• Wall pass\, 
+ take a touch out of your feet\, burst 5 m — 5 min\n• Weak foot only wall 
+ passing — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Wall session
+DESCRIPTION:Wall session: dribbling at speed
 TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
@@ -335,19 +340,20 @@ TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:plan-5-wall@elijah-os
+UID:plan-5-wall-juggle@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261114T130000
 DTEND:20261114T133000
 RRULE:FREQ=WEEKLY
-SUMMARY:Wall session
-DESCRIPTION:Non-negotiable\, every day except academy nights (Wednesday an
- d Thursday). Reps over perfection. Second half weak foot only.\n• Two-tou
- ch passing\, both feet — 8 min\n• One-touch passing — 7 min\n• Receiving 
- across body and turning — 7 min\n• Weak foot only — 8 min
+SUMMARY:Wall session: juggling and close control
+DESCRIPTION:Non-negotiable. Wall passing plus close control. Soft touches\
+ , ball close.\n• Two-touch wall passing\, both feet — 8 min\n• Juggling: 
+ feet only\, then weak foot only — 8 min\n• Toe taps\, bells and sole roll
+ s — 4 × 45s on\, 30s off (5 min)\n• Receive off the wall on your back foo
+ t and turn — 4 min\n• Weak foot only wall passing — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Wall session
+DESCRIPTION:Wall session: juggling and close control
 TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
@@ -361,6 +367,27 @@ SUMMARY:Rest\, or 20 min mobility
 DESCRIPTION:Rest is fine. If you move\, keep it easy.\n• Foam roll: calves
  \, quads\, glutes — 6 min\n• Hip flexor stretch — 2 × 45s each side\n• Ha
  mstring stretch — 2 × 45s each side\n• Ankle mobility — 2 × 10 each side
+END:VEVENT
+BEGIN:VEVENT
+UID:plan-5-upper-cali-b@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261114T160000
+DTEND:20261114T164000
+RRULE:FREQ=WEEKLY
+SUMMARY:Upper-body calisthenics B (push + skill)
+DESCRIPTION:Second upper-body day: push and skill focus\, legs rest for Su
+ nday. Stop 2 reps short on every set.\n• Warm-up: wrist circles\, shoulde
+ r dislocates\, scap push-ups — 5 min\n• Handstand practice: chest-to-wall
+  holds or kick-ups — 5 × 15–20s\n• Pike push-ups (feet on a step when the
+ y get easy) — 3 × 8–10\, stop 2 short\n• Chin-ups (palms facing you) — 3 
+ × stop 2 short\n• Archer or diamond push-ups — 3 × 6–10\n• Feet-up invert
+ ed rows — 3 × 8–12\n• Hollow body rocks — 3 × 15–20s\n• Mobility: shoulde
+ rs and upper back — 5 min
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Upper-body calisthenics B (push + skill)
+TRIGGER:-PT10M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:plan-5-visualise@elijah-os
@@ -389,19 +416,19 @@ DESCRIPTION:Play simple\, play fast.\n• Breakfast 3 hours before kick-off\
  within an hour
 END:VEVENT
 BEGIN:VEVENT
-UID:plan-6-wall@elijah-os
+UID:plan-6-wall-light@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261115T170000
 DTEND:20261115T173000
 RRULE:FREQ=WEEKLY
-SUMMARY:Wall session
-DESCRIPTION:Non-negotiable\, every day except academy nights (Wednesday an
- d Thursday). Reps over perfection. Second half weak foot only.\n• Two-tou
- ch passing\, both feet — 8 min\n• One-touch passing — 7 min\n• Receiving 
- across body and turning — 7 min\n• Weak foot only — 8 min
+SUMMARY:Wall session: light touch
+DESCRIPTION:Match day: easy pace\, just touches. Stop if your legs feel he
+ avy.\n• Easy one- and two-touch wall passing — 10 min\n• Juggling\, relax
+ ed — 8 min\n• Gentle ball mastery: sole rolls\, inside-outside — 6 min\n•
+  Weak foot only wall passing — 6 min
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Wall session
+DESCRIPTION:Wall session: light touch
 TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
