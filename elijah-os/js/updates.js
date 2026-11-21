@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-21-warmups', date: '2026-11-21', kind: 'update',
+    title: 'Warm-ups before every session',
+    body: 'Upper body, lower body, wall and recovery sessions now start with a 5-minute warm-up: 3 minutes on the skipping rope or bike, then 2 minutes of dynamic moves for that session. Astro sessions already had their own.'
+  },
+  {
     id: '2026-11-21-link-fix', date: '2026-11-21', kind: 'notice',
     title: 'Link fixed',
     body: 'Elijah OS lives at elijahphilips71-max.github.io/elijah--os/elijah-os/ and the shorter …/elijah--os/ now redirects there, so both always work. It also opens properly offline now.'
