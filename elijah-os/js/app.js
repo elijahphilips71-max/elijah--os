@@ -541,7 +541,7 @@
     if (plyoStop) rows.push({ key: 'plyo-off', name: 'Plyometrics skipped today: ' + plyoStop, sets: 0, detail: '' });
     (c.items || []).forEach((x, i) => {
       if (x.plyo && plyoStop) return;
-      let detail = [x.sets ? x.sets + ' × ' + (x.reps || '') : x.reps, x.rest ? 'rest ' + x.rest : ''].filter(Boolean).join(' · ');
+      let detail = [x.sets ? x.sets + ' × ' + (x.reps || '') : x.reps, x.rest ? 'rest ' + x.rest : '', x.cue || ''].filter(Boolean).join(' · ');
       rows.push({ key: 'i' + i, name: x.name, sets: x.sets || 1, detail });
     });
     if (c.kind === 'hustle') {
@@ -600,6 +600,7 @@
       ${open ? `<div class="os-scard-body">
         ${canMove ? moveControls(id, it) : ''}
         ${c.focus ? `<div class="os-scard-focus">${esc(c.focus)}</div>` : ''}
+        ${glossaryFor(id, c)}
         ${c.ladder ? (() => { const qs = cardRows(id).filter(r => r.q && (e.q || {})[r.q.id] != null); const g = qs.reduce((a, r) => a + e.q[r.q.id], 0), o = qs.reduce((a, r) => a + r.q.m, 0);
           return qs.length ? `<div class="os-between os-q-total"><span>${qs.length} answered</span><span class="os-num">${g} / ${o} marks${o ? ' · ' + Math.round(g / o * 100) + '%' : ''}</span></div>` : ''; })() : ''}
         ${c.ladder ? questionStepper(id, e) : c.guide ? guideBody(id, e) : c.logPaper ? mockExam() : `<div class="os-scard-rows">${cardRows(id).map(r => sessRow(id, r, e)).join('')}</div>`}
@@ -610,6 +611,16 @@
             : `<button class="btn os-btn os-submit-part" data-act="sessDone" data-v="${esc(id)}">Submit incomplete · ${Math.round(part * 100)}%${sub ? ` · +${Math.round(it.min * part)} min` : ''}</button>`; })()}
       </div>` : ''}
     </article>`;
+  }
+
+  // "What the moves mean": the moves a card names, explained, behind a tap.
+  function glossaryFor(key, c) {
+    const text = (c.focus || '') + ' ' + (c.items || []).map(x => x.name + ' ' + (x.cue || '')).join(' ');
+    const terms = Object.keys(DATA.glossary || {}).filter(t => text.toLowerCase().includes(t.toLowerCase()));
+    if (!terms.length) return '';
+    const open = ui.glossOpen === key;
+    return `<div class="os-gloss"><button class="btn btn-ghost" data-act="gloss" data-v="${esc(key)}" aria-expanded="${open}">${icon(open ? 'minus' : 'question')}What the moves mean</button>
+      ${open ? `<dl>${terms.map(t => `<dt>${esc(t.charAt(0).toUpperCase() + t.slice(1))}</dt><dd>${esc(DATA.glossary[t])}</dd>`).join('')}</dl>` : ''}</div>`;
   }
 
   function moveControls(key, it) {
@@ -1374,6 +1385,7 @@
     },
     shiftWeek(v) { ui.week += +v; ui.openCard = null; ui.showPlanned = false; },
     goToday() { ui.week = 0; ui.day = todayIdx(); ui.openCard = null; ui.showPlanned = false; },
+    gloss(v) { ui.glossOpen = ui.glossOpen === v ? null : v; },
     moveOpen(v) { ui.moveOpen = v || null; },
     moveReset(v) { resetMove(v); ui.moveOpen = null; },
     showPlanned() { ui.showPlanned = !ui.showPlanned; },

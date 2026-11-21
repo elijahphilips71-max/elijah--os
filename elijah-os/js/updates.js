@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-21-tech-upgrade', date: '2026-11-21', kind: 'update',
+    title: 'Proper technical drills',
+    body: 'Wall sessions now name real moves with coaching cues and level-ups: an 8-move ball mastery circuit, half-turn and directional first touches, aerial control, step-overs, Cruyff turns, Ronaldo chops, elasticos and roulettes, and levelled juggling. Open a card and tap “What the moves mean” for how to do each one.'
+  },
+  {
     id: '2026-11-21-warmups', date: '2026-11-21', kind: 'update',
     title: 'Warm-ups before every session',
     body: 'Upper body, lower body, wall and recovery sessions now start with a 5-minute warm-up: 3 minutes on the skipping rope or bike, then 2 minutes of dynamic moves for that session. Astro sessions already had their own.'

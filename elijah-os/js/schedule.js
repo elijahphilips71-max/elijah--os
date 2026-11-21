@@ -48,6 +48,25 @@ window.ELIJAH_DATA = {
     ]
   },
 
+  // Football moves explained on any card that names them ("What the moves mean").
+  glossary: {
+    'bells': 'Tap the ball quickly between the insides of both feet, left-right-left-right, on your toes. The ball barely moves.',
+    'toe taps': 'Tap the top of the ball with the soles of your feet, alternating, as fast as you can stay clean.',
+    'sole rolls': 'Roll the ball sideways across your body with the sole, then back with the other foot.',
+    'V-pulls': 'Pull the ball back with the sole, then push it forward at an angle with the inside of the same foot: a V shape.',
+    'L-turns': 'Pull the ball back with the sole, then push it across behind your standing leg with the inside of the same foot: an L shape.',
+    'croqueta': 'Shift the ball quickly from the inside of one foot to the inside of the other, sideways, to slip past a defender.',
+    'Ronaldo chop': 'Cut the ball behind your standing leg with the inside of your foot to change direction sharply.',
+    'inside-outside': 'Touch the ball with the inside of the foot, then straight away with the outside of the same foot. The base of the elastico.',
+    'step-over': 'Swing your foot around the front of the ball without touching it, then go the other way.',
+    'Cruyff turn': 'Fake a pass or cross, then drag the ball behind your standing leg with the inside of the foot and go the opposite way.',
+    'elastico': 'Push the ball out with the outside of the foot, then snap it back with the inside of the same foot in one quick movement.',
+    'roulette': 'The Maradona turn: drag the ball back with one sole, spin, then drag it on with the other sole, turning a full circle away from a defender.',
+    'drag-back': 'Roll the ball back towards you with the sole to stop or change direction.',
+    'half-turn': 'Receive side-on with your body open, so your first touch can go forward instead of back.',
+    'shoulder check': 'A quick look over your shoulder before the ball arrives, to see space and pressure.'
+  },
+
   // Saturday past papers rotate through these subjects, one per week (positions in `subjects`).
   // You can always switch subject on the card. paperMins = default time allowed.
   paperRotation: [0, 1, 3, 2, 4],
@@ -213,54 +232,54 @@ window.ELIJAH_DATA = {
     // Every one mixes wall passing with technical work and ends with weak-foot wall passes.
     'wall-mastery': {
       kind: 'football', keep: true, title: 'Wall session: ball mastery', minutes: 35,
-      focus: 'Non-negotiable. Wall passing plus ball mastery. Quick feet, head up as much as you can.',
+      focus: 'Non-negotiable. Quick, soft touches on the balls of your feet; head up between moves. Level up: go faster, then do it all eyes-up.',
       items: [
         { name: 'Warm-up: skipping rope', reps: '3 min', warmup: true },
         { name: 'Warm-up: leg swings, hip openers, high knees', reps: '2 min', warmup: true },
-        { name: 'Two-touch wall passing, both feet', reps: '8 min' },
-        { name: 'One-touch wall passing', reps: '5 min' },
-        { name: 'Ball mastery: sole rolls, inside-outside, V-pulls, croquetas', sets: 4, reps: '60s on, 30s off (6 min)' },
-        { name: 'Tight-box dribbling: 4 cones 2 m apart, every surface of both feet', reps: '6 min' },
-        { name: 'Weak foot only wall passing', reps: '5 min' }
+        { name: 'Two-touch wall passing, both feet', reps: '6 min', cue: 'First touch out of your feet, pass on the second. Alternate inside foot and laces' },
+        { name: 'One-touch wall passing', reps: '4 min', cue: 'Lock your ankle, follow through to the target' },
+        { name: 'Ball mastery circuit: bells, toe taps, sole rolls, V-pulls, L-turns, croquetas, Ronaldo chops, inside-outside', sets: 8, reps: '40s on, 20s off (8 min)', cue: 'One move per set, both feet' },
+        { name: 'Tight-box combos: 4 cones 2 m apart', reps: '7 min', cue: 'Croqueta through each gate, chop at each corner. Level up: eyes on a fixed point, not the ball' },
+        { name: 'Weak foot only wall passing', reps: '5 min', cue: 'Same quality as your strong foot, slower if you need to' }
       ]
     },
     'wall-touch': {
       kind: 'football', keep: true, title: 'Wall session: first touch', minutes: 35,
-      focus: 'Non-negotiable. Wall passing plus first touch. Every touch sets up the next action.',
+      focus: 'Non-negotiable. Every first touch sets up the next action: check your shoulder before the ball arrives.',
       items: [
         { name: 'Warm-up: easy bike', reps: '3 min', warmup: true },
         { name: 'Warm-up: leg swings, hip openers, high knees', reps: '2 min', warmup: true },
-        { name: 'Two-touch wall passing, both feet', reps: '7 min' },
-        { name: 'Receive across your body off the wall, turn, pass back', reps: '8 min' },
-        { name: 'Juggling: alternate feet, beat your record', reps: '6 min' },
-        { name: 'Throw-ups: cushion with thigh, chest, then foot', reps: '4 min' },
-        { name: 'Weak foot only wall passing', reps: '5 min' }
+        { name: 'Two-touch wall passing, both feet', reps: '6 min', cue: 'Touch to the side you pass with next' },
+        { name: 'Half-turn receive off the wall', reps: '8 min', cue: 'Shoulder check, open your hips, receive on the back foot, first touch at 45° into space, pass back. Alternate sides' },
+        { name: 'Directional first touch', reps: '5 min', cue: 'Take it away with the outside of the foot, then stop it dead with the sole and go. Both feet' },
+        { name: 'Aerial control: throw it high', reps: '5 min', cue: 'Kill it dead on the laces, then thigh to foot, then chest to foot. Ball stays within a step' },
+        { name: 'Weak foot only wall passing', reps: '6 min', cue: 'First touch and pass with the weak foot only' }
       ]
     },
     'wall-dribble': {
       kind: 'football', keep: true, title: 'Wall session: dribbling at speed', minutes: 35,
-      focus: 'Non-negotiable. Wall passing plus dribbling. Sharp changes of direction, then accelerate.',
+      focus: 'Non-negotiable. Sell the fake, then explode out of it. Ball close until the burst.',
       items: [
         { name: 'Warm-up: skipping rope', reps: '3 min', warmup: true },
         { name: 'Warm-up: leg swings, hip openers, high knees', reps: '2 min', warmup: true },
-        { name: 'One-touch wall passing', reps: '6 min' },
-        { name: 'Cone slalom: 6 cones, both feet, out and back', reps: '6 min' },
-        { name: 'Skill moves at a cone: drag-back, step-over, Cruyff, then burst 5 m', reps: '8 min' },
-        { name: 'Wall pass, take a touch out of your feet, burst 5 m', reps: '5 min' },
-        { name: 'Weak foot only wall passing', reps: '5 min' }
+        { name: 'One-touch wall passing', reps: '5 min', cue: 'On your toes, quick feet between passes' },
+        { name: 'Cone slalom: 6 cones 1 m apart', reps: '5 min', cue: 'Inside-outside with one foot, then weak foot only, then sole rolls through. Touch in every gap' },
+        { name: 'Skill moves at a cone, then burst 5 m', reps: '10 min', cue: '5 reps each: step-over, Cruyff turn, Ronaldo chop, elastico, roulette' },
+        { name: 'Match combos at speed', reps: '5 min', cue: 'Step-over → chop → burst. Drag-back → croqueta → burst. Finish with a pass into the wall' },
+        { name: 'Weak foot only wall passing', reps: '5 min', cue: 'Weak foot only, keep the tempo high' }
       ]
     },
     'wall-juggle': {
       kind: 'football', keep: true, title: 'Wall session: juggling and close control', minutes: 35,
-      focus: 'Non-negotiable. Wall passing plus close control. Soft touches, ball close.',
+      focus: 'Non-negotiable. Soft touches, ball close. Beat your record every week.',
       items: [
         { name: 'Warm-up: easy bike', reps: '3 min', warmup: true },
         { name: 'Warm-up: leg swings, hip openers, high knees', reps: '2 min', warmup: true },
-        { name: 'Two-touch wall passing, both feet', reps: '8 min' },
-        { name: 'Juggling: feet only, then weak foot only', reps: '8 min' },
-        { name: 'Toe taps, bells and sole rolls', sets: 4, reps: '45s on, 30s off (5 min)' },
-        { name: 'Receive off the wall on your back foot and turn', reps: '4 min' },
-        { name: 'Weak foot only wall passing', reps: '5 min' }
+        { name: 'Two-touch wall passing, both feet', reps: '6 min', cue: 'Cushion the first touch, ball under control before passing' },
+        { name: 'Juggling progressions', reps: '8 min', cue: 'Level 1: 20 alternate feet. Level 2: foot, thigh, foot, head. Level 3: 20 weak foot only. Level 4: low juggles below the knee' },
+        { name: 'Close-control circuit: bells, toe taps, sole roll to inside, inside-outside, croqueta', sets: 5, reps: '45s on, 15s off (5 min)', cue: 'One move per set, as fast as you can stay clean' },
+        { name: 'Receive on the back foot off the wall and turn', reps: '5 min', cue: 'Shoulder check, open up, first touch past your standing leg, then pass back' },
+        { name: 'Weak foot only wall passing', reps: '6 min', cue: 'Weak foot only' }
       ]
     },
     'wall-light': {
@@ -269,10 +288,10 @@ window.ELIJAH_DATA = {
       items: [
         { name: 'Warm-up: skipping rope, easy pace', reps: '3 min', warmup: true },
         { name: 'Warm-up: leg swings, hip openers', reps: '2 min', warmup: true },
-        { name: 'Easy one- and two-touch wall passing', reps: '10 min' },
-        { name: 'Juggling, relaxed', reps: '8 min' },
-        { name: 'Gentle ball mastery: sole rolls, inside-outside', reps: '6 min' },
-        { name: 'Weak foot only wall passing', reps: '6 min' }
+        { name: 'Easy one- and two-touch wall passing', reps: '10 min', cue: 'Relaxed, crisp passes' },
+        { name: 'Juggling, relaxed', reps: '8 min', cue: 'Alternate feet, no pressure' },
+        { name: 'Gentle ball mastery: bells, toe taps, sole rolls', reps: '6 min', cue: 'Light and quick, not tiring' },
+        { name: 'Weak foot only wall passing', reps: '6 min', cue: 'Weak foot only, easy pace' }
       ]
     },
     'hustle': {
