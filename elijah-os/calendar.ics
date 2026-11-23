@@ -42,6 +42,28 @@ TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
+UID:plan-0-lower-a@elijah-os
+DTSTAMP:20261109T000000Z
+DTSTART:20261109T181500
+DTEND:20261109T185000
+RRULE:FREQ=WEEKLY
+SUMMARY:Lower body A (strength)
+DESCRIPTION:Strength\, the day after the match: stop 2–3 reps short on eve
+ ry set. Played 60+ minutes yesterday\, or legs 2 or lower in the check-in
+ ? Do one set less of each.\n• Warm-up: easy bike — 3 min\n• Warm-up: leg 
+ swings\, glute bridges ×10\, bodyweight squats ×10 — 2 min\n• Rear-foot e
+ levated split squats (back foot on a chair or step) — 3 × 6–8 each leg\n•
+  Single-leg RDL — 3 × 8 each leg\n• Nordic curl negatives (lower as slowl
+ y as you can) — 3 × 3–5\n• Copenhagen plank (top knee on a bench\, side p
+ lank\, short lever) — 3 × 15–20s each side\n• Single-leg calf raises (on 
+ a step) — 2 × 12–15 each leg
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Lower body A (strength)
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
 UID:plan-0-match-review@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261109T190000
@@ -100,20 +122,19 @@ BEGIN:VEVENT
 UID:plan-1-lower-body@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261110T170000
-DTEND:20261110T174000
+DTEND:20261110T173000
 RRULE:FREQ=WEEKLY
-SUMMARY:Lower body at home (light)
-DESCRIPTION:Plyos first while you’re fresh\, low and springy (academy is t
- omorrow). Then strength: stop 2–3 reps short on every set.\n• Warm-up: ea
- sy bike — 3 min\n• Warm-up: leg swings\, walking lunges\, glute bridges ×
- 10 — 2 min\n• Plyometrics: pogo hops (quick\, stiff ankles) — 2 × 15\n• P
- lyometrics: lateral bounds (stick each landing) — 2 × 5 each side\n• Spli
- t squats — 2 × 8 each leg\n• Single-leg RDL — 2 × 8 each leg\n• Single-le
- g glute bridge — 2 × 12\n• Nordic curl negatives — 2 × 3–5\n• Skill snack
- : tuck L-sit holds — 10 min
+SUMMARY:Lower body B (power\, light)
+DESCRIPTION:Light and springy: academy is tomorrow. Plyos first while you’
+ re fresh\; the heavy strength work was on Monday.\n• Warm-up: easy bike —
+  3 min\n• Warm-up: leg swings\, walking lunges\, glute bridges ×10 — 2 mi
+ n\n• Plyometrics: pogo hops (quick\, stiff ankles) — 2 × 15\n• Plyometric
+ s: lateral bounds (stick each landing) — 2 × 5 each side\n• Single-leg gl
+ ute bridge — 2 × 12 each leg\n• Lateral lunges — 2 × 8 each side\n• Skill
+  snack: tuck L-sit holds — 10 min
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Lower body at home (light)
+DESCRIPTION:Lower body B (power\, light)
 TRIGGER:-PT10M
 END:VALARM
 END:VEVENT
