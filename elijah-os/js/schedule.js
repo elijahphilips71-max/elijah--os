@@ -1,6 +1,6 @@
 // Elijah OS — the data you are most likely to edit.
 // Change the weekly schedule, session cards, exam date, subjects or benchmarks here, save, and reload the app.
-// (Claude Code can edit this file for you: "add Nordic curls to the lower-body session", "add Circle theorems to Maths".)
+// (Claude Code can edit this file for you: "add calf raises to the lower-body session", "add Circle theorems to Maths".)
 
 window.ELIJAH_DATA = {
   name: 'Elijah',
@@ -209,7 +209,7 @@ window.ELIJAH_DATA = {
         { name: 'Warm-up: leg swings, glute bridges ×10, bodyweight squats ×10', reps: '2 min', warmup: true },
         { name: 'Rear-foot elevated split squats (back foot on a chair or step)', sets: 3, reps: '6–8 each leg', rest: '90s' },
         { name: 'Single-leg RDL', sets: 3, reps: '8 each leg', rest: '60s' },
-        { name: 'Nordic curl negatives (lower as slowly as you can)', sets: 3, reps: '3–5', rest: '90s' },
+        { name: 'Slider hamstring curls (socks on a hard floor, or heels on a towel)', sets: 3, reps: '6–8', rest: '90s', cue: 'Bridge up, slide your heels out slowly over 3–4 s keeping hips up, pull back in. Too hard: slide out only, then walk your feet back. Too easy: one leg. Someone to hold your ankles? Do Nordics instead' },
         { name: 'Copenhagen plank (top knee on a bench, side plank, short lever)', sets: 3, reps: '15–20s each side', rest: '45s' },
         { name: 'Single-leg calf raises (on a step)', sets: 2, reps: '12–15 each leg', rest: '45s' }
       ]
