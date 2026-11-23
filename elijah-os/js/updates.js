@@ -9,9 +9,14 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-23-sliders', date: '2026-11-23', kind: 'update',
+    title: 'Nordics swapped for slider curls',
+    body: 'No anchor for Nordics? Monday now has slider hamstring curls: socks on a hard floor, bridge up, slide your heels out slowly over 3–4 seconds and pull back in. Same hamstring protection, no equipment.'
+  },
+  {
     id: '2026-11-23-lower-a', date: '2026-11-23', kind: 'update',
     title: 'Lower body twice a week',
-    body: 'Monday now has lower-body strength at 18:15: rear-foot elevated split squats, single-leg RDLs, Nordics, Copenhagen planks and calf raises. Tuesday’s lower-body session is now the light, springy one (plyos, glute bridges, lateral lunges), so your legs are fresh for academy.'
+    body: 'Monday now has lower-body strength at 18:15: rear-foot elevated split squats, single-leg RDLs, slider hamstring curls, Copenhagen planks and calf raises. Tuesday’s lower-body session is now the light, springy one (plyos, glute bridges, lateral lunges), so your legs are fresh for academy.'
   },
   {
     id: '2026-11-21-moves-library', date: '2026-11-21', kind: 'update',
