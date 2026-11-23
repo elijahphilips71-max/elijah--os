@@ -89,10 +89,10 @@ window.ELIJAH_DATA = {
   // sessions lists the session cards for that day: [id, start time] (ids from `sessions` below).
   // Leave the time out (just the id) for an all-day item. Times feed the calendar (calendar.ics).
   schedule: [
-    { day: 'Mon', title: 'Recovery + upper body', load: 'Medium',
+    { day: 'Mon', title: 'Upper + lower body', load: 'Medium',
       time: 'After school · Maths 40 min', sub: 'Leave 08:20 · school 08:50–15:25',
-      mission: 'Upper body with 2 reps in reserve, then 40 minutes of Maths from the revision guide. Review Sunday’s match.',
-      sessions: [['upper-cali', '16:15'], ['rev-maths', '17:30'], ['match-review', '19:00'], ['wall-mastery', '19:10']] },
+      mission: 'Upper body, Maths, then lower-body strength with 2–3 reps in reserve. Review Sunday’s match.',
+      sessions: [['upper-cali', '16:15'], ['rev-maths', '17:30'], ['lower-a', '18:15'], ['match-review', '19:00'], ['wall-mastery', '19:10']] },
     { day: 'Tue', title: 'Astro skills + lower body', load: 'Medium',
       time: '15:45 · Physics 40 min', sub: 'Leave 08:20 · school 08:50–15:25',
       mission: 'Skill sequences at 75% pace, light legs, then 40 minutes of Physics from the revision guide.',
@@ -201,18 +201,29 @@ window.ELIJAH_DATA = {
         { name: 'Weak foot: throw the ball up and control it with your weak foot (or thigh or chest first), then weak-foot finishes', reps: '10 min' }
       ]
     },
+    'lower-a': {
+      kind: 'gym', title: 'Lower body A (strength)', minutes: 35,
+      focus: 'Strength, the day after the match: stop 2–3 reps short on every set. Played 60+ minutes yesterday, or legs 2 or lower in the check-in? Do one set less of each.',
+      items: [
+        { name: 'Warm-up: easy bike', reps: '3 min', warmup: true },
+        { name: 'Warm-up: leg swings, glute bridges ×10, bodyweight squats ×10', reps: '2 min', warmup: true },
+        { name: 'Rear-foot elevated split squats (back foot on a chair or step)', sets: 3, reps: '6–8 each leg', rest: '90s' },
+        { name: 'Single-leg RDL', sets: 3, reps: '8 each leg', rest: '60s' },
+        { name: 'Nordic curl negatives (lower as slowly as you can)', sets: 3, reps: '3–5', rest: '90s' },
+        { name: 'Copenhagen plank (top knee on a bench, side plank, short lever)', sets: 3, reps: '15–20s each side', rest: '45s' },
+        { name: 'Single-leg calf raises (on a step)', sets: 2, reps: '12–15 each leg', rest: '45s' }
+      ]
+    },
     'lower-body': {
-      kind: 'gym', title: 'Lower body at home (light)', minutes: 40,
-      focus: 'Plyos first while you’re fresh, low and springy (academy is tomorrow). Then strength: stop 2–3 reps short on every set.',
+      kind: 'gym', title: 'Lower body B (power, light)', minutes: 30,
+      focus: 'Light and springy: academy is tomorrow. Plyos first while you’re fresh; the heavy strength work was on Monday.',
       items: [
         { name: 'Warm-up: easy bike', reps: '3 min', warmup: true },
         { name: 'Warm-up: leg swings, walking lunges, glute bridges ×10', reps: '2 min', warmup: true },
         { name: 'Plyometrics: pogo hops (quick, stiff ankles)', sets: 2, reps: '15', rest: '60s', plyo: true },
         { name: 'Plyometrics: lateral bounds (stick each landing)', sets: 2, reps: '5 each side', rest: '60s', plyo: true },
-        { name: 'Split squats', sets: 2, reps: '8 each leg' },
-        { name: 'Single-leg RDL', sets: 2, reps: '8 each leg' },
-        { name: 'Single-leg glute bridge', sets: 2, reps: '12' },
-        { name: 'Nordic curl negatives', sets: 2, reps: '3–5' },
+        { name: 'Single-leg glute bridge', sets: 2, reps: '12 each leg' },
+        { name: 'Lateral lunges', sets: 2, reps: '8 each side' },
         { name: 'Skill snack: tuck L-sit holds', reps: '10 min' }
       ]
     },

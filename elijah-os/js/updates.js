@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-23-lower-a', date: '2026-11-23', kind: 'update',
+    title: 'Lower body twice a week',
+    body: 'Monday now has lower-body strength at 18:15: rear-foot elevated split squats, single-leg RDLs, Nordics, Copenhagen planks and calf raises. Tuesday’s lower-body session is now the light, springy one (plyos, glute bridges, lateral lunges), so your legs are fresh for academy.'
+  },
+  {
     id: '2026-11-21-moves-library', date: '2026-11-21', kind: 'update',
     title: 'Moves library',
     body: 'Every move in your sessions now has step-by-step instructions, a key tip and the common mistake, in its own Moves library (menu → Moves library). Cards just show one link, “How to do these moves”, that opens the moves for that card.'
