@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-27-warmups-2', date: '2026-11-27', kind: 'update',
+    title: 'Proper warm-ups and cool-downs',
+    body: 'Astro sessions now start with a 12-minute warm-up in four stages (raise, mobilise, activate, sharpen) and end with a 5-minute cool-down. Strength sessions add one easy ramp-up set before the real work.'
+  },
+  {
     id: '2026-11-27-fatigue-skills', date: '2026-11-27', kind: 'update',
     title: 'Skills under fatigue',
     body: 'Both astro sessions now end with a block of fast skills while you’re tired, so your touch holds up late in games. Tuesday: 12 minutes of ball mastery into dribble, move and finish. Friday: 8 minutes of shuttles into a move and a finish. Slow the move down, never the effort.'

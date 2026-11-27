@@ -10,16 +10,17 @@ BEGIN:VEVENT
 UID:plan-0-upper-cali@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261109T161500
-DTEND:20261109T170000
+DTEND:20261109T170200
 RRULE:FREQ=WEEKLY
 SUMMARY:Upper-body calisthenics
 DESCRIPTION:Stop 2 reps short on every set. Quality over fatigue.\n• Warm-
  up: skipping rope — 3 min\n• Warm-up: arm circles\, inchworms ×5 — 2 min\
  n• Warm-up: wrist circles\, shoulder dislocates\, scap pull-ups — 5 min\n
- • Chest-to-wall handstand — 5 × 15–20s\n• Pull-ups — 3 × ~8–10\, stop 2 s
- hort\n• Dips\, elbows to ~90° — 3 × stop 2 short\n• Inverted rows — 3 × 1
- 0–12\n• Hollow hold — 4 × 10–15s\n• Tuck L-sit on dip bars — 3 × 10s\n• M
- obility: hips\, hamstrings\, groin — 10 min
+ • Ramp-up: 1 easy set of pull-ups at half effort — 2 min\n• Chest-to-wall
+  handstand — 5 × 15–20s\n• Pull-ups — 3 × ~8–10\, stop 2 short\n• Dips\, 
+ elbows to ~90° — 3 × stop 2 short\n• Inverted rows — 3 × 10–12\n• Hollow 
+ hold — 4 × 10–15s\n• Tuck L-sit on dip bars — 3 × 10s\n• Mobility: hips\,
+  hamstrings\, groin — 10 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Upper-body calisthenics
@@ -45,18 +46,19 @@ BEGIN:VEVENT
 UID:plan-0-lower-a@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261109T181500
-DTEND:20261109T185000
+DTEND:20261109T185200
 RRULE:FREQ=WEEKLY
 SUMMARY:Lower body A (strength)
 DESCRIPTION:Strength\, the day after the match: stop 2–3 reps short on eve
  ry set. Played 60+ minutes yesterday\, or legs 2 or lower in the check-in
  ? Do one set less of each.\n• Warm-up: easy bike — 3 min\n• Warm-up: leg 
- swings\, glute bridges ×10\, bodyweight squats ×10 — 2 min\n• Rear-foot e
- levated split squats (back foot on a chair or step) — 3 × 6–8 each leg\n•
-  Single-leg RDL — 3 × 8 each leg\n• Slider hamstring curls (socks on a ha
- rd floor\, or heels on a towel) — 3 × 6–8\n• Copenhagen plank (top knee o
- n a bench\, side plank\, short lever) — 3 × 15–20s each side\n• Single-le
- g calf raises (on a step) — 2 × 12–15 each leg
+ swings\, glute bridges ×10\, bodyweight squats ×10 — 2 min\n• Ramp-up: 1 
+ easy set of split squats at half effort — 2 min\n• Rear-foot elevated spl
+ it squats (back foot on a chair or step) — 3 × 6–8 each leg\n• Single-leg
+  RDL — 3 × 8 each leg\n• Slider hamstring curls (socks on a hard floor\, 
+ or heels on a towel) — 3 × 6–8\n• Copenhagen plank (top knee on a bench\,
+  side plank\, short lever) — 3 × 15–20s each side\n• Single-leg calf rais
+ es (on a step) — 2 × 12–15 each leg
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Lower body A (strength)
@@ -103,18 +105,24 @@ BEGIN:VEVENT
 UID:plan-1-astro-skill@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261110T154500
-DTEND:20261110T163200
+DTEND:20261110T164100
 RRULE:FREQ=WEEKLY
 SUMMARY:Astro: skill sequences
 DESCRIPTION:Solo: just balls and cones. Bring 3+ balls and 4–6 cones. Abou
- t 75% pace: half speed first\, then full speed.\n• Warm-up: jog\, dynamic
-  stretches\, 3 build-ups — 8 min\n• Back to goal\, roll the ball past you
- r side\, open up and take it on the half-turn\, drive past a cone\, shoot
-  — 4 × 5 reps\n• Weak foot: throw the ball up and control it with your we
- ak foot (or thigh or chest first)\, then weak-foot finishes — 10 min\n• S
- kills under fatigue: 20s fast ball mastery (croquetas\, inside-outside\, 
- sole rolls) → 10 m dribble flat out → Ronaldo chop or Cruyff turn at the 
- cone → sprint back → finish — 2 × 6 rounds\, 40s rest
+ t 75% pace: half speed first\, then full speed.\n• Warm-up 1\, raise: eas
+ y jog with the ball\, light touches with both feet — 3 min\n• Warm-up 2\,
+  mobilise: leg swings (front and side)\, hip openers\, walking lunges wit
+ h a twist\, inchworms — 3 min\n• Warm-up 3\, activate: glute bridges ×10\
+ , A-skips\, carioca\, high knees — 2 min\n• Warm-up 4\, sharpen: 3 build-
+ ups at 70%\, 80%\, 90%\, quick feet\, 2 short sprints with the ball — 4 m
+ in\n• Back to goal\, roll the ball past your side\, open up and take it o
+ n the half-turn\, drive past a cone\, shoot — 4 × 5 reps\n• Weak foot: th
+ row the ball up and control it with your weak foot (or thigh or chest fir
+ st)\, then weak-foot finishes — 10 min\n• Skills under fatigue: 20s fast 
+ ball mastery (croquetas\, inside-outside\, sole rolls) → 10 m dribble fla
+ t out → Ronaldo chop or Cruyff turn at the cone → sprint back → finish — 
+ 2 × 6 rounds\, 40s rest\n• Cool-down: 2 min easy jog\, then stretch hamst
+ rings\, quads\, hip flexors and calves — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Astro: skill sequences
@@ -125,16 +133,17 @@ BEGIN:VEVENT
 UID:plan-1-lower-body@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261110T170000
-DTEND:20261110T173000
+DTEND:20261110T173200
 RRULE:FREQ=WEEKLY
 SUMMARY:Lower body B (power\, light)
 DESCRIPTION:Light and springy: academy is tomorrow. Plyos first while you’
  re fresh\; the heavy strength work was on Monday.\n• Warm-up: easy bike —
   3 min\n• Warm-up: leg swings\, walking lunges\, glute bridges ×10 — 2 mi
- n\n• Plyometrics: pogo hops (quick\, stiff ankles) — 2 × 15\n• Plyometric
- s: lateral bounds (stick each landing) — 2 × 5 each side\n• Single-leg gl
- ute bridge — 2 × 12 each leg\n• Lateral lunges — 2 × 8 each side\n• Skill
-  snack: tuck L-sit holds — 10 min
+ n\n• Ramp-up: 1 easy set of glute bridges at half effort — 2 min\n• Plyom
+ etrics: pogo hops (quick\, stiff ankles) — 2 × 15\n• Plyometrics: lateral
+  bounds (stick each landing) — 2 × 5 each side\n• Single-leg glute bridge
+  — 2 × 12 each leg\n• Lateral lunges — 2 × 8 each side\n• Skill snack: tu
+ ck L-sit holds — 10 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Lower body B (power\, light)
@@ -284,22 +293,27 @@ BEGIN:VEVENT
 UID:plan-4-astro-speed@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261113T154500
-DTEND:20261113T163800
+DTEND:20261113T164500
 RRULE:FREQ=WEEKLY
 SUMMARY:Astro: speed + match reps
 DESCRIPTION:Solo. Bring 3+ balls and 6 cones so you’re not chasing balls. 
- Full recovery between sprints\; stop after 2 slow reps.\n• Warm-up: A-ski
- ps\, strides — 10 min\n• Plyometrics: broad jumps (max effort\, stick the
-  landing) — 3 × 3\n• Plyometrics: single-leg bounds — 2 × 4 each leg\n• 1
- 0m sprints — 3 × 1\n• 20m sprints — 2 × 1\n• Runs in behind: knock the ba
- ll past a cone into space\, sprint onto it\, one touch\, shoot — 6–8 reps
- \n• Near-post darts: set the ball out wide\, dart to the near post\, fini
- sh first time — 6–8 reps\, half weak foot\n• 1v1 into shot: run at a cone
-  “defender” at speed\, do a move\, burst past\, shoot — 6–8 reps\n• Finis
- hing from self-set balls\, at least half weak foot — 10 min\n• Skills und
- er fatigue: 2 hard 20 m shuttles → set yourself a ball → beat a cone with
-  a move → finish — 4 × 1 round\n• Skill snack: handstand kick-ups — 10 mi
- n
+ Full recovery between sprints\; stop after 2 slow reps.\n• Warm-up 1\, ra
+ ise: easy jog with the ball\, light touches with both feet — 3 min\n• War
+ m-up 2\, mobilise: leg swings (front and side)\, hip openers\, walking lu
+ nges with a twist\, inchworms — 3 min\n• Warm-up 3\, activate: glute brid
+ ges ×10\, A-skips\, B-skips\, carioca — 2 min\n• Warm-up 4\, sharpen: qui
+ ck feet\, 3 strides at 70%\, 80%\, 90% — 4 min\n• Plyometrics: broad jump
+ s (max effort\, stick the landing) — 3 × 3\n• Plyometrics: single-leg bou
+ nds — 2 × 4 each leg\n• 10m sprints — 3 × 1\n• 20m sprints — 2 × 1\n• Run
+ s in behind: knock the ball past a cone into space\, sprint onto it\, one
+  touch\, shoot — 6–8 reps\n• Near-post darts: set the ball out wide\, dar
+ t to the near post\, finish first time — 6–8 reps\, half weak foot\n• 1v1
+  into shot: run at a cone “defender” at speed\, do a move\, burst past\, 
+ shoot — 6–8 reps\n• Finishing from self-set balls\, at least half weak fo
+ ot — 10 min\n• Skills under fatigue: 2 hard 20 m shuttles → set yourself 
+ a ball → beat a cone with a move → finish — 4 × 1 round\n• Skill snack: h
+ andstand kick-ups — 10 min\n• Cool-down: 2 min easy jog\, then stretch ha
+ mstrings\, quads\, hip flexors and calves — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Astro: speed + match reps
@@ -406,18 +420,19 @@ BEGIN:VEVENT
 UID:plan-5-upper-cali-b@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261114T160000
-DTEND:20261114T164500
+DTEND:20261114T164700
 RRULE:FREQ=WEEKLY
 SUMMARY:Upper-body calisthenics B (push + skill)
 DESCRIPTION:Second upper-body day: push and skill focus\, legs rest for Su
  nday. Stop 2 reps short on every set.\n• Warm-up: easy bike — 3 min\n• Wa
  rm-up: arm circles\, inchworms ×5 — 2 min\n• Warm-up: wrist circles\, sho
- ulder dislocates\, scap push-ups — 5 min\n• Handstand practice: chest-to-
- wall holds or kick-ups — 5 × 15–20s\n• Pike push-ups (feet on a step when
-  they get easy) — 3 × 8–10\, stop 2 short\n• Chin-ups (palms facing you) 
- — 3 × stop 2 short\n• Archer or diamond push-ups — 3 × 6–10\n• Feet-up in
- verted rows — 3 × 8–12\n• Hollow body rocks — 3 × 15–20s\n• Mobility: sho
- ulders and upper back — 5 min
+ ulder dislocates\, scap push-ups — 5 min\n• Ramp-up: 1 easy set of pike p
+ ush-ups at half effort — 2 min\n• Handstand practice: chest-to-wall holds
+  or kick-ups — 5 × 15–20s\n• Pike push-ups (feet on a step when they get 
+ easy) — 3 × 8–10\, stop 2 short\n• Chin-ups (palms facing you) — 3 × stop
+  2 short\n• Archer or diamond push-ups — 3 × 6–10\n• Feet-up inverted row
+ s — 3 × 8–12\n• Hollow body rocks — 3 × 15–20s\n• Mobility: shoulders and
+  upper back — 5 min
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Upper-body calisthenics B (push + skill)

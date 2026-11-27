@@ -156,12 +156,13 @@ window.ELIJAH_DATA = {
       ]
     },
     'upper-cali-b': {
-      kind: 'gym', title: 'Upper-body calisthenics B (push + skill)', minutes: 45,
+      kind: 'gym', title: 'Upper-body calisthenics B (push + skill)', minutes: 47,
       focus: 'Second upper-body day: push and skill focus, legs rest for Sunday. Stop 2 reps short on every set.',
       items: [
         { name: 'Warm-up: easy bike', reps: '3 min', warmup: true },
         { name: 'Warm-up: arm circles, inchworms ×5', reps: '2 min', warmup: true },
         { name: 'Warm-up: wrist circles, shoulder dislocates, scap push-ups', reps: '5 min' },
+        { name: 'Ramp-up: 1 easy set of pike push-ups at half effort', reps: '2 min', warmup: true },
         { name: 'Handstand practice: chest-to-wall holds or kick-ups', sets: 5, reps: '15–20s' },
         { name: 'Pike push-ups (feet on a step when they get easy)', sets: 3, reps: '8–10, stop 2 short' },
         { name: 'Chin-ups (palms facing you)', sets: 3, reps: 'stop 2 short' },
@@ -172,12 +173,13 @@ window.ELIJAH_DATA = {
       ]
     },
     'upper-cali': {
-      kind: 'gym', title: 'Upper-body calisthenics', minutes: 45,
+      kind: 'gym', title: 'Upper-body calisthenics', minutes: 47,
       focus: 'Stop 2 reps short on every set. Quality over fatigue.',
       items: [
         { name: 'Warm-up: skipping rope', reps: '3 min', warmup: true },
         { name: 'Warm-up: arm circles, inchworms ×5', reps: '2 min', warmup: true },
         { name: 'Warm-up: wrist circles, shoulder dislocates, scap pull-ups', reps: '5 min' },
+        { name: 'Ramp-up: 1 easy set of pull-ups at half effort', reps: '2 min', warmup: true },
         { name: 'Chest-to-wall handstand', sets: 5, reps: '15–20s' },
         { name: 'Pull-ups', sets: 3, reps: '~8–10, stop 2 short' },
         { name: 'Dips, elbows to ~90°', sets: 3, reps: 'stop 2 short' },
@@ -193,21 +195,26 @@ window.ELIJAH_DATA = {
       items: [{ name: '3 good actions' }, { name: '1 repeated problem' }]
     },
     'astro-skill': {
-      kind: 'football', title: 'Astro: skill sequences', minutes: 47,
+      kind: 'football', title: 'Astro: skill sequences', minutes: 56,
       focus: 'Solo: just balls and cones. Bring 3+ balls and 4–6 cones. About 75% pace: half speed first, then full speed.',
       items: [
-        { name: 'Warm-up: jog, dynamic stretches, 3 build-ups', reps: '8 min' },
+        { name: 'Warm-up 1, raise: easy jog with the ball, light touches with both feet', reps: '3 min', warmup: true },
+        { name: 'Warm-up 2, mobilise: leg swings (front and side), hip openers, walking lunges with a twist, inchworms', reps: '3 min', warmup: true },
+        { name: 'Warm-up 3, activate: glute bridges ×10, A-skips, carioca, high knees', reps: '2 min', warmup: true },
+        { name: 'Warm-up 4, sharpen: 3 build-ups at 70%, 80%, 90%, quick feet, 2 short sprints with the ball', reps: '4 min', warmup: true },
         { name: 'Back to goal, roll the ball past your side, open up and take it on the half-turn, drive past a cone, shoot', sets: 4, reps: '5 reps', rest: 'half then full speed' },
         { name: 'Weak foot: throw the ball up and control it with your weak foot (or thigh or chest first), then weak-foot finishes', reps: '10 min' },
-        { name: 'Skills under fatigue: 20s fast ball mastery (croquetas, inside-outside, sole rolls) → 10 m dribble flat out → Ronaldo chop or Cruyff turn at the cone → sprint back → finish', sets: 2, reps: '6 rounds, 40s rest', rest: '2 min between sets', cue: 'Last block on purpose. Slow the move down, never the effort. Stop the set if your touch falls apart' }
+        { name: 'Skills under fatigue: 20s fast ball mastery (croquetas, inside-outside, sole rolls) → 10 m dribble flat out → Ronaldo chop or Cruyff turn at the cone → sprint back → finish', sets: 2, reps: '6 rounds, 40s rest', rest: '2 min between sets', cue: 'Last block on purpose. Slow the move down, never the effort. Stop the set if your touch falls apart' },
+        { name: 'Cool-down: 2 min easy jog, then stretch hamstrings, quads, hip flexors and calves', reps: '5 min' }
       ]
     },
     'lower-a': {
-      kind: 'gym', title: 'Lower body A (strength)', minutes: 35,
+      kind: 'gym', title: 'Lower body A (strength)', minutes: 37,
       focus: 'Strength, the day after the match: stop 2–3 reps short on every set. Played 60+ minutes yesterday, or legs 2 or lower in the check-in? Do one set less of each.',
       items: [
         { name: 'Warm-up: easy bike', reps: '3 min', warmup: true },
         { name: 'Warm-up: leg swings, glute bridges ×10, bodyweight squats ×10', reps: '2 min', warmup: true },
+        { name: 'Ramp-up: 1 easy set of split squats at half effort', reps: '2 min', warmup: true },
         { name: 'Rear-foot elevated split squats (back foot on a chair or step)', sets: 3, reps: '6–8 each leg', rest: '90s' },
         { name: 'Single-leg RDL', sets: 3, reps: '8 each leg', rest: '60s' },
         { name: 'Slider hamstring curls (socks on a hard floor, or heels on a towel)', sets: 3, reps: '6–8', rest: '90s', cue: 'Bridge up, slide your heels out slowly over 3–4 s keeping hips up, pull back in. Too hard: slide out only, then walk your feet back. Too easy: one leg. Someone to hold your ankles? Do Nordics instead' },
@@ -216,11 +223,12 @@ window.ELIJAH_DATA = {
       ]
     },
     'lower-body': {
-      kind: 'gym', title: 'Lower body B (power, light)', minutes: 30,
+      kind: 'gym', title: 'Lower body B (power, light)', minutes: 32,
       focus: 'Light and springy: academy is tomorrow. Plyos first while you’re fresh; the heavy strength work was on Monday.',
       items: [
         { name: 'Warm-up: easy bike', reps: '3 min', warmup: true },
         { name: 'Warm-up: leg swings, walking lunges, glute bridges ×10', reps: '2 min', warmup: true },
+        { name: 'Ramp-up: 1 easy set of glute bridges at half effort', reps: '2 min', warmup: true },
         { name: 'Plyometrics: pogo hops (quick, stiff ankles)', sets: 2, reps: '15', rest: '60s', plyo: true },
         { name: 'Plyometrics: lateral bounds (stick each landing)', sets: 2, reps: '5 each side', rest: '60s', plyo: true },
         { name: 'Single-leg glute bridge', sets: 2, reps: '12 each leg' },
@@ -234,10 +242,13 @@ window.ELIJAH_DATA = {
       items: [{ name: 'Choose today’s cue before you leave' }, { name: 'After training: did you do it?' }]
     },
     'astro-speed': {
-      kind: 'football', title: 'Astro: speed + match reps', minutes: 53,
+      kind: 'football', title: 'Astro: speed + match reps', minutes: 60,
       focus: 'Solo. Bring 3+ balls and 6 cones so you’re not chasing balls. Full recovery between sprints; stop after 2 slow reps.',
       items: [
-        { name: 'Warm-up: A-skips, strides', reps: '10 min' },
+        { name: 'Warm-up 1, raise: easy jog with the ball, light touches with both feet', reps: '3 min', warmup: true },
+        { name: 'Warm-up 2, mobilise: leg swings (front and side), hip openers, walking lunges with a twist, inchworms', reps: '3 min', warmup: true },
+        { name: 'Warm-up 3, activate: glute bridges ×10, A-skips, B-skips, carioca', reps: '2 min', warmup: true },
+        { name: 'Warm-up 4, sharpen: quick feet, 3 strides at 70%, 80%, 90%', reps: '4 min', warmup: true },
         { name: 'Plyometrics: broad jumps (max effort, stick the landing)', sets: 3, reps: '3', rest: 'full recovery', plyo: true },
         { name: 'Plyometrics: single-leg bounds', sets: 2, reps: '4 each leg', rest: 'full recovery', plyo: true },
         { name: '10m sprints', sets: 3, reps: '1', rest: 'full recovery' },
@@ -247,7 +258,8 @@ window.ELIJAH_DATA = {
         { name: '1v1 into shot: run at a cone “defender” at speed, do a move, burst past, shoot', reps: '6–8 reps' },
         { name: 'Finishing from self-set balls, at least half weak foot', reps: '10 min' },
         { name: 'Skills under fatigue: 2 hard 20 m shuttles → set yourself a ball → beat a cone with a move → finish', sets: 4, reps: '1 round', rest: '60s', cue: 'Keep the touch clean while you’re breathing hard. Shorter than Tuesday: match on Sunday' },
-        { name: 'Skill snack: handstand kick-ups', reps: '10 min' }
+        { name: 'Skill snack: handstand kick-ups', reps: '10 min' },
+        { name: 'Cool-down: 2 min easy jog, then stretch hamstrings, quads, hip flexors and calves', reps: '5 min' }
       ]
     },
     // Wall sessions: 30 minutes every day except academy nights, a different technical focus each day.
