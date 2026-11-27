@@ -103,7 +103,7 @@ BEGIN:VEVENT
 UID:plan-1-astro-skill@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261110T154500
-DTEND:20261110T162000
+DTEND:20261110T163200
 RRULE:FREQ=WEEKLY
 SUMMARY:Astro: skill sequences
 DESCRIPTION:Solo: just balls and cones. Bring 3+ balls and 4–6 cones. Abou
@@ -111,7 +111,10 @@ DESCRIPTION:Solo: just balls and cones. Bring 3+ balls and 4–6 cones. Abou
   stretches\, 3 build-ups — 8 min\n• Back to goal\, roll the ball past you
  r side\, open up and take it on the half-turn\, drive past a cone\, shoot
   — 4 × 5 reps\n• Weak foot: throw the ball up and control it with your we
- ak foot (or thigh or chest first)\, then weak-foot finishes — 10 min
+ ak foot (or thigh or chest first)\, then weak-foot finishes — 10 min\n• S
+ kills under fatigue: 20s fast ball mastery (croquetas\, inside-outside\, 
+ sole rolls) → 10 m dribble flat out → Ronaldo chop or Cruyff turn at the 
+ cone → sprint back → finish — 2 × 6 rounds\, 40s rest
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Astro: skill sequences
@@ -281,7 +284,7 @@ BEGIN:VEVENT
 UID:plan-4-astro-speed@elijah-os
 DTSTAMP:20261109T000000Z
 DTSTART:20261113T154500
-DTEND:20261113T163000
+DTEND:20261113T163800
 RRULE:FREQ=WEEKLY
 SUMMARY:Astro: speed + match reps
 DESCRIPTION:Solo. Bring 3+ balls and 6 cones so you’re not chasing balls. 
@@ -293,8 +296,10 @@ DESCRIPTION:Solo. Bring 3+ balls and 6 cones so you’re not chasing balls.
  \n• Near-post darts: set the ball out wide\, dart to the near post\, fini
  sh first time — 6–8 reps\, half weak foot\n• 1v1 into shot: run at a cone
   “defender” at speed\, do a move\, burst past\, shoot — 6–8 reps\n• Finis
- hing from self-set balls\, at least half weak foot — 10 min\n• Skill snac
- k: handstand kick-ups — 10 min
+ hing from self-set balls\, at least half weak foot — 10 min\n• Skills und
+ er fatigue: 2 hard 20 m shuttles → set yourself a ball → beat a cone with
+  a move → finish — 4 × 1 round\n• Skill snack: handstand kick-ups — 10 mi
+ n
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Astro: speed + match reps

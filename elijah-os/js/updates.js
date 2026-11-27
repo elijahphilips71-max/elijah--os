@@ -9,6 +9,11 @@
 
 window.ELIJAH_UPDATES = [
   {
+    id: '2026-11-27-fatigue-skills', date: '2026-11-27', kind: 'update',
+    title: 'Skills under fatigue',
+    body: 'Both astro sessions now end with a block of fast skills while you’re tired, so your touch holds up late in games. Tuesday: 12 minutes of ball mastery into dribble, move and finish. Friday: 8 minutes of shuttles into a move and a finish. Slow the move down, never the effort.'
+  },
+  {
     id: '2026-11-23-sliders', date: '2026-11-23', kind: 'update',
     title: 'Nordics swapped for slider curls',
     body: 'No anchor for Nordics? Monday now has slider hamstring curls: socks on a hard floor, bridge up, slide your heels out slowly over 3–4 seconds and pull back in. Same hamstring protection, no equipment.'

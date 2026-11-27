@@ -193,12 +193,13 @@ window.ELIJAH_DATA = {
       items: [{ name: '3 good actions' }, { name: '1 repeated problem' }]
     },
     'astro-skill': {
-      kind: 'football', title: 'Astro: skill sequences', minutes: 35,
+      kind: 'football', title: 'Astro: skill sequences', minutes: 47,
       focus: 'Solo: just balls and cones. Bring 3+ balls and 4–6 cones. About 75% pace: half speed first, then full speed.',
       items: [
         { name: 'Warm-up: jog, dynamic stretches, 3 build-ups', reps: '8 min' },
         { name: 'Back to goal, roll the ball past your side, open up and take it on the half-turn, drive past a cone, shoot', sets: 4, reps: '5 reps', rest: 'half then full speed' },
-        { name: 'Weak foot: throw the ball up and control it with your weak foot (or thigh or chest first), then weak-foot finishes', reps: '10 min' }
+        { name: 'Weak foot: throw the ball up and control it with your weak foot (or thigh or chest first), then weak-foot finishes', reps: '10 min' },
+        { name: 'Skills under fatigue: 20s fast ball mastery (croquetas, inside-outside, sole rolls) → 10 m dribble flat out → Ronaldo chop or Cruyff turn at the cone → sprint back → finish', sets: 2, reps: '6 rounds, 40s rest', rest: '2 min between sets', cue: 'Last block on purpose. Slow the move down, never the effort. Stop the set if your touch falls apart' }
       ]
     },
     'lower-a': {
@@ -233,7 +234,7 @@ window.ELIJAH_DATA = {
       items: [{ name: 'Choose today’s cue before you leave' }, { name: 'After training: did you do it?' }]
     },
     'astro-speed': {
-      kind: 'football', title: 'Astro: speed + match reps', minutes: 45,
+      kind: 'football', title: 'Astro: speed + match reps', minutes: 53,
       focus: 'Solo. Bring 3+ balls and 6 cones so you’re not chasing balls. Full recovery between sprints; stop after 2 slow reps.',
       items: [
         { name: 'Warm-up: A-skips, strides', reps: '10 min' },
@@ -245,6 +246,7 @@ window.ELIJAH_DATA = {
         { name: 'Near-post darts: set the ball out wide, dart to the near post, finish first time', reps: '6–8 reps, half weak foot' },
         { name: '1v1 into shot: run at a cone “defender” at speed, do a move, burst past, shoot', reps: '6–8 reps' },
         { name: 'Finishing from self-set balls, at least half weak foot', reps: '10 min' },
+        { name: 'Skills under fatigue: 2 hard 20 m shuttles → set yourself a ball → beat a cone with a move → finish', sets: 4, reps: '1 round', rest: '60s', cue: 'Keep the touch clean while you’re breathing hard. Shorter than Tuesday: match on Sunday' },
         { name: 'Skill snack: handstand kick-ups', reps: '10 min' }
       ]
     },
